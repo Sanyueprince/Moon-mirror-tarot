@@ -113,7 +113,11 @@ body{
 .auth-card{position:absolute;left:18px;right:18px;bottom:24px;background:var(--screen2);
   border:1px solid var(--line);border-radius:18px;padding:22px 20px;z-index:2;box-shadow:0 -6px 30px rgba(0,0,0,.5)}
 .auth-app{display:flex;align-items:center;gap:11px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:14px}
-.auth-ic{width:42px;height:42px;border-radius:11px;background:radial-gradient(circle at 32% 30%, #fff7e4, var(--gold) 60%, #9c7f44)}
+.auth-ic{width:42px;height:42px;border-radius:11px;
+  background:linear-gradient(95deg,
+    #fff7e4 0%, #f3d289 22%, var(--gold) 38%,
+    #a07f44 50%, #4a3f5e 60%, #2a2350 72%, #161232 86%, #0d0b1a 100%)}
+
 .auth-app b{font-size:15px;color:#fff;display:block}
 .auth-app span{font-size:11px;color:var(--faint)}
 .auth-req{font-size:13px;color:var(--dim);margin-bottom:9px}
