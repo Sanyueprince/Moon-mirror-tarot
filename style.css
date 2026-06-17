@@ -44,14 +44,29 @@ body{
 .scroll::-webkit-scrollbar{display:none}
 .pad{padding:8px 22px 30px}
 
-/* logo —— 🌗 半亮半暗月相（左亮右暗） */
+/* logo —— 🌗 半亮半暗月相（左亮右暗，渐变过渡 + 环形山质感） */
 .logo-moon{position:relative;width:60px;height:60px;border-radius:50%;overflow:hidden;
-  background:radial-gradient(circle at 72% 35%, #2a2350 0%, #161232 70%, #0d0b1a 100%);
-  box-shadow:0 0 28px rgba(212,175,106,.55),inset -2px 0 6px rgba(0,0,0,.5)}
+  /* 底色：从左侧暖金平滑过渡到右侧暗夜，模拟明暗交界线（晨昏线） */
+  background:
+    linear-gradient(95deg,
+      #fff7e4 0%, #f3d289 22%, var(--gold) 38%,
+      #a07f44 50%, #4a3f5e 60%, #2a2350 72%, #161232 86%, #0d0b1a 100%);
+  box-shadow:0 0 28px rgba(212,175,106,.55),inset -3px -2px 8px rgba(0,0,0,.45)}
+/* 环形山 / 月海纹理：多层径向渐变叠加 */
 .logo-moon::before{content:"";position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle at 30% 35%, #fff7e4 0%, var(--gold) 46%, #9c7f44 100%);
-  clip-path:inset(0 50% 0 0)}
+  background:
+    radial-gradient(circle at 26% 30%, rgba(120,90,40,.55) 0 8%, transparent 9%),
+    radial-gradient(circle at 38% 62%, rgba(120,90,40,.45) 0 6%, transparent 7%),
+    radial-gradient(circle at 18% 58%, rgba(140,108,52,.4) 0 4%, transparent 5%),
+    radial-gradient(circle at 30% 80%, rgba(120,90,40,.35) 0 5%, transparent 6%),
+    radial-gradient(circle at 62% 40%, rgba(255,247,228,.06) 0 7%, transparent 8%),
+    radial-gradient(circle at 70% 72%, rgba(255,255,255,.04) 0 5%, transparent 6%);
+  mix-blend-mode:soft-light}
+/* 顶部柔和高光，增加球体立体感 */
+.logo-moon::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 28% 24%, rgba(255,255,255,.5) 0%, transparent 32%)}
 .logo-moon.big{width:84px;height:84px;animation:glow 3s ease-in-out infinite}
+
 
 @keyframes glow{0%,100%{box-shadow:0 0 28px rgba(212,175,106,.5)}50%{box-shadow:0 0 44px rgba(212,175,106,.85)}}
 .logo-name{font-family:var(--serif);font-weight:700;font-size:30px;letter-spacing:8px;color:#fff;margin-top:18px}
