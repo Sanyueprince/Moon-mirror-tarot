@@ -58,28 +58,12 @@ body{
 .scroll::-webkit-scrollbar{display:none}
 .pad{padding:8px 22px 30px}
 
-/* logo —— 🌗 半亮半暗月相（左亮右暗，渐变过渡 + 环形山质感） */
+/* logo —— 使用品牌图片 yue.jpg */
 .logo-moon{position:relative;width:60px;height:60px;border-radius:50%;overflow:hidden;
-  /* 底色：从左侧暖金平滑过渡到右侧暗夜，模拟明暗交界线（晨昏线） */
-  background:
-    linear-gradient(95deg,
-      #fff7e4 0%, #f3d289 22%, var(--gold) 38%,
-      #a07f44 50%, #4a3f5e 60%, #2a2350 72%, #161232 86%, #0d0b1a 100%);
-  box-shadow:0 0 28px rgba(212,175,106,.55),inset -3px -2px 8px rgba(0,0,0,.45)}
-/* 环形山 / 月海纹理：多层径向渐变叠加 */
-.logo-moon::before{content:"";position:absolute;inset:0;border-radius:50%;
-  background:
-    radial-gradient(circle at 26% 30%, rgba(120,90,40,.55) 0 8%, transparent 9%),
-    radial-gradient(circle at 38% 62%, rgba(120,90,40,.45) 0 6%, transparent 7%),
-    radial-gradient(circle at 18% 58%, rgba(140,108,52,.4) 0 4%, transparent 5%),
-    radial-gradient(circle at 30% 80%, rgba(120,90,40,.35) 0 5%, transparent 6%),
-    radial-gradient(circle at 62% 40%, rgba(255,247,228,.06) 0 7%, transparent 8%),
-    radial-gradient(circle at 70% 72%, rgba(255,255,255,.04) 0 5%, transparent 6%);
-  mix-blend-mode:soft-light}
-/* 顶部柔和高光，增加球体立体感 */
-.logo-moon::after{content:"";position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle at 28% 24%, rgba(255,255,255,.5) 0%, transparent 32%)}
-.logo-moon.big{width:84px;height:84px;animation:glow 3s ease-in-out infinite}
+  background:#0d0b1a url("assets/logo.jpg?v=28") center/cover no-repeat;
+  box-shadow:0 0 28px rgba(212,175,106,.55),0 0 0 1px rgba(212,175,106,.45) inset}
+.logo-moon::before,.logo-moon::after{content:none}
+.logo-moon.big{width:96px;height:96px;animation:glow 3s ease-in-out infinite}
 
 
 @keyframes glow{0%,100%{box-shadow:0 0 28px rgba(212,175,106,.5)}50%{box-shadow:0 0 44px rgba(212,175,106,.85)}}
@@ -145,9 +129,8 @@ body{
   border:1px solid var(--line);border-radius:18px;padding:22px 20px;z-index:2;box-shadow:0 -6px 30px rgba(0,0,0,.5)}
 .auth-app{display:flex;align-items:center;gap:11px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:14px}
 .auth-ic{width:42px;height:42px;border-radius:11px;
-  background:linear-gradient(95deg,
-    #fff7e4 0%, #f3d289 22%, var(--gold) 38%,
-    #a07f44 50%, #4a3f5e 60%, #2a2350 72%, #161232 86%, #0d0b1a 100%)}
+  background:#0d0b1a url("assets/logo.jpg?v=28") center/cover no-repeat;
+  box-shadow:0 0 0 1px rgba(212,175,106,.4) inset}
 
 .auth-app b{font-size:15px;color:#fff;display:block}
 .auth-app span{font-size:11px;color:var(--faint)}
@@ -428,10 +411,10 @@ body{
 
 /* ===== 我的 ===== */
 .mine-head{display:flex;align-items:center;gap:15px;padding:24px 22px 18px}
-.mine-avatar{width:60px;height:60px;border-radius:50%;flex:0 0 60px;
-  background:radial-gradient(circle at 35% 30%,#3a3068,#1c1640);border:2px solid var(--gold);
+.mine-avatar{width:60px;height:60px;border-radius:50%;flex:0 0 60px;overflow:hidden;
+  background:#0d0b1a url("assets/logo.jpg?v=28") center/cover no-repeat;border:2px solid var(--gold);
   display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(212,175,106,.35)}
-.mine-avatar .ico{width:28px;height:28px;color:var(--gold-soft)}
+.mine-avatar .ico{display:none}
 .mine-name{font-family:var(--serif);font-size:19px;color:#fff;font-weight:600;letter-spacing:1px}
 .mine-id{font-size:11px;color:var(--faint);margin-top:5px}
 .vip-card{margin:0 16px;background:linear-gradient(135deg,#3a2f1c,#5b4a28);
