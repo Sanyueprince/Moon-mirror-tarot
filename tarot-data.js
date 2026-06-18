@@ -708,3 +708,85 @@ const WIKI_INTRO = [
   { t:"如何提出好问题", c:"塔罗擅长回答「开放式」而非「是非题」。把「我会复合吗」换成「我该如何面对这段关系」，聚焦在自己能掌控的部分，会得到更有启发的指引。" },
   { t:"塔罗的正确心态", c:"塔罗揭示的是「当下能量的趋势」，而非不可改变的命运。它是一面镜子，帮助你更清晰地认识自己，最终的选择权始终在你手中。" }
 ];
+
+
+/* ============================================================
+   共用牌背 —— 马赛塔罗风格：正面圆月 + 叠加半脸侧影（繁复版画）
+   返回完整 <svg viewBox="0 0 100 150">，三处牌背统一复用
+   ============================================================ */
+function cardBackSVG(){
+  const G='#e8c46a', Gd='#b9882a', Gdk='#8a6418', INK='#1d1838', NAVY='#221d4a', NAVY2='#15123a', RED='#b23a2b';
+  // 放射光芒（围绕圆月一圈）
+  let rays='';
+  for(let i=0;i<24;i++){
+    const a=i*15*Math.PI/180, r1=33, r2=(i%2? 42:39);
+    const x1=(50+Math.cos(a)*r1).toFixed(2), y1=(66+Math.sin(a)*r1).toFixed(2);
+    const x2=(50+Math.cos(a)*r2).toFixed(2), y2=(66+Math.sin(a)*r2).toFixed(2);
+    rays+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${G}" stroke-width="${i%2?0.8:1.4}" opacity="0.85"/>`;
+  }
+  // 散落星点 / 露珠
+  const stars=[[18,28,1.6],[82,30,1.4],[26,118,1.3],[76,116,1.5],[14,74,1.1],[86,70,1.2],[50,16,1.8],[50,120,1.5]];
+  let star='';
+  stars.forEach(([x,y,r])=>{
+    star+=`<path d="M${x} ${y-r*2} l${r*0.5} ${r*1.5} ${r*1.5} ${r*0.5} -${r*1.5} ${r*0.5} -${r*0.5} ${r*1.5} -${r*0.5} -${r*1.5} -${r*1.5} -${r*0.5} ${r*1.5} -${r*0.5}z" fill="${G}" opacity="0.9"/>`;
+  });
+  return `<svg class="card-back-svg" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <radialGradient id="cbBg" cx="50%" cy="44%" r="70%">
+        <stop offset="0%" stop-color="#2c2658"/><stop offset="70%" stop-color="${NAVY}"/><stop offset="100%" stop-color="${NAVY2}"/>
+      </radialGradient>
+      <radialGradient id="cbMoon" cx="42%" cy="38%" r="68%">
+        <stop offset="0%" stop-color="#fbe7b0"/><stop offset="55%" stop-color="${G}"/><stop offset="100%" stop-color="${Gd}"/>
+      </radialGradient>
+      <pattern id="cbGrid" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <path d="M0 0 H10 M0 0 V10" stroke="${G}" stroke-width="0.4" opacity="0.18"/>
+      </pattern>
+    </defs>
+    <rect width="100" height="150" fill="url(#cbBg)"/>
+    <rect width="100" height="150" fill="url(#cbGrid)"/>
+    <!-- 外框 -->
+    <rect x="3" y="3" width="94" height="144" fill="none" stroke="${G}" stroke-width="2" rx="4"/>
+    <rect x="6" y="6" width="88" height="138" fill="none" stroke="${Gd}" stroke-width="0.6" rx="3"/>
+    <g stroke-linejoin="round" stroke-linecap="round">
+      ${rays}
+      <!-- 圆月盘 -->
+      <circle cx="50" cy="66" r="30" fill="url(#cbMoon)" stroke="${Gdk}" stroke-width="1.4"/>
+      <circle cx="50" cy="66" r="30" fill="none" stroke="${G}" stroke-width="0.5"/>
+      <!-- 月面斑块（环形坑纹） -->
+      <g fill="${Gd}" opacity="0.35">
+        <circle cx="62" cy="54" r="3.4"/><circle cx="66" cy="72" r="2.4"/><circle cx="58" cy="82" r="2.8"/><circle cx="68" cy="62" r="1.6"/>
+      </g>
+      <!-- 半脸侧影（左半·朝左的侧脸，暗面） -->
+      <path d="M50 36
+               C 45 39 44 43 44 48
+               C 41 51 38 53 42 56
+               L 44 58
+               C 39 59 41 63 45 64
+               C 47 66 47 69 50 72
+               L 50 96
+               A 30 30 0 0 1 50 36 Z"
+            fill="${INK}" opacity="0.32"/>
+      <!-- 侧脸轮廓线（金描边，强化版画感） -->
+      <path d="M50 36
+               C 45 39 44 43 44 48
+               C 41 51 38 53 42 56
+               L 44 58
+               C 39 59 41 63 45 64
+               C 47 66 47 69 50 72"
+            fill="none" stroke="${Gdk}" stroke-width="1.1"/>
+      <!-- 眉 + 闭眼 + 睫毛 -->
+      <path d="M40 49 q4 -2 7 0" fill="none" stroke="${Gdk}" stroke-width="1"/>
+      <path d="M40 53 q3.5 2.5 7 0.5" fill="none" stroke="${INK}" stroke-width="1.1"/>
+      <g stroke="${INK}" stroke-width="0.7">
+        <line x1="41" y1="54.5" x2="40" y2="56.5"/><line x1="43" y1="55.2" x2="42.5" y2="57.3"/><line x1="45" y1="55" x2="45" y2="57"/>
+      </g>
+      <!-- 嘴唇 -->
+      <path d="M41.5 61.5 q3 1.6 5 0" fill="none" stroke="${RED}" stroke-width="1.1" opacity="0.8"/>
+      <!-- 脸颊螺旋红晕 -->
+      <path d="M52 60 a2.4 2.4 0 1 1 -1.6 -1.6" fill="none" stroke="${RED}" stroke-width="0.9" opacity="0.7"/>
+      <!-- 月顶小冠点 -->
+      <circle cx="50" cy="36" r="1.8" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
+      ${star}
+    </g>
+  </svg>`;
+}

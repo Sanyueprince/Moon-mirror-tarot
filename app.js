@@ -206,6 +206,10 @@
   let shuffled = false;
   function resetShuffle(){
     shuffled = false;
+    // 给三张叠牌注入马赛风格牌背（仅注入一次）
+    if(typeof cardBackSVG === 'function'){
+      $$('.deck-c').forEach(c=>{ if(!c.querySelector('svg')) c.innerHTML = cardBackSVG(); });
+    }
     $('#deck').classList.remove('shuffling');
     $('#shuffleDone').classList.add('hidden');
     $('#shuffleHint').innerHTML = '<svg class="ico"><use href="#i-orb"/></svg> 点击牌堆洗牌　|　摇一摇手机';
@@ -239,17 +243,32 @@
     state._fanDeck = shuffleArray(TAROT.slice());
     state.drawn = [];
     fan.innerHTML = '';
+    const backSVG = (typeof cardBackSVG === 'function') ? cardBackSVG() : '';
     for(let i=0;i<total;i++){
       const f = document.createElement('div');
       f.className = 'f';
       f.dataset.idx = i;
+      f.innerHTML = backSVG;   // 注入马赛风格牌背
       fan.appendChild(f);
     }
-    // 设置牌带总宽度，使牌背相互叠压、可横向滑动
-    const STEP = 22;      // 相邻牌背露出的宽度(px)
-    const CARD_W = 60;    // 单张牌背宽度(px)
+    // ===== 弧形扇面布局 =====
+    // 78 张沿一条大圆弧排布：一屏约露出 23 张呈扇形，可左右滑动浏览全部
+    const STEP = 26;        // 相邻牌背沿弧的水平步距(px)
+    const CARD_W = 60;      // 单张牌背宽度(px)
+    const PER_DEG = 2.0;    // 每张牌相对相邻牌的夹角(度)
+    const ARC_DROP = 0.42;  // 弧面下沉系数（角度越大，沿弧下沉越多）
     fan.style.width = (STEP*(total-1) + CARD_W) + 'px';
-    $$('.f', fan).forEach((f,i)=>{ f.style.left = (i*STEP) + 'px'; });
+    $$('.f', fan).forEach((f,i)=>{
+      // 以「当前一屏的中心」为基准计算角度：用每 23 张为一个可视窗口，
+      // 让整条牌带呈连续弧形（中间凸、两端略垂）
+      const ang = (i - (total-1)/2) * PER_DEG;          // 该牌的旋转角度
+      const drop = Math.abs(ang) * ARC_DROP;            // 离中心越远，越往下沉
+      f.style.left = (i*STEP) + 'px';
+      f.style.transformOrigin = '50% 150%';             // 旋转中心在牌底下方，形成扇面
+      f.style.transform = `rotate(${ang.toFixed(2)}deg) translateY(${drop.toFixed(1)}px)`;
+      f.dataset.ang = ang.toFixed(2);
+      f.dataset.drop = drop.toFixed(1);
+    });
     // 进入时把滚动条复位到最左
     const sc = $('.fan-scroll');
     if(sc) sc.scrollLeft = 0;
@@ -265,6 +284,10 @@
     const need = state.spread.positions.length;
     if(state.drawn.length >= need) return;
     f.classList.add('sel');
+    // 沿当前扇面角度方向把牌抽起高亮
+    const ang = parseFloat(f.dataset.ang || '0');
+    const drop = parseFloat(f.dataset.drop || '0');
+    f.style.transform = `rotate(${ang}deg) translateY(${(drop-26).toFixed(1)}px)`;
     if(navigator.vibrate) navigator.vibrate(20);
     // 你点击的牌背位置 ↔ 牌堆中对应的那一张牌（不重复，正逆位随机）
     const idx = parseInt(f.dataset.idx, 10) || 0;
@@ -291,7 +314,7 @@
       <div class="reveal-item">
         <div class="flip" data-i="${i}">
           <div class="flip-inner">
-            <div class="flip-face flip-back">☾</div>
+            <div class="flip-face flip-back">${(typeof cardBackSVG==='function')?cardBackSVG():'☾'}</div>
             <div class="flip-face flip-front ${d.reversed?'rev':''}">${d.card.svg()}</div>
           </div>
         </div>
