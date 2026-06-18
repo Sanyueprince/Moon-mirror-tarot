@@ -11,6 +11,8 @@ html,body{height:100%}
 body{
   font-family:var(--sans);
   background:var(--bg);color:var(--text);overflow:hidden;
+  /* 居中显示，像真实手机一样 */
+  display:flex;align-items:center;justify-content:center;
 }
 /* 统一线性图标 */
 .ico{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;fill:none;
@@ -22,6 +24,18 @@ body{
              radial-gradient(700px 500px at -10% 20%, #241a4d 0%, transparent 50%),
              linear-gradient(180deg,var(--screen2),#070512);
 }
+/* 桌面浏览器预览：把应用限制为真实手机比例（约 9:19.5），居中并加圆角阴影，避免被拉成细高长条 */
+@media (min-width:481px), (min-height:880px){
+  body{background:#000;}
+  #app{
+    width:min(430px, 96vw);
+    height:min(932px, 96vh);
+    aspect-ratio:430 / 932;
+    border-radius:34px;
+    box-shadow:0 18px 60px rgba(0,0,0,.6), 0 0 0 10px #111, 0 0 0 11px #2a2a2a;
+  }
+}
+
 .bg-stars{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:
   radial-gradient(1.5px 1.5px at 15% 12%, #fff, transparent),
   radial-gradient(1px 1px at 65% 18%, #fff, transparent),
