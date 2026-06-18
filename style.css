@@ -239,7 +239,8 @@ body{
 .flip-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:9px;overflow:hidden;border:2px solid var(--gold)}
 .flip-back{background:repeating-linear-gradient(45deg,#2a2356,#2a2356 5px,#352c6e 5px,#352c6e 10px);
   display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:30px}
-.flip-front{transform:rotateY(180deg);background:#222}
+.flip-front{transform:rotateY(180deg);background:#fbf4e2}
+
 .flip-front.rev .card-svg{transform:rotate(180deg)}
 .reveal-pos{font-size:10px;color:var(--faint);text-align:center;margin-top:5px}
 .reveal-item{display:flex;flex-direction:column;align-items:center}
@@ -249,7 +250,8 @@ body{
 /* result */
 .result-cards{display:flex;gap:10px;justify-content:center;margin:8px 0 16px}
 .rc{width:60px;text-align:center}
-.rc .rc-img{width:60px;height:90px;border-radius:8px;border:2px solid var(--gold);overflow:hidden;background:#222}
+.rc .rc-img{width:60px;height:90px;border-radius:8px;border:2px solid var(--gold);overflow:hidden;background:#fbf4e2}
+
 .rc .rc-img.rev .card-svg{transform:rotate(180deg)}
 .rc .rc-pos{font-size:10px;color:var(--faint);margin-top:5px}
 .card-svg{display:block;width:100%;height:auto}

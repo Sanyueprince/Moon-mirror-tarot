@@ -14,13 +14,59 @@
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-  function go(id){
+  // ---------- 页面历史栈（实现返回上一页，而非退出小程序） ----------
+  const navStack = [];                 // 记录访问过的页面，用于返回
+  const ROOT = 's-home';               // 应用根页面
+  // 这些页面视为「根/入口」，到达它们时清空历史栈（避免返回到启动/登录页）
+  const ROOTS = ['s-launch','s-login','s-home'];
+
+  function currentScreen(){
+    const el = document.querySelector('.screen.active');
+    return el ? el.id : null;
+  }
+
+  // 仅负责切换显示，不处理历史栈
+  function showScreen(id){
     $$('.screen').forEach(s => s.classList.remove('active'));
     const el = document.getElementById(id);
     if(el){ el.classList.add('active'); el.querySelector('.scroll') && (el.querySelector('.scroll').scrollTop = 0); }
     if(id === 'onShow') return;
     onShow(id);
   }
+
+  // 前进导航：记录来源页，压入历史栈
+  function go(id){
+    const cur = currentScreen();
+    if(cur && cur !== id){
+      if(ROOTS.includes(id)){
+        navStack.length = 0;           // 到达根页面：清空历史栈
+      }else{
+        navStack.push(cur);
+      }
+    }
+    showScreen(id);
+  }
+
+  // 返回上一页：栈空时停留在首页（绝不退出小程序）
+  function goBack(){
+    if(navStack.length){
+      const prev = navStack.pop();
+      showScreen(prev);
+    }else{
+      const cur = currentScreen();
+      if(cur && cur !== ROOT) showScreen(ROOT);
+      // 已在根页面则不做任何事（停留，不退出）
+    }
+  }
+
+  // 拦截浏览器/系统返回（含侧滑返回），改为返回上一页而非退出
+  function trapHistory(){ history.pushState({ mm:true }, ''); }
+  window.addEventListener('popstate', () => {
+    trapHistory();   // 立即补一个历史记录，防止真正退出
+    goBack();        // 执行内部返回逻辑
+  });
+  trapHistory();     // 初始化时放置一个「陷阱」历史记录
+
 
   function toast(msg){
     const t = $('#toast');
@@ -63,8 +109,16 @@
 
   // ---------- 全局点击：data-go 导航 ----------
   document.addEventListener('click', (e) => {
+    // 返回键统一走历史栈返回（而非写死跳转）
+    const backEl = e.target.closest('.nav-back');
+    if(backEl){
+      e.stopPropagation();
+      goBack();
+      return;
+    }
     const goEl = e.target.closest('[data-go]');
     if(goEl){
+
       const target = goEl.getAttribute('data-go');
       // 提问页的“跳过”：直接用每日一牌
       if(goEl.getAttribute('data-skip')){
@@ -421,7 +475,38 @@
   // 全局震动开关
   const settings = { vibrate: true };
 
+  // ---------- 右滑手势返回上一页 ----------
+  (function initSwipeBack(){
+    let startX = 0, startY = 0, tracking = false;
+    const EDGE = 40;     // 从屏幕左缘起手的判定区域(px)
+    const DIST = 70;     // 触发返回所需的水平滑动距离(px)
+    const app = document.getElementById('app');
+    if(!app) return;
+
+    app.addEventListener('touchstart', (e)=>{
+      if(e.touches.length !== 1){ tracking = false; return; }
+      const t = e.touches[0];
+      // 仅当从屏幕左缘起手时才识别为返回手势，避免与页面内横向滑动冲突
+      tracking = t.clientX <= EDGE;
+      startX = t.clientX;
+      startY = t.clientY;
+    }, { passive:true });
+
+    app.addEventListener('touchend', (e)=>{
+      if(!tracking) return;
+      tracking = false;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      // 向右滑动且以水平方向为主
+      if(dx > DIST && Math.abs(dx) > Math.abs(dy) * 1.5){
+        goBack();
+      }
+    }, { passive:true });
+  })();
+
   // ---------- 初始化 ----------
   initHome();
+
 
 })();

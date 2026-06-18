@@ -1,23 +1,42 @@
-/* ========= 月镜言 · 塔罗牌库与解读数据 =========
+/* ========= 月镜言 · 塔罗牌库与解读数据（马赛塔罗风格） =========
    每张牌：name 牌名 / arcana 类别 / kw 关键词 / up 正位 / rev 逆位 / detail 象征解析 / svg 牌面
    svg() 返回完整 <svg viewBox="0 0 100 150">。
+
+   牌面采用 Tarot de Marseille（马赛塔罗）经典版画风格：
+   - 米白/羊皮纸底色 + 粗黑双线边框
+   - 平涂五色调色板：朱红 / 墨绿 / 金黄 / 淡蓝 / 肉粉，黑色描边
+   - 顶部罗马数字、底部牌名横幅（法文）
 */
 
-/* 通用底框：渐变背景 + 描金双边框 + 暖金光晕 + 四角描金装饰 */
-let _fid = 0;
-function frame(inner, c1, c2){
-  const id = 'fg' + (_fid++);
+/* 马赛风格调色板 */
+const MC = {
+  ink:'#1c1a17',     // 描边黑
+  paper:'#fbf4e2',   // 牌面底（羊皮纸）
+  cream:'#fffdf4',   // 高光白
+  red:'#c5402b',     // 朱红
+  green:'#2f7d5e',   // 墨绿/青绿
+  gold:'#e8b53a',    // 金黄
+  blue:'#a9c7d4',    // 淡蓝
+  flesh:'#f0cba0',   // 肉粉
+  fleshDk:'#d9a06f'  // 肤色阴影
+};
+
+/* 通用底框：羊皮纸底 + 粗黑双线边框 + 顶部罗马数字 + 底部牌名横幅 */
+function frame(inner, roman, label){
+  const top = roman
+    ? `<text x="50" y="17" font-size="12" text-anchor="middle" fill="${MC.ink}" font-family="Georgia,'Times New Roman',serif" font-weight="700" letter-spacing="1.5">${roman}</text>`
+    : '';
+  const bottom = label
+    ? `<line x1="9" y1="132.5" x2="91" y2="132.5" stroke="${MC.ink}" stroke-width="0.8"/>
+       <text x="50" y="142.5" font-size="7" text-anchor="middle" fill="${MC.ink}" font-family="Georgia,'Times New Roman',serif" font-weight="700" letter-spacing="1">${label}</text>`
+    : '';
   return `<svg class="card-svg" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2||c1}"/></linearGradient>
-      <radialGradient id="${id}v" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></radialGradient>
-    </defs>
-    <rect width="100" height="150" fill="url(#${id})"/>
-    ${inner}
-    <rect width="100" height="150" fill="url(#${id}v)"/>
-    <rect x="3" y="3" width="94" height="144" fill="none" stroke="#d4af6a" stroke-width="1.4" rx="5" opacity=".9"/>
-    <rect x="5.5" y="5.5" width="89" height="139" fill="none" stroke="#d4af6a" stroke-width=".5" rx="3.5" opacity=".5"/>
-    <g fill="#e9cf9a"><circle cx="10" cy="10" r="1.4"/><circle cx="90" cy="10" r="1.4"/><circle cx="10" cy="140" r="1.4"/><circle cx="90" cy="140" r="1.4"/></g>
+    <rect width="100" height="150" fill="${MC.paper}"/>
+    <rect x="3" y="3" width="94" height="144" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="2.4" rx="1"/>
+    <rect x="6" y="6" width="88" height="138" fill="none" stroke="${MC.ink}" stroke-width="0.8"/>
+    ${top}
+    <g stroke-linejoin="round" stroke-linecap="round">${inner}</g>
+    ${bottom}
   </svg>`;
 }
 
@@ -29,18 +48,22 @@ const TAROT = [
     rev:"提醒你三思而后行，别因冲动而忽视脚下的悬崖，做好准备再出发。",
     detail:"愚人站在悬崖边，背着行囊、手持白玫瑰，脚边的小白狗象征本能的提醒。他代表纯粹的可能性与未受拘束的灵魂，是一切旅程的起点。",
     svg:()=>frame(`
-      <path d="M0 118 L24 104 L48 116 L72 102 L100 120 L100 150 L0 150 Z" fill="#5a6a3a"/>
-      <path d="M0 118 L24 104 L48 116 L72 102 L100 120" fill="none" stroke="#7a8a4a" stroke-width="1"/>
-      <circle cx="80" cy="26" r="9" fill="#f6c945"/><g stroke="#f0c24a" stroke-width="1" opacity=".7"><line x1="80" y1="12" x2="80" y2="40"/><line x1="66" y1="26" x2="94" y2="26"/><line x1="70" y1="16" x2="90" y2="36"/><line x1="90" y1="16" x2="70" y2="36"/></g>
-      <circle cx="44" cy="44" r="8" fill="#f4d0a4"/><path d="M37 40 q7 -8 14 0 l-2 4 -10 0 z" fill="#caa23a"/>
-      <path d="M35 52 Q44 48 53 52 L57 96 L33 96 Z" fill="#7a5fc0"/>
-      <path d="M35 52 L30 78 L36 80 Z" fill="#8a6fd0"/><path d="M53 52 L60 76 L54 80 Z" fill="#6a4fb0"/>
-      <path d="M38 96 L37 116 L44 116 L45 96 Z" fill="#c9b27a"/><path d="M50 96 L52 116 L58 116 L55 96 Z" fill="#b9a26a"/>
-      <rect x="56" y="40" width="2.6" height="62" fill="#9c7f44" transform="rotate(12 57 70)"/>
-      <path d="M62 40 q10 -2 8 8 q-8 0 -8 -8 z" fill="#e3d6a0"/>
-      <path d="M22 100 q8 -12 16 -4 q-2 8 -10 8 q-6 0 -6 -4 z" fill="#f0ece0"/>
-      <circle cx="26" cy="102" r="4.5" fill="#fff"/><circle cx="24" cy="100" r="1" fill="#3a3a3a"/>
-      <path d="M48 76 l-7 -7 a4 4 0 0 1 7 -2 a4 4 0 0 1 7 2 z" fill="#fff" opacity=".9"/>`, "#6fb0d8", "#3a6f9a")
+      <path d="M10 120 H90" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M10 120 q20 -6 40 0 t40 0" fill="none" stroke="${MC.green}" stroke-width="2"/>
+      <circle cx="50" cy="40" r="9" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M41 38 q9 -10 18 0 l-2 -8 -6 3 -2 -4 -2 4 -6 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M40 50 q10 -5 20 0 l4 50 -28 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M40 50 l-4 26 6 2z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M60 50 l5 24 -6 2z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M42 100 l-1 18 8 0 0 -16z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M52 100 l1 16 8 0 -1 -18z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M62 40 q12 -4 9 8" fill="none" stroke="${MC.ink}" stroke-width="1.4"/>
+      <rect x="66" y="44" width="12" height="9" rx="1" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <line x1="64" y1="36" x2="64" y2="104" stroke="${MC.fleshDk}" stroke-width="2"/>
+      <path d="M22 108 q8 -10 16 -2 q-2 8 -10 8 q-6 0 -6 -6z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <circle cx="26" cy="106" r="1.4" fill="${MC.ink}"/>
+      <path d="M48 78 l-6 -6 a3.5 3.5 0 0 1 6 -1.6 a3.5 3.5 0 0 1 6 1.6z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1"/>
+    `, "", "LE·MAT")
   },
   {
     name:"魔术师", arcana:"大阿卡那 · I", kw:"创造 · 行动力 · 显化",
@@ -48,20 +71,20 @@ const TAROT = [
     rev:"能量有些散乱或被误用，小心眼高手低与自我欺骗，先理清真正的目标。",
     detail:"魔术师一手指天、一手指地，桌上摆着权杖、圣杯、宝剑、星币四元素，头顶悬着无限符号。他象征意志与行动力的合一，是宇宙能量的导管。",
     svg:()=>frame(`
-      <path d="M0 116 L100 116 L100 150 L0 150 Z" fill="#3a2f5a"/>
-      <text x="50" y="22" font-size="15" text-anchor="middle" fill="#f6c945">∞</text>
-      <circle cx="50" cy="46" r="8" fill="#f4d0a4"/><path d="M43 43 q7 -7 14 0 l-2 4 -10 0z" fill="#3a2f5a"/>
-      <path d="M40 54 Q50 50 60 54 L62 100 L38 100 Z" fill="#c0392b"/>
-      <path d="M40 54 L34 80 L40 82 Z" fill="#d04a3a"/><path d="M60 54 L66 80 L60 82 Z" fill="#a83228"/>
-      <rect x="36" y="98" width="28" height="6" fill="#f0e7c8"/>
-      <rect x="48" y="22" width="2.4" height="22" fill="#f6e7b0"/><line x1="49" y1="20" x2="49" y2="12" stroke="#f6e7b0" stroke-width="2.6"/>
-      <rect x="18" y="100" width="64" height="9" rx="2" fill="#8a6a3a"/><rect x="18" y="100" width="64" height="3" fill="#a3854a"/>
-      <path d="M26 100 l4 -10 l4 10 z" fill="#d4af6a"/>
-      <rect x="40" y="92" width="8" height="8" rx="1" fill="#e0c060"/>
-      <path d="M58 100 l6 -6 l2 6 z" fill="#cfd6e8"/>
-      <circle cx="72" cy="96" r="4" fill="#f6c945"/><text x="72" y="98.5" font-size="5" text-anchor="middle" fill="#8a6a14">★</text>
-      <g fill="#5fb27a"><ellipse cx="14" cy="40" rx="4" ry="8"/><ellipse cx="86" cy="40" rx="4" ry="8"/></g>
-      <g fill="#e0506a"><circle cx="14" cy="118" r="3"/><circle cx="86" cy="118" r="3"/></g>`, "#f2e6c0", "#d9c79a")
+      <path d="M40 28 q10 -8 20 0 q-3 -7 -10 -7 q-7 0 -10 7z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <circle cx="50" cy="40" r="8.5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M41 49 q9 -5 18 0 l4 46 -26 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M41 49 l-5 22 6 2z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M59 49 l6 -10" stroke="${MC.flesh}" stroke-width="3.4" stroke-linecap="round"/>
+      <line x1="65" y1="38" x2="65" y2="28" stroke="${MC.fleshDk}" stroke-width="2.2"/>
+      <path d="M38 60 l-8 8" stroke="${MC.flesh}" stroke-width="3.4" stroke-linecap="round"/>
+      <rect x="22" y="96" width="56" height="8" rx="1" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M22 96 l4 -10 4 10z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
+      <rect x="40" y="88" width="8" height="8" rx="1" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M58 96 l5 -6 2 6z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1"/>
+      <circle cx="72" cy="92" r="4" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M10 120 H90" stroke="${MC.ink}" stroke-width="1"/>
+    `, "I", "LE·BATELEVR")
   },
   {
     name:"女祭司", arcana:"大阿卡那 · II", kw:"直觉 · 潜意识 · 神秘",
@@ -69,16 +92,18 @@ const TAROT = [
     rev:"你可能忽略了内在声音，或被表象迷惑。重新与自己的感受连接。",
     detail:"女祭司端坐于黑白双柱之间，头戴月冠，手持律法卷轴，身后垂帘绣着石榴。她象征潜意识、直觉与未被言说的智慧。",
     svg:()=>frame(`
-      <rect x="20" y="28" width="13" height="92" fill="#1a1a30"/><rect x="67" y="28" width="13" height="92" fill="#e2dcec"/>
-      <text x="26.5" y="50" font-size="9" text-anchor="middle" fill="#cfc8e0">J</text><text x="73.5" y="50" font-size="9" text-anchor="middle" fill="#2a2a45">B</text>
-      <rect x="33" y="40" width="34" height="80" fill="#2c3f6e"/>
-      <circle cx="50" cy="22" r="6" fill="#f3e7ad"/><path d="M44 22 a6 6 0 0 0 12 0 a4 4 0 0 1 -12 0z" fill="#f3e7ad"/>
-      <circle cx="50" cy="46" r="8" fill="#f4d0a4"/><path d="M42 44 q8 -8 16 0 l-1 5 -14 0z" fill="#cfe3ee"/>
-      <path d="M40 54 Q50 50 60 54 L64 116 L36 116 Z" fill="#5b8fb0"/>
-      <path d="M50 56 Q46 86 50 116 Q54 86 50 56" fill="#cfe3ee"/>
-      <path d="M44 64 l12 0 l-2 8 l-8 0z" fill="#e6eef5"/><text x="50" y="71" font-size="5" text-anchor="middle" fill="#3a5b86">+</text>
-      <circle cx="50" cy="38" r="2.4" fill="#f6c945"/>
-      <rect x="52" y="92" width="12" height="16" rx="1" fill="#e6dcc0" transform="rotate(8 58 100)"/>`, "#243a6a", "#16243f")
+      <rect x="20" y="30" width="9" height="92" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <rect x="71" y="30" width="9" height="92" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M40 28 q10 -6 20 0 l-2 -7 -8 3 -8 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <circle cx="50" cy="24" r="4" fill="none" stroke="${MC.gold}" stroke-width="1.4"/>
+      <circle cx="50" cy="40" r="8.5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M42 48 q8 -5 16 0 l4 56 -24 0z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M42 48 q8 6 16 0 l2 56 -20 0z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M50 50 V104" stroke="${MC.blue}" stroke-width="1"/>
+      <path d="M44 60 h12 l-2 8 h-8z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
+      <line x1="50" y1="58" x2="50" y2="70" stroke="${MC.ink}" stroke-width="1"/><line x1="46" y1="63" x2="54" y2="63" stroke="${MC.ink}" stroke-width="1"/>
+      <rect x="54" y="86" width="13" height="17" rx="1" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.1" transform="rotate(10 60 94)"/>
+    `, "II", "LA·PAPESSE")
   },
   {
     name:"恋人", arcana:"大阿卡那 · VI", kw:"爱 · 结合 · 选择",
@@ -86,33 +111,37 @@ const TAROT = [
     rev:"关系中出现失衡或价值观分歧，需要更坦诚的沟通与重新审视。",
     detail:"亚当与夏娃立于伊甸园中，天使拉斐尔在金色阳光中赐福。背后是知识之树与生命之树。象征爱、结合，以及价值观层面的重要抉择。",
     svg:()=>frame(`
-      <path d="M0 120 L100 120 L100 150 L0 150 Z" fill="#3a5a3a"/>
-      <circle cx="50" cy="22" r="9" fill="#f6e7b0"/><path d="M50 13 q7 4 7 9 q-7 0 -7 -9z" fill="#fff4cf"/>
-      <g stroke="#f0c24a" stroke-width="1" opacity=".6"><line x1="50" y1="8" x2="50" y2="34"/><line x1="36" y1="22" x2="64" y2="22"/><line x1="40" y1="12" x2="60" y2="32"/><line x1="60" y1="12" x2="40" y2="32"/></g>
-      <circle cx="30" cy="62" r="7" fill="#f4d0a4"/><path d="M23 72 Q30 66 37 72 L39 112 L21 112 Z" fill="#5fb27a"/><path d="M30 69 L30 112" stroke="#4a9a64" stroke-width="1"/>
-      <circle cx="70" cy="62" r="7" fill="#f6dcc0"/><path d="M63 72 Q70 66 77 72 L79 112 L61 112 Z" fill="#c75b9a"/>
-      <path d="M50 82 l-7 -7 a4 4 0 0 1 7 -2 a4 4 0 0 1 7 2z" fill="#e04060"/>
-      <rect x="14" y="80" width="3" height="34" fill="#6a8a4a"/><circle cx="15.5" cy="78" r="7" fill="#5fb27a"/>
-      <rect x="83" y="80" width="3" height="34" fill="#9a5a2a"/><g fill="#f0a040"><circle cx="80" cy="78" r="3"/><circle cx="88" cy="76" r="3"/><circle cx="84" cy="70" r="3"/></g>`, "#7fb0d8", "#4a7faa")
+      <circle cx="50" cy="28" r="8" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <g stroke="${MC.gold}" stroke-width="1.1"><line x1="50" y1="14" x2="50" y2="42"/><line x1="38" y1="28" x2="62" y2="28"/><line x1="41" y1="19" x2="59" y2="37"/><line x1="59" y1="19" x2="41" y2="37"/></g>
+      <circle cx="50" cy="28" r="4" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1"/>
+      <circle cx="30" cy="62" r="7" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M23 72 q7 -6 14 0 l2 38 -18 0z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <circle cx="70" cy="62" r="7" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M63 72 q7 -6 14 0 l2 38 -18 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M50 88 l-6 -6 a3.5 3.5 0 0 1 6 -1.6 a3.5 3.5 0 0 1 6 1.6z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
+      <line x1="16" y1="84" x2="16" y2="112" stroke="${MC.fleshDk}" stroke-width="2"/><circle cx="16" cy="80" r="6" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <line x1="84" y1="84" x2="84" y2="112" stroke="${MC.fleshDk}" stroke-width="2"/><circle cx="84" cy="80" r="6" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M10 118 H90" stroke="${MC.ink}" stroke-width="1"/>
+    `, "VI", "L'AMOVREVX")
   },
   {
-    name:"力量", arcana:"大阿卡那 · VIII", kw:"勇气 · 温柔 · 内在力量",
+    name:"力量", arcana:"大阿卡那 · XI", kw:"勇气 · 温柔 · 内在力量",
     up:"以柔克刚。用耐心与善意驯服内心的躁动，你比想象中更强大。",
     rev:"自我怀疑或情绪失控正在消耗你，先与内在的恐惧温柔和解。",
     detail:"身着白袍、头戴花环的女子温柔地合上雄狮之口，头顶悬着无限符号。她以慈爱而非暴力驯服野性，象征内在的勇气、耐心与精神力量。",
     svg:()=>frame(`
-      <path d="M0 118 L100 118 L100 150 L0 150 Z" fill="#cfa84a"/>
-      <text x="50" y="20" font-size="13" text-anchor="middle" fill="#e8a93b">∞</text>
-      <circle cx="40" cy="44" r="8" fill="#f4d0a4"/><path d="M32 42 q8 -7 16 0" fill="none" stroke="#5fb27a" stroke-width="2"/>
-      <g fill="#e0506a"><circle cx="34" cy="34" r="1.6"/><circle cx="40" cy="32" r="1.6"/><circle cx="46" cy="34" r="1.6"/></g>
-      <path d="M32 52 Q40 48 48 52 L50 102 L30 102 Z" fill="#f4efe0"/>
-      <path d="M40 52 L40 102" stroke="#e0d8c0" stroke-width="1"/>
-      <ellipse cx="66" cy="84" rx="20" ry="15" fill="#e0a23a"/>
-      <circle cx="80" cy="78" r="11" fill="#e8b04a"/>
-      <g fill="#c9871e"><path d="M70 70 l-4 -5 5 3z"/><path d="M90 70 l4 -5 -5 3z"/><path d="M80 66 l0 -6 2 6z"/></g>
-      <circle cx="76" cy="76" r="1.5" fill="#5a3a12"/><circle cx="84" cy="76" r="1.5" fill="#5a3a12"/>
-      <path d="M74 84 q6 4 12 0" fill="none" stroke="#a3691a" stroke-width="1.4"/>
-      <path d="M48 76 q12 4 20 6" stroke="#e0a23a" stroke-width="2" fill="none"/>`, "#f3e6bf", "#dcc78f")
+      <path d="M40 24 q8 8 16 0 q0 -6 -8 -6 q-8 0 -8 6z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <circle cx="42" cy="40" r="8" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M34 48 q8 -5 16 0 l3 50 -22 0z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M34 48 l-4 20 5 2z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
+      <ellipse cx="64" cy="86" rx="17" ry="13" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <circle cx="74" cy="78" r="10" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <g fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"><path d="M66 70 l-4 -5 5 3z"/><path d="M82 70 l4 -5 -5 3z"/></g>
+      <circle cx="71" cy="77" r="1.4" fill="${MC.ink}"/><circle cx="78" cy="77" r="1.4" fill="${MC.ink}"/>
+      <path d="M70 84 q4 3 8 0" fill="none" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M50 72 q8 4 14 8" fill="none" stroke="${MC.flesh}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M10 120 H90" stroke="${MC.ink}" stroke-width="1"/>
+    `, "XI", "LA·FORCE")
   },
   {
     name:"命运之轮", arcana:"大阿卡那 · X", kw:"转机 · 循环 · 机遇",
@@ -120,14 +149,16 @@ const TAROT = [
     rev:"遭遇阻滞或坏运的循环，提醒你接受变化，别与无常硬碰硬。",
     detail:"巨轮悬于空中，四角的天使、鹰、狮、牛各自研读经书，轮上有神秘字母与炼金符号。它象征命运的循环、转折与不可抗拒的变化。",
     svg:()=>frame(`
-      <circle cx="50" cy="66" r="32" fill="#3a2f7a" stroke="#f6c945" stroke-width="3"/>
-      <circle cx="50" cy="66" r="22" fill="none" stroke="#e9cf9a" stroke-width="1.4"/>
-      <circle cx="50" cy="66" r="12" fill="none" stroke="#e8a93b" stroke-width="1.6"/>
-      <g stroke="#d4af6a" stroke-width="2"><line x1="50" y1="34" x2="50" y2="98"/><line x1="18" y1="66" x2="82" y2="66"/><line x1="27" y1="43" x2="73" y2="89"/><line x1="73" y1="43" x2="27" y2="89"/></g>
-      <circle cx="50" cy="66" r="5" fill="#f6c945"/>
-      <g fill="#e9cf9a"><rect x="8" y="10" width="12" height="9" rx="1"/><rect x="80" y="10" width="12" height="9" rx="1"/><rect x="8" y="120" width="12" height="9" rx="1"/><rect x="80" y="120" width="12" height="9" rx="1"/></g>
-      <text x="14" y="17" font-size="6" text-anchor="middle" fill="#3a2f5a">☁</text>
-      <path d="M84 96 q8 4 6 14 q-8 -4 -6 -14z" fill="#e0a23a"/>`, "#2a2160", "#171040")
+      <line x1="50" y1="32" x2="50" y2="122" stroke="${MC.fleshDk}" stroke-width="2"/>
+      <circle cx="50" cy="72" r="30" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.8"/>
+      <circle cx="50" cy="72" r="20" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <circle cx="50" cy="72" r="10" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <g stroke="${MC.ink}" stroke-width="1.4"><line x1="50" y1="42" x2="50" y2="102"/><line x1="20" y1="72" x2="80" y2="72"/><line x1="29" y1="51" x2="71" y2="93"/><line x1="71" y1="51" x2="29" y2="93"/></g>
+      <circle cx="50" cy="72" r="3.4" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M72 100 q9 4 7 16 q-9 -4 -7 -16z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M28 100 q-9 4 -7 16 q9 -4 7 -16z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M50 38 l-5 6 10 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+    `, "X", "LA·ROVE")
   },
   {
     name:"星星", arcana:"大阿卡那 · XVII", kw:"希望 · 疗愈 · 灵感",
@@ -135,15 +166,17 @@ const TAROT = [
     rev:"暂时的失望或信心动摇，别放弃希望，光芒只是被乌云遮住了。",
     detail:"裸身少女单膝跪于水边，将两壶清水分别倾入池中与大地，天空一颗大星与七颗小星闪耀。象征希望、疗愈、灵感与心灵的宁静。",
     svg:()=>frame(`
-      <path d="M0 108 Q50 96 100 108 L100 150 L0 150 Z" fill="#2a5a6e"/>
-      <ellipse cx="50" cy="118" rx="44" ry="8" fill="#357088"/>
-      <path d="M50 12 l2.4 7 7.2 .6 -5.5 4.7 1.7 7 -5.8 -3.8 -5.8 3.8 1.7 -7 -5.5 -4.7 7.2 -.6z" fill="#f6e7b0"/>
-      <g fill="#dfe9f6"><path d="M24 30 l1 3 3 .3 -2.4 2 .7 3 -2.3 -1.6 -2.3 1.6 .7 -3 -2.4 -2 3 -.3z"/><path d="M76 26 l1 3 3 .3 -2.4 2 .7 3 -2.3 -1.6 -2.3 1.6 .7 -3 -2.4 -2 3 -.3z"/><circle cx="34" cy="18" r="1.4"/><circle cx="66" cy="42" r="1.4"/><circle cx="18" cy="46" r="1.4"/><circle cx="84" cy="48" r="1.4"/></g>
-      <circle cx="50" cy="74" r="8" fill="#f4d0a4"/><path d="M42 84 Q50 78 58 84 L60 108 L40 108 Z" fill="#f6dcc0"/>
-      <path d="M40 98 q-8 4 -10 12" stroke="#aee0ee" stroke-width="2" fill="none"/>
-      <path d="M60 98 q8 4 10 12" stroke="#aee0ee" stroke-width="2" fill="none"/>
-      <path d="M30 110 q4 4 0 8 M70 110 q-4 4 0 8" stroke="#cfeaf2" stroke-width="1.4" fill="none"/>
-      <rect x="74" y="64" width="3" height="20" fill="#7a9a5a"/><circle cx="75.5" cy="62" r="5" fill="#5fb27a"/>`, "#163850", "#0e2438")
+      <path d="M50 22 l3 8 8 1 -6 5.5 2 8 -7 -4.5 -7 4.5 2 -8 -6 -5.5 8 -1z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <g fill="${MC.blue}" stroke="${MC.ink}" stroke-width="0.7"><path d="M24 34 l1.6 4 4 .5 -3 2.6 1 4 -3.6 -2.4 -3.6 2.4 1 -4 -3 -2.6 4 -.5z"/><path d="M76 32 l1.6 4 4 .5 -3 2.6 1 4 -3.6 -2.4 -3.6 2.4 1 -4 -3 -2.6 4 -.5z"/></g>
+      <g fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.6"><path d="M18 52 l1.2 3 3 .4 -2.2 2 .7 3 -2.7 -1.7 -2.7 1.7 .7 -3 -2.2 -2 3 -.4z"/><path d="M82 50 l1.2 3 3 .4 -2.2 2 .7 3 -2.7 -1.7 -2.7 1.7 .7 -3 -2.2 -2 3 -.4z"/></g>
+      <path d="M10 104 q40 -10 80 0 V122 H10z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <circle cx="50" cy="72" r="7" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M43 82 q7 -6 14 0 l2 22 -18 0z" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M40 96 q-9 4 -11 14" fill="none" stroke="${MC.blue}" stroke-width="2"/>
+      <path d="M60 96 q9 4 11 14" fill="none" stroke="${MC.blue}" stroke-width="2"/>
+      <path d="M33 64 l-6 6 4 2z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M67 64 l6 6 -4 2z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+    `, "XVII", "L'ESTOILLE")
   },
   {
     name:"月亮", arcana:"大阿卡那 · XVIII", kw:"潜意识 · 迷惑 · 直觉",
@@ -151,18 +184,18 @@ const TAROT = [
     rev:"迷雾正在散去，误会与不安逐渐澄清，你重新看清了方向。",
     detail:"月亮高悬，洒下露珠，一犬一狼对月嗥叫，小龙虾从池中爬出，远处双塔守着未知之路。象征潜意识、幻象、恐惧与直觉的深海。",
     svg:()=>frame(`
-      <path d="M0 96 Q30 80 50 90 Q70 80 100 96 L100 120 L0 120 Z" fill="#2b3b60"/>
-      <circle cx="50" cy="38" r="24" fill="#fff6d0" opacity=".18"/>
-      <circle cx="50" cy="38" r="15" fill="#f5ecbf"/><path d="M50 23 a15 15 0 0 0 0 30 a11 11 0 0 1 0 -30" fill="#fbf6d8"/>
-      <circle cx="45" cy="34" r="1.4" fill="#b3a368"/><path d="M43 42 q3 2 5 .3" stroke="#b3a368" fill="none" stroke-width="1"/>
-      <g fill="#f5ecbf"><path d="M50 60 l1.2 3 1.2 -3 -1.2 -3z"/><path d="M34 66 l1 2.4 1 -2.4 -1 -2.2z"/><path d="M66 66 l1 2.4 1 -2.4 -1 -2.2z"/></g>
-      <rect x="9" y="68" width="14" height="42" fill="#3c4668"/><path d="M9 68 L16 56 L23 68 Z" fill="#4d5984"/><rect x="13" y="78" width="6" height="9" rx="1" fill="#16264a"/>
-      <rect x="77" y="68" width="14" height="42" fill="#3c4668"/><path d="M77 68 L84 56 L91 68 Z" fill="#4d5984"/><rect x="81" y="78" width="6" height="9" rx="1" fill="#16264a"/>
-      <path d="M44 150 L48 112 L52 112 L56 150 Z" fill="#c9b27a"/>
-      <path d="M30 110 q-2 -11 3 -15 q1.5 -3 3 0 q3.5 6 1 15 z" fill="#1c2c50" stroke="#34466e" stroke-width=".5"/>
-      <path d="M70 110 q2 -12 -3 -16 q-1.5 -3 -3 0 q-3.5 7 -1 16 z" fill="#243a64" stroke="#34466e" stroke-width=".5"/>
-      <ellipse cx="50" cy="134" rx="20" ry="8" fill="#274a6a"/>
-      <ellipse cx="50" cy="132" rx="5" ry="3.2" fill="#8aa0b4"/><path d="M45 132 l-3 2.5 M55 132 l3 2.5 M47 130 l-1 -2.5 M53 130 l1 -2.5" stroke="#8aa0b4" stroke-width="1" stroke-linecap="round"/>`, "#2a3f6e", "#16264a")
+      <circle cx="50" cy="38" r="15" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.4"/>
+      <path d="M50 23 a15 15 0 0 0 0 30 a11 11 0 0 1 0 -30z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="0.8"/>
+      <circle cx="46" cy="35" r="1.3" fill="${MC.ink}"/><path d="M44 42 q3 2 5 0" fill="none" stroke="${MC.ink}" stroke-width="1"/>
+      <g fill="${MC.red}"><path d="M50 58 l1.4 4 1.4 -4 -1.4 -3z"/><path d="M34 64 l1 3 1 -3 -1 -2.4z"/><path d="M66 64 l1 3 1 -3 -1 -2.4z"/></g>
+      <rect x="11" y="66" width="13" height="40" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/><path d="M11 66 l6.5 -10 6.5 10z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
+      <rect x="76" y="66" width="13" height="40" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/><path d="M76 66 l6.5 -10 6.5 10z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M30 106 q-2 -12 3 -16 q1.5 -3 3 0 q3.5 7 1 16z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M70 106 q2 -12 -3 -16 q-1.5 -3 -3 0 q-3.5 7 -1 16z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <ellipse cx="50" cy="118" rx="18" ry="7" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <ellipse cx="50" cy="116" rx="5" ry="3" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.9"/>
+      <path d="M45 116 l-3 2.5 M55 116 l3 2.5 M47 114 l-1 -2.5 M53 114 l1 -2.5" stroke="${MC.ink}" stroke-width="0.9"/>
+    `, "XVIII", "LA·LVNE")
   },
   {
     name:"太阳", arcana:"大阿卡那 · XIX", kw:"喜悦 · 成功 · 光明",
@@ -170,21 +203,20 @@ const TAROT = [
     rev:"快乐被暂时遮蔽，或过于乐观。调整心态，光明依旧在前方。",
     detail:"灿烂的太阳放射光芒，一个戴花冠的孩子骑着白马，举着红色旗帜，身后是向日葵盛开的花墙。象征喜悦、成功、生命力与纯真的幸福。",
     svg:()=>frame(`
-      <g stroke="#ef9f17" stroke-linecap="round">
-        <g stroke-width="2.4"><line x1="50" y1="50" x2="50" y2="6"/><line x1="50" y1="50" x2="94" y2="50"/><line x1="50" y1="50" x2="50" y2="94"/><line x1="50" y1="50" x2="6" y2="50"/><line x1="50" y1="50" x2="81" y2="19"/><line x1="50" y1="50" x2="81" y2="81"/><line x1="50" y1="50" x2="19" y2="81"/><line x1="50" y1="50" x2="19" y2="19"/></g>
-        <g stroke-width="1.1" opacity=".8"><line x1="50" y1="50" x2="68" y2="10"/><line x1="50" y1="50" x2="90" y2="32"/><line x1="50" y1="50" x2="90" y2="68"/><line x1="50" y1="50" x2="68" y2="90"/><line x1="50" y1="50" x2="32" y2="90"/><line x1="50" y1="50" x2="10" y2="68"/><line x1="50" y1="50" x2="10" y2="32"/><line x1="50" y1="50" x2="32" y2="10"/></g>
+      <g stroke="${MC.ink}" stroke-width="0.8">
+        <g fill="${MC.red}"><path d="M50 20 l4 14 -8 0z"/><path d="M80 50 l-14 4 0 -8z"/><path d="M50 80 l-4 -14 8 0z"/><path d="M20 50 l14 -4 0 8z"/></g>
+        <g fill="${MC.gold}"><path d="M71 29 l-8 12 -4 -5z"/><path d="M71 71 l-12 -8 5 -4z"/><path d="M29 71 l8 -12 4 5z"/><path d="M29 29 l12 8 -5 4z"/></g>
       </g>
-      <circle cx="50" cy="50" r="21" fill="#ffd24a" stroke="#cf8c1c" stroke-width="1.2"/>
-      <circle cx="43" cy="47" r="2.2" fill="#9c6b12"/><circle cx="57" cy="47" r="2.2" fill="#9c6b12"/>
-      <path d="M41 56 Q50 63 59 56" stroke="#9c6b12" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <rect y="110" width="100" height="40" fill="#d97b3a"/><rect y="108" width="100" height="4" fill="#b5601f"/>
-      <g><circle cx="32" cy="86" r="4.5" fill="#fff2d0"/><circle cx="38" cy="82" r="5.5" fill="#fff2d0"/><circle cx="44" cy="86" r="4.5" fill="#fff2d0"/><circle cx="38" cy="84" r="3" fill="#e0a23a"/></g>
-      <g><circle cx="62" cy="92" r="3.6" fill="#fff2d0"/><circle cx="67" cy="89" r="4.4" fill="#fff2d0"/><circle cx="62" cy="90" r="2.4" fill="#e0a23a"/></g>
-      <ellipse cx="50" cy="126" rx="13" ry="13" fill="#f0e7d8"/>
-      <circle cx="50" cy="104" r="6.5" fill="#f4d0a4"/>
-      <g fill="#e8a93b"><path d="M50 97 l1 -5 1 5z"/><path d="M44 100 l-4 -3 4 4z"/><path d="M56 100 l4 -3 -4 4z"/></g>
-      <path d="M50 110 l-3 3 3 3 3 -3z" fill="#d23b3b"/>
-      <path d="M56 114 L68 110 L68 122 L56 120 Z" fill="#e23b3b"/><line x1="56" y1="112" x2="56" y2="126" stroke="#9c4a1a" stroke-width="1.6"/>`, "#fbe39a", "#f4c34e")
+      <circle cx="50" cy="50" r="19" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.6"/>
+      <circle cx="43" cy="47" r="1.8" fill="${MC.ink}"/><circle cx="57" cy="47" r="1.8" fill="${MC.ink}"/>
+      <path d="M50 50 l0 4" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M42 57 q8 6 16 0" fill="none" stroke="${MC.ink}" stroke-width="1.4"/>
+      <g fill="${MC.red}"><circle cx="40" cy="42" r="1.4"/><circle cx="60" cy="42" r="1.4"/></g>
+      <rect x="14" y="104" width="72" height="18" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <line x1="30" y1="104" x2="30" y2="122" stroke="${MC.ink}" stroke-width="0.9"/><line x1="50" y1="104" x2="50" y2="122" stroke="${MC.ink}" stroke-width="0.9"/><line x1="70" y1="104" x2="70" y2="122" stroke="${MC.ink}" stroke-width="0.9"/>
+      <circle cx="50" cy="92" r="6" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M44 100 q6 -6 12 0 l1 6 -14 0z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.1"/>
+    `, "XVIIII", "LE·SOLEIL")
   },
   {
     name:"高塔", arcana:"大阿卡那 · XVI", kw:"剧变 · 觉醒 · 释放",
@@ -192,32 +224,33 @@ const TAROT = [
     rev:"你正努力避免一场必要的崩塌，或灾难已渐平息，重建的时刻来临。",
     detail:"闪电击中高塔，王冠被掀飞，两人从塔上坠落。象征旧结构的骤然瓦解、幻象的破灭，以及随之而来的觉醒与释放。",
     svg:()=>frame(`
-      <rect x="38" y="46" width="24" height="74" fill="#6a6a82"/><rect x="38" y="46" width="24" height="74" fill="none" stroke="#4a4a60" stroke-width="1"/>
-      <g stroke="#4a4a60" stroke-width=".8"><line x1="38" y1="64" x2="62" y2="64"/><line x1="38" y1="84" x2="62" y2="84"/><line x1="38" y1="104" x2="62" y2="104"/><line x1="50" y1="46" x2="50" y2="120"/></g>
-      <path d="M36 46 L64 46 L58 32 L42 32 Z" fill="#8a6a3a"/>
-      <path d="M20 18 L36 44 L30 46 L44 64 L34 50 L40 48 Z" fill="#f6e7b0"/>
-      <rect x="44" y="56" width="5" height="9" fill="#f6c945"/><rect x="51" y="56" width="5" height="9" fill="#f6c945"/>
-      <circle cx="28" cy="92" r="5" fill="#f4d0a4"/><path d="M24 96 L32 96 L34 110 L22 110 Z" fill="#5b6a9a"/>
-      <circle cx="72" cy="86" r="5" fill="#f4d0a4"/><path d="M68 90 L76 90 L74 104 L66 104 Z" fill="#9a5a5a"/>
-      <g fill="#f0c24a"><path d="M18 70 l1.4 4 1.4 -4 -1.4 -3z"/><path d="M82 64 l1.4 4 1.4 -4 -1.4 -3z"/><path d="M66 108 l1.4 4 1.4 -4 -1.4 -3z"/><path d="M30 118 l1.2 3 1.2 -3 -1.2 -2.6z"/></g>`, "#241830", "#120a1c")
+      <rect x="37" y="48" width="26" height="74" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.4"/>
+      <g stroke="${MC.ink}" stroke-width="0.9"><line x1="37" y1="66" x2="63" y2="66"/><line x1="37" y1="86" x2="63" y2="86"/><line x1="37" y1="106" x2="63" y2="106"/><line x1="50" y1="48" x2="50" y2="122"/></g>
+      <rect x="44" y="56" width="5" height="8" fill="${MC.ink}"/><rect x="51" y="56" width="5" height="8" fill="${MC.ink}"/>
+      <path d="M34 48 L66 48 L60 36 L40 36 Z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M22 18 L38 44 L31 44 L46 64 L34 50 L40 50 Z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <circle cx="26" cy="92" r="5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/><path d="M22 98 h8 l2 14 -12 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <circle cx="74" cy="86" r="5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/><path d="M70 92 h8 l2 14 -12 0z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <g fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.6"><path d="M16 72 l1.6 4 1.6 -4 -1.6 -3z"/><path d="M84 66 l1.6 4 1.6 -4 -1.6 -3z"/><path d="M68 110 l1.4 4 1.4 -4 -1.4 -3z"/></g>
+    `, "XVI", "LA·MAISON·DIEV")
   },
   {
     name:"死神", arcana:"大阿卡那 · XIII", kw:"结束 · 转化 · 重生",
     up:"一段旅程的终结，正是另一段的开始。放下过去，迎接必然的蜕变。",
     rev:"你在抗拒改变，停滞不前。允许旧的离开，新的才有空间生长。",
-    detail:"身披黑甲的骷髅骑士手持白玫瑰旗帜前行，无论国王、孩童或主教皆无法阻挡。远方双塔间太阳升起。象征终结、转化与必然的重生。",
+    detail:"身披黑甲的骷髅骑士手持镰刀前行，无论国王、孩童或主教皆无法阻挡。远方双塔间太阳升起。象征终结、转化与必然的重生。",
     svg:()=>frame(`
-      <path d="M0 116 L100 116 L100 150 L0 150 Z" fill="#3a2f4a"/>
-      <circle cx="50" cy="34" r="10" fill="#e8e6f5"/>
-      <ellipse cx="46" cy="33" rx="2" ry="2.6" fill="#2a1c3a"/><ellipse cx="54" cy="33" rx="2" ry="2.6" fill="#2a1c3a"/>
-      <path d="M44 40 l2 4 2 -4 2 4 2 -4" fill="none" stroke="#2a1c3a" stroke-width="1"/>
-      <path d="M40 48 Q50 44 60 48 L62 110 L38 110 Z" fill="#2a2a3a"/>
-      <path d="M40 48 L34 78 L40 80 Z" fill="#3a3a4a"/><path d="M60 48 L66 78 L60 80 Z" fill="#1e1e2e"/>
-      <rect x="46" y="54" width="8" height="50" fill="#4a4a5e"/>
-      <rect x="70" y="14" width="3" height="98" fill="#9c9cb0" transform="rotate(6 71 60)"/>
-      <path d="M70 16 q16 4 13 20 q-13 -6 -13 -20z" fill="#f0ece0"/>
-      <path d="M14 28 l8 14 8 -14z" fill="#f6c945"/>
-      <path d="M20 100 q6 -8 14 -2" stroke="#f6e7b0" fill="none" stroke-width="1.6"/>`, "#1c1428", "#0c0814")
+      <path d="M14 116 H86" stroke="${MC.ink}" stroke-width="1"/>
+      <circle cx="48" cy="40" r="10" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.4"/>
+      <ellipse cx="44" cy="39" rx="2" ry="2.6" fill="${MC.ink}"/><ellipse cx="52" cy="39" rx="2" ry="2.6" fill="${MC.ink}"/>
+      <path d="M43 46 l2 4 2 -4 2 4 2 -4" fill="none" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M40 52 q8 -4 16 0 l3 56 -22 0z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.4"/>
+      <g stroke="${MC.ink}" stroke-width="1.1"><line x1="44" y1="62" x2="44" y2="100"/><line x1="48" y1="62" x2="48" y2="100"/><line x1="52" y1="62" x2="52" y2="100"/></g>
+      <path d="M72 20 q14 18 0 40" fill="none" stroke="${MC.ink}" stroke-width="2.2"/>
+      <line x1="72" y1="20" x2="58" y2="108" stroke="${MC.fleshDk}" stroke-width="2.4"/>
+      <path d="M16 30 l7 12 7 -12z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M22 104 q6 -8 14 -2" fill="none" stroke="${MC.gold}" stroke-width="1.6"/>
+    `, "XIII", "LA·MORT")
   },
 
   /* ===== 小阿卡那 ===== */
@@ -227,21 +260,16 @@ const TAROT = [
     rev:"协作出现分歧或敷衍，提醒你重视细节、重新投入真诚。",
     detail:"年轻的石匠在修道院中展示作品，僧侣与设计师手持图纸与他商讨。三枚星币嵌于拱顶。象征技艺、协作、用心打磨与初步的成就认可。",
     svg:()=>frame(`
-      <path d="M14 92 L14 50 Q50 8 86 50 L86 92 Z" fill="#4a4566"/>
-      <path d="M20 92 L20 53 Q50 18 80 53 L80 92 Z" fill="#2b2742"/>
-      <g stroke="#6a6488" stroke-width="1" opacity=".8"><path d="M50 22 L50 50"/><path d="M34 27 L42 52"/><path d="M66 27 L58 52"/><path d="M24 38 L36 56"/><path d="M76 38 L64 56"/></g>
-      <circle cx="50" cy="40" r="9" fill="#3a4f7a" stroke="#7d86ad" stroke-width="1"/>
-      <g stroke="#7d86ad" stroke-width=".7"><line x1="41" y1="40" x2="59" y2="40"/><line x1="50" y1="31" x2="50" y2="49"/></g>
-      <g><circle cx="50" cy="64" r="6.5" fill="#f6c945" stroke="#8a6a14" stroke-width=".8"/><path d="M50 60 l1.2 2.6 2.8 .2 -2.1 1.8 .7 2.8 -2.6 -1.6 -2.6 1.6 .7 -2.8 -2.1 -1.8 2.8 -.2z" fill="#8a6a14"/></g>
-      <g><circle cx="37" cy="80" r="6" fill="#f6c945" stroke="#8a6a14" stroke-width=".8"/><path d="M37 76.3 l1.1 2.4 2.6 .2 -2 1.6 .6 2.6 -2.3 -1.5 -2.3 1.5 .6 -2.6 -2 -1.6 2.6 -.2z" fill="#8a6a14"/></g>
-      <g><circle cx="63" cy="80" r="6" fill="#f6c945" stroke="#8a6a14" stroke-width=".8"/><path d="M63 76.3 l1.1 2.4 2.6 .2 -2 1.6 .6 2.6 -2.3 -1.5 -2.3 1.5 .6 -2.6 -2 -1.6 2.6 -.2z" fill="#8a6a14"/></g>
-      <rect y="116" width="100" height="34" fill="#3a3454"/>
-      <rect x="20" y="104" width="20" height="12" fill="#6a5a3a"/>
-      <circle cx="30" cy="92" r="4.5" fill="#e8c39a"/><path d="M26 104 L26 96 Q30 93 34 96 L34 104 Z" fill="#7a4a8a"/>
-      <path d="M34 98 L42 92" stroke="#e8c39a" stroke-width="2.2" stroke-linecap="round"/>
-      <circle cx="60" cy="96" r="4" fill="#e8c39a"/><path d="M56 108 L56 99 Q60 96 64 99 L64 108 Z" fill="#324f6e"/>
-      <circle cx="74" cy="98" r="4" fill="#e8c39a"/><path d="M70 110 L70 101 Q74 98 78 101 L78 110 Z" fill="#6a4a8a"/>
-      <rect x="58" y="103" width="13" height="8" rx="1" fill="#d8c9a0" stroke="#9c8a5a" stroke-width=".6" transform="rotate(-8 64 107)"/>`, "#3a3556", "#272340")
+      <path d="M18 96 V58 Q50 24 82 58 V96 Z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.6"/>
+      <path d="M26 96 V60 Q50 32 74 60 V96 Z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1"/>
+      <g stroke="${MC.ink}" stroke-width="0.8" opacity="0.7"><path d="M50 34 V60"/><path d="M36 39 L42 60"/><path d="M64 39 L58 60"/></g>
+      ${coin(50,46,7)}
+      ${coin(36,70,6)}
+      ${coin(64,70,6)}
+      <path d="M22 112 H78" stroke="${MC.ink}" stroke-width="1"/>
+      <circle cx="50" cy="92" r="5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M44 100 q6 -6 12 0 l1 12 -14 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.1"/>
+    `, "III", "III·DE·DENIERS")
   },
   {
     name:"圣杯二", arcana:"小阿卡那 · 圣杯", kw:"结合 · 互信 · 情感连接",
@@ -249,13 +277,16 @@ const TAROT = [
     rev:"关系失衡或信任受损，需要修复沟通，找回平等与尊重。",
     detail:"一男一女举杯相对，杯上盘绕着赫尔墨斯之杖与狮首。象征平等的情感交流、承诺、伙伴关系与心灵的相互滋养。",
     svg:()=>frame(`
-      <path d="M0 118 L100 118 L100 150 L0 150 Z" fill="#3a6a5a"/>
-      <circle cx="32" cy="56" r="7" fill="#f4d0a4"/><path d="M25 66 Q32 60 39 66 L41 104 L23 104 Z" fill="#5fb27a"/>
-      <circle cx="68" cy="56" r="7" fill="#f6dcc0"/><path d="M61 66 Q68 60 75 66 L77 104 L59 104 Z" fill="#c75b9a"/>
-      <path d="M38 74 L46 74 L45 84 L39 84 Z" fill="#f6c945"/><rect x="40" y="84" width="3" height="8" fill="#e0a23a"/><rect x="36" y="92" width="11" height="3" fill="#e0a23a"/>
-      <path d="M54 74 L62 74 L61 84 L55 84 Z" fill="#f6c945"/><rect x="57" y="84" width="3" height="8" fill="#e0a23a"/><rect x="53" y="92" width="11" height="3" fill="#e0a23a"/>
-      <path d="M50 50 l-5 -5 a3 3 0 0 1 5 -1.6 a3 3 0 0 1 5 1.6z" fill="#e04060"/>
-      <path d="M44 50 q6 -10 12 0 q-6 6 -12 0z" fill="#f0c24a"/>`, "#2c5a6e", "#163a48")
+      <path d="M14 116 H86" stroke="${MC.ink}" stroke-width="1"/>
+      <circle cx="32" cy="54" r="7" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M25 64 q7 -6 14 0 l2 40 -18 0z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <circle cx="68" cy="54" r="7" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M61 64 q7 -6 14 0 l2 40 -18 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.2"/>
+      ${cup(42,78)}
+      ${cup(58,78)}
+      <path d="M50 48 l-5 -5 a3 3 0 0 1 5 -1.6 a3 3 0 0 1 5 1.6z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M44 50 q6 -10 12 0 q-6 6 -12 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+    `, "II", "II·DE·COVPE")
   },
   {
     name:"宝剑三", arcana:"小阿卡那 · 宝剑", kw:"心碎 · 释放 · 真相",
@@ -263,12 +294,13 @@ const TAROT = [
     rev:"你正从伤痛中复原，愿意原谅与放下，乌云即将散去。",
     detail:"三柄长剑穿透一颗红心，背景是阴云密布的暴雨天空。象征心碎、悲伤、被真相刺痛，以及哀伤之后所带来的清明与释放。",
     svg:()=>frame(`
-      <g fill="#5a6480" opacity=".6"><ellipse cx="30" cy="34" rx="16" ry="8"/><ellipse cx="68" cy="38" rx="18" ry="9"/><ellipse cx="50" cy="28" rx="20" ry="9"/></g>
-      <path d="M50 52 q-17 6 -19 28 q19 9 19 9 q0 0 19 -9 q-2 -22 -19 -28z" fill="#c0394b"/>
-      <path d="M50 52 q-17 6 -19 28 q19 9 19 9" fill="#a82e3e"/>
-      <g stroke="#cfd6e8" stroke-width="3.4"><line x1="50" y1="40" x2="50" y2="104"/><line x1="32" y1="46" x2="68" y2="94"/><line x1="68" y1="46" x2="32" y2="94"/></g>
-      <g fill="#9aa6c0"><circle cx="50" cy="38" r="2.4"/><circle cx="31" cy="45" r="2.4"/><circle cx="69" cy="45" r="2.4"/></g>
-      <g stroke="#7a86a0" stroke-width="1.4"><line x1="22" y1="106" x2="26" y2="118"/><line x1="40" y1="108" x2="44" y2="120"/><line x1="58" y1="108" x2="62" y2="120"/><line x1="76" y1="106" x2="80" y2="118"/></g>`, "#5a6480", "#3a4258")
+      <g fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1"><ellipse cx="30" cy="34" rx="14" ry="7"/><ellipse cx="68" cy="38" rx="15" ry="7.5"/></g>
+      <path d="M50 54 q-18 7 -20 30 q20 10 20 10 q0 0 20 -10 q-2 -23 -20 -30z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.4"/>
+      <g stroke="${MC.ink}" stroke-width="1"><line x1="50" y1="44" x2="50" y2="104" stroke-width="3.6" stroke="${MC.blue}"/><line x1="30" y1="50" x2="70" y2="94" stroke-width="3.6" stroke="${MC.blue}"/><line x1="70" y1="50" x2="30" y2="94" stroke-width="3.6" stroke="${MC.blue}"/></g>
+      <g stroke="${MC.ink}" stroke-width="1.1"><line x1="50" y1="44" x2="50" y2="104"/><line x1="30" y1="50" x2="70" y2="94"/><line x1="70" y1="50" x2="30" y2="94"/></g>
+      <g fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.8"><circle cx="50" cy="42" r="2.6"/><circle cx="29" cy="48" r="2.6"/><circle cx="71" cy="48" r="2.6"/></g>
+      <g stroke="${MC.blue}" stroke-width="1.4"><line x1="22" y1="108" x2="26" y2="118"/><line x1="42" y1="110" x2="46" y2="120"/><line x1="58" y1="110" x2="62" y2="120"/><line x1="76" y1="108" x2="80" y2="118"/></g>
+    `, "III", "III·DESPÉE")
   },
   {
     name:"权杖王牌", arcana:"小阿卡那 · 权杖", kw:"灵感 · 行动 · 新机会",
@@ -276,14 +308,14 @@ const TAROT = [
     rev:"动力受阻或方向不明，先找回最初的热情，再重新点火。",
     detail:"云中伸出一只手，紧握一根新生嫩芽的权杖，叶片纷纷飘落。象征灵感的火花、创造的冲动、全新的机会与原始的生命动力。",
     svg:()=>frame(`
-      <path d="M0 116 Q40 108 60 116 L100 110 L100 150 L0 150z" fill="#3a5a3a"/>
-      <ellipse cx="68" cy="42" rx="22" ry="11" fill="#e6eef5" opacity=".9"/>
-      <ellipse cx="80" cy="48" rx="14" ry="8" fill="#dbe5f0" opacity=".8"/>
-      <rect x="44" y="28" width="7" height="86" rx="3.5" fill="#8a5a2a"/>
-      <path d="M44 40 q-6 -4 -10 -12 M51 36 q6 -4 10 -12 M47 30 q0 -8 0 -14" stroke="#9a6a3a" stroke-width="2" fill="none"/>
-      <g fill="#5fb27a"><ellipse cx="34" cy="30" rx="5" ry="9" transform="rotate(-30 34 30)"/><ellipse cx="64" cy="26" rx="5" ry="9" transform="rotate(30 64 26)"/><ellipse cx="48" cy="18" rx="5" ry="9"/></g>
-      <circle cx="40" cy="76" r="9" fill="#f4d0a4"/><path d="M31 80 q9 -8 18 0" fill="none" stroke="#e6eef5" stroke-width="2.4"/>
-      <g fill="#6fb84a"><ellipse cx="22" cy="96" rx="3" ry="6" transform="rotate(-40 22 96)"/><ellipse cx="60" cy="100" rx="3" ry="6" transform="rotate(30 60 100)"/></g>`, "#4a6a8a", "#2a4560")
+      <rect x="46" y="28" width="8" height="86" rx="3" fill="${MC.fleshDk}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M46 40 q-7 -5 -11 -13 M54 36 q7 -5 11 -13 M50 30 q0 -8 0 -14" stroke="${MC.ink}" stroke-width="1.4" fill="none"/>
+      <g fill="${MC.green}" stroke="${MC.ink}" stroke-width="1"><ellipse cx="34" cy="28" rx="5" ry="9" transform="rotate(-30 34 28)"/><ellipse cx="66" cy="24" rx="5" ry="9" transform="rotate(30 66 24)"/><ellipse cx="50" cy="17" rx="5" ry="9"/></g>
+      <g fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.9"><ellipse cx="24" cy="58" rx="3" ry="6" transform="rotate(-40 24 58)"/><ellipse cx="76" cy="54" rx="3" ry="6" transform="rotate(40 76 54)"/><ellipse cx="22" cy="86" rx="3" ry="6" transform="rotate(-40 22 86)"/><ellipse cx="78" cy="90" rx="3" ry="6" transform="rotate(40 78 90)"/></g>
+      <path d="M30 100 q20 -8 40 0 V120 H30z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <ellipse cx="50" cy="100" rx="12" ry="6" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M40 100 q10 -6 20 0" fill="none" stroke="${MC.ink}" stroke-width="1.1"/>
+    `, "I", "AS·DE·BASTON")
   },
   {
     name:"圣杯十", arcana:"小阿卡那 · 圣杯", kw:"圆满 · 幸福 · 家庭",
@@ -291,15 +323,16 @@ const TAROT = [
     rev:"表面和谐下藏着小裂痕，用心经营，幸福需要持续地呵护。",
     detail:"一对夫妇张开双臂仰望天空，彩虹中浮现十只金杯，孩子在一旁欢快玩耍，远处是温馨的家园。象征圆满的幸福、家庭的和谐与情感的丰盈。",
     svg:()=>frame(`
-      <path d="M0 118 L100 118 L100 150 L0 150 Z" fill="#4a7a4a"/>
-      <path d="M18 44 Q50 18 82 44" fill="none" stroke="#e0506a" stroke-width="3"/>
-      <path d="M18 44 Q50 22 82 44" fill="none" stroke="#f0a040" stroke-width="3" opacity=".8"/>
-      <path d="M18 44 Q50 26 82 44" fill="none" stroke="#5fb27a" stroke-width="3" opacity=".7"/>
-      <g fill="#f6c945"><path d="M26 38 l5 0 -1 6 -3 0z"/><path d="M37 32 l5 0 -1 6 -3 0z"/><path d="M48 30 l5 0 -1 6 -3 0z"/><path d="M59 32 l5 0 -1 6 -3 0z"/><path d="M70 38 l5 0 -1 6 -3 0z"/></g>
-      <circle cx="38" cy="74" r="7" fill="#f4d0a4"/><path d="M31 84 Q38 78 45 84 L40 114 Q38 100 36 114 Z" fill="#5b8fb0"/><path d="M31 84 L26 70 24 72z" fill="#5b8fb0"/>
-      <circle cx="62" cy="74" r="7" fill="#f6dcc0"/><path d="M55 84 Q62 78 69 84 L64 114 Q62 100 60 114 Z" fill="#c75b9a"/><path d="M69 84 L74 70 76 72z" fill="#c75b9a"/>
-      <circle cx="22" cy="100" r="4" fill="#f4d0a4"/><path d="M19 104 L25 104 L24 116 L20 116 Z" fill="#e0a23a"/>
-      <circle cx="80" cy="102" r="3.6" fill="#f4d0a4"/><path d="M77 106 L83 106 L82 116 L78 116 Z" fill="#7fc5d8"/>`, "#7fb0d8", "#4a7faa")
+      <path d="M16 48 Q50 22 84 48" fill="none" stroke="${MC.red}" stroke-width="3"/>
+      <path d="M16 52 Q50 26 84 52" fill="none" stroke="${MC.gold}" stroke-width="3"/>
+      <path d="M16 56 Q50 30 84 56" fill="none" stroke="${MC.green}" stroke-width="3"/>
+      <g fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"><path d="M26 40 l5 0 -1 6 -3 0z"/><path d="M37 34 l5 0 -1 6 -3 0z"/><path d="M48 32 l5 0 -1 6 -3 0z"/><path d="M59 34 l5 0 -1 6 -3 0z"/><path d="M70 40 l5 0 -1 6 -3 0z"/></g>
+      <path d="M14 118 H86" stroke="${MC.ink}" stroke-width="1"/>
+      <circle cx="38" cy="74" r="6" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.1"/><path d="M32 82 q6 -5 12 0 l1 32 -14 0z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <circle cx="62" cy="74" r="6" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.1"/><path d="M56 82 q6 -5 12 0 l1 32 -14 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <circle cx="22" cy="98" r="4" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1"/><path d="M19 102 h6 l1 14 -8 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <circle cx="80" cy="100" r="3.6" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1"/><path d="M77 104 h6 l1 12 -8 0z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1"/>
+    `, "X", "X·DE·COVPE")
   },
   {
     name:"圣杯八", arcana:"小阿卡那 · 圣杯", kw:"离开 · 追寻 · 转身",
@@ -307,13 +340,15 @@ const TAROT = [
     rev:"在去留之间徘徊不定，听从内心，别因留恋而困住自己。",
     detail:"一个披红袍的人拄杖背对八只排列整齐的金杯，向月夜中的群山走去。象征主动的放下、对更高意义的追寻，以及离开舒适区的勇气。",
     svg:()=>frame(`
-      <path d="M0 110 L30 96 L60 108 L100 94 L100 150 L0 150 Z" fill="#2a3a52"/>
-      <circle cx="44" cy="32" r="13" fill="#f3e7ad"/><path d="M44 19 a13 13 0 0 0 0 26 a9 9 0 0 1 0 -26" fill="#fbf4cf"/>
-      <g fill="#e0c060"><rect x="22" y="96" width="9" height="11" rx="1"/><rect x="33" y="96" width="9" height="11" rx="1"/><rect x="44" y="96" width="9" height="11" rx="1"/><rect x="28" y="84" width="9" height="11" rx="1"/><rect x="39" y="84" width="9" height="11" rx="1"/></g>
-      <circle cx="72" cy="58" r="5" fill="#e8c39a"/>
-      <path d="M65 66 Q72 60 79 66 L82 116 L62 116 Z" fill="#b04a3a"/>
-      <path d="M65 66 L60 90 65 92z" fill="#c05a4a"/>
-      <rect x="82" y="60" width="2.4" height="56" fill="#9c7f44"/>`, "#1c2c44", "#0e1a2e")
+      <path d="M10 100 L32 88 L60 100 L90 86 V122 H10z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <circle cx="44" cy="34" r="12" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.4"/>
+      <path d="M44 22 a12 12 0 0 0 0 24 a9 9 0 0 1 0 -24z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="0.8"/>
+      ${cupSm(26,90)}${cupSm(36,90)}${cupSm(46,90)}
+      ${cupSm(31,80)}${cupSm(41,80)}
+      <circle cx="72" cy="60" r="5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M65 68 q7 -6 14 0 l3 48 -20 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <line x1="82" y1="62" x2="82" y2="116" stroke="${MC.fleshDk}" stroke-width="2"/>
+    `, "VIII", "VIII·DE·COVPE")
   },
   {
     name:"星币十", arcana:"小阿卡那 · 星币", kw:"富足 · 传承 · 稳定",
@@ -321,14 +356,33 @@ const TAROT = [
     rev:"对稳定的过度执着或财务的小波动，提醒你平衡物质与情感。",
     detail:"白发长者坐于拱门下，身旁有伴侣、孩童与忠犬，十枚星币如生命之树般排布，背景是繁荣的家宅。象征财富的积累、家族传承与长久的稳定。",
     svg:()=>frame(`
-      <path d="M16 44 L16 120 L36 120 L36 44 Q26 36 16 44z" fill="#6a5a3a"/><rect x="18" y="50" width="16" height="20" fill="#3a2f2a"/>
-      <path d="M64 44 L64 120 L84 120 L84 44 Q74 36 64 44z" fill="#6a5a3a"/><rect x="66" y="50" width="16" height="20" fill="#3a2f2a"/>
-      <rect x="0" y="120" width="100" height="30" fill="#4a3f2a"/>
-      <g fill="#f6c945" stroke="#8a6a14" stroke-width=".5"><circle cx="42" cy="40" r="4.5"/><circle cx="58" cy="40" r="4.5"/><circle cx="50" cy="52" r="4.5"/><circle cx="40" cy="60" r="4.5"/><circle cx="60" cy="60" r="4.5"/><circle cx="50" cy="72" r="4.5"/><circle cx="42" cy="84" r="4.5"/><circle cx="58" cy="84" r="4.5"/><circle cx="46" cy="98" r="4.5"/><circle cx="58" cy="100" r="4.5"/></g>
-      <circle cx="48" cy="92" r="6" fill="#e8c39a"/><path d="M42 100 Q48 94 54 100 L54 118 L42 118 Z" fill="#8a4a8a"/>
-      <ellipse cx="30" cy="108" rx="6" ry="4" fill="#d8c0a0"/><path d="M24 108 l-4 6 4 0z" fill="#d8c0a0"/>`, "#2a3a22", "#161e10")
+      <path d="M16 46 V120 H36 V46 Q26 38 16 46z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.3"/><rect x="19" y="52" width="14" height="18" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.9"/>
+      <path d="M64 46 V120 H84 V46 Q74 38 64 46z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.3"/><rect x="67" y="52" width="14" height="18" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.9"/>
+      ${coin(42,40,4.4)}${coin(58,40,4.4)}${coin(50,52,4.4)}
+      ${coin(40,62,4.4)}${coin(60,62,4.4)}${coin(50,74,4.4)}
+      ${coin(42,86,4.4)}${coin(58,86,4.4)}
+      ${coin(46,100,4.4)}${coin(58,102,4.4)}
+      <path d="M16 120 H84" stroke="${MC.ink}" stroke-width="1"/>
+    `, "X", "X·DE·DENIERS")
   }
 ];
+
+/* ===== 小图元：星币与圣杯（马赛风格） ===== */
+function coin(cx,cy,r){
+  return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+    <circle cx="${cx}" cy="${cy}" r="${r*0.55}" fill="none" stroke="${MC.ink}" stroke-width="0.8"/>
+    <circle cx="${cx}" cy="${cy}" r="${r*0.18}" fill="${MC.red}"/>`;
+}
+function cup(cx,cy){
+  return `<path d="M${cx-6} ${cy-8} h12 l-2 9 a4 4 0 0 1 -8 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+    <rect x="${cx-1.4}" y="${cy+1}" width="2.8" height="9" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.8"/>
+    <rect x="${cx-5}" y="${cy+10}" width="10" height="3" rx="1" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.9"/>`;
+}
+function cupSm(cx,cy){
+  return `<path d="M${cx-3.5} ${cy-4} h7 l-1 6 a2.4 2.4 0 0 1 -5 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.9"/>
+    <rect x="${cx-3}" y="${cy+5}" width="6" height="2" rx="0.6" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/>`;
+}
+
 
 /* ===== 牌阵定义 ===== */
 const SPREADS = [
@@ -356,6 +410,7 @@ const LUCKY = {
 const WIKI_INTRO = [
   { t:"什么是塔罗牌", c:"塔罗牌是一套共 78 张的图像卡牌，起源于 15 世纪的欧洲，最初用于游戏，后逐渐发展为自我探索与心灵指引的工具。它通过象征性的图像，映照我们内心的状态与潜意识。" },
   { t:"大阿卡那与小阿卡那", c:"78 张牌分为两部分：22 张「大阿卡那」描绘人生重大主题与灵魂成长阶段（如愚人、恋人、太阳）；56 张「小阿卡那」分为权杖（火·行动）、圣杯（水·情感）、宝剑（风·思想）、星币（土·物质）四种花色，对应日常生活的细节。" },
+  { t:"马赛塔罗", c:"本套牌面采用经典的「马赛塔罗（Tarot de Marseille）」风格——起源于法国南部的木刻版画传统，以厚重的黑色描边、平涂的朱红、群青、明黄等纯色，以及质朴对称的构图著称，是流传最广、最具历史感的塔罗体系之一。" },
   { t:"正位与逆位", c:"牌面正立为「正位」，通常表达该牌能量的正向流动；牌面颠倒为「逆位」，可能代表能量受阻、内化或过度。逆位并非「坏」，而是提醒我们换一个角度看待问题。" },
   { t:"如何提出好问题", c:"塔罗擅长回答「开放式」而非「是非题」。把「我会复合吗」换成「我该如何面对这段关系」，聚焦在自己能掌控的部分，会得到更有启发的指引。" },
   { t:"塔罗的正确心态", c:"塔罗揭示的是「当下能量的趋势」，而非不可改变的命运。它是一面镜子，帮助你更清晰地认识自己，最终的选择权始终在你手中。" }
