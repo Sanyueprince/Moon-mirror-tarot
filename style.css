@@ -258,6 +258,7 @@ body{
 /* 一整排连续牌带（宽度由 JS 按张数计算），底部留白容纳弧线下沉 */
 .fan{position:relative;height:230px;display:block}
 .fan .f{position:absolute;top:30px;width:46px;height:138px;border-radius:7px;overflow:hidden;
+  background:#15123a;
   border:1px solid rgba(217,165,49,.5);box-shadow:-3px 4px 9px rgba(0,0,0,.45);
   transform-origin:50% 200%;
   transition:transform .2s ease,border-color .18s,box-shadow .18s;cursor:pointer;will-change:transform}
