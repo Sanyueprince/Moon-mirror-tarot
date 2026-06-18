@@ -785,8 +785,6 @@ function cardBackSVG(){
                C 43 69, 43.4 63, 44.4 58.5
                C 45.1 55.2, 46.6 53.2, 50 52.5 Z"
             fill="${G}" stroke="${Gdk}" stroke-width="0.8" stroke-linejoin="round"/>
-      <!-- 细长前腿分隔（一条暗线，纤细英气） -->
-      <path d="M50 71 L 50 91.2" fill="none" stroke="${Gdk}" stroke-width="0.6" opacity="0.45"/>
 
       <!-- 月顶星点 -->
       <circle cx="64" cy="44" r="1.4" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
