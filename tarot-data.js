@@ -616,20 +616,28 @@ function pip(suit, cx, cy){
       <circle cx="0" cy="8.8" r="1.9" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/>
       <circle cx="0" cy="8.8" r="0.7" fill="${MC.red}"/></g>`;
   }
-  // baton 权杖：木纹结节 + 顶端嫩芽叶 + 缠藤
+  // baton 权杖：发芽的木杖（锥形主干 + 修枝节疤 + 木纹 + 顶端嫩芽叶 + 红芽 + 切口底）
   return `<g transform="translate(${cx},${cy})">
-    <rect x="-1.9" y="-8" width="3.8" height="16" rx="1.7" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1"/>
-    <line x1="-0.4" y1="-7" x2="-0.4" y2="7" stroke="${MC.cream}" stroke-width="0.4" opacity="0.5"/>
-    <g stroke="${MC.ink}" stroke-width="0.4" fill="none">
-      <path d="M-1.9 -3.4 q1.9 -1.4 3.8 0"/><path d="M-1.9 0.6 q1.9 -1.4 3.8 0"/><path d="M-1.9 4.6 q1.9 -1.4 3.8 0"/>
-    </g>
-    <circle cx="0" cy="-3.4" r="0.6" fill="${MC.ink}"/><circle cx="0" cy="4.6" r="0.6" fill="${MC.ink}"/>
-    <path d="M0 -8 q-3.2 -1 -3.6 -4 q3 0.6 3.6 4z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.7"/>
-    <path d="M0 -8 q3.2 -1 3.6 -4 q-3 0.6 -3.6 4z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.7"/>
-    <ellipse cx="0" cy="-8" rx="2.4" ry="2.8" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"/>
-    <ellipse cx="0" cy="8" rx="2.4" ry="2.8" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"/>
-    <circle cx="-0.6" cy="-8.6" r="0.6" fill="${MC.cream}" opacity="0.7"/></g>`;
+    <!-- 主干：上略粗、下略收的木杖 -->
+    <path d="M-1.9 -7.6 Q0 -8.4 1.9 -7.6 L1.5 7.4 Q0 8.4 -1.5 7.4 Z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1"/>
+    <!-- 木纹高光与暗线 -->
+    <line x1="-0.4" y1="-7" x2="-0.7" y2="7" stroke="${MC.cream}" stroke-width="0.4" opacity="0.55"/>
+    <line x1="0.9" y1="-7.2" x2="0.7" y2="7" stroke="${MC.goldDk}" stroke-width="0.3" opacity="0.5"/>
+    <!-- 左右交错的修枝节疤 -->
+    <path d="M-1.7 -2.4 Q-4 -3, -4.6 -5 Q-2.4 -4.6, -1.4 -3.4 Z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.6"/>
+    <path d="M1.7 2.2 Q4 1.6, 4.6 -0.4 Q2.4 0, 1.4 1.2 Z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.6"/>
+    <circle cx="-1.5" cy="-2.6" r="0.5" fill="${MC.ink}"/><circle cx="1.5" cy="1.9" r="0.5" fill="${MC.ink}"/>
+    <!-- 顶端：两片对生嫩叶 + 中央顶芽 + 红色花苞 -->
+    <path d="M0 -7.8 Q-3.4 -9, -4 -12.4 Q-0.8 -11.6, 0 -7.8 Z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.7"/>
+    <path d="M0 -7.8 Q3.4 -9, 4 -12.4 Q0.8 -11.6, 0 -7.8 Z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.7"/>
+    <path d="M-2.2 -10.8 Q-1.2 -10, -0.6 -9 M2.2 -10.8 Q1.2 -10, 0.6 -9" fill="none" stroke="${MC.ink}" stroke-width="0.35"/>
+    <line x1="0" y1="-7.8" x2="0" y2="-12.2" stroke="${MC.green}" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="0" y1="-7.8" x2="0" y2="-12.2" stroke="${MC.ink}" stroke-width="0.3"/>
+    <circle cx="0" cy="-12.6" r="1.1" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.5"/>
+    <!-- 底端切口 -->
+    <ellipse cx="0" cy="7.6" rx="1.6" ry="0.8" fill="${MC.goldDk}" stroke="${MC.ink}" stroke-width="0.5"/></g>`;
 }
+
 
 /* 点数牌排列坐标（对称布局） */
 const PIPS = {
@@ -650,24 +658,48 @@ function courtSvg(suit, rank){
   const c = SUIT_INFO[suit].col;
   let inner = "";
   if(rank === "knight"){
-    // 骑士：策马前行（马鬃、马具、缰绳细节）
+    // 骑士：跨于战马之上（侧视）。重绘马匹：圆实躯干 + 弓形脖颈 + 清晰马头(口鼻/双耳/鬃毛) + 四肢 + 飘尾
     inner = `
-      <path d="M22 74 q26 -12 52 0 l-2 30 -9 0 -2 -18 -26 0 -2 18 -9 0z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.3"/>
-      <g stroke="${MC.ink}" stroke-width="0.5"><path d="M30 76 v24"/><path d="M58 76 v22"/></g>
-      <path d="M22 74 q-9 -8 -13 -5 q3 6 8 8 l-4 2 q4 4 9 2z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
-      <path d="M13 70 l-3 -5 4 1z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="0.9"/>
-      <circle cx="14" cy="71" r="0.7" fill="${MC.ink}"/>
-      <g stroke="${c}" stroke-width="1.1" fill="none"><path d="M16 73 q-3 4 -2 9"/><path d="M20 72 q-2 5 -1 10"/></g>
-      <path d="M22 74 q14 -4 14 8" fill="none" stroke="${MC.fleshDk}" stroke-width="0.7"/>
-      <circle cx="50" cy="34" r="7" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
-      <ellipse cx="47.6" cy="33.5" rx="0.8" ry="1" fill="${MC.ink}"/><ellipse cx="52.4" cy="33.5" rx="0.8" ry="1" fill="${MC.ink}"/>
-      <path d="M47 37 q3 1.5 6 0" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
-      <path d="M42 30 q8 -5 16 0 l-2 -7 -6 3 -6 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
-      <path d="M44 27 l1 -5 1 4 z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.5"/>
-      <path d="M43 41 q7 -4 14 0 l3 24 -20 0z" fill="${c}" stroke="${MC.ink}" stroke-width="1.2"/>
-      <path d="M50 41 v24" stroke="${MC.ink}" stroke-width="0.4" opacity="0.5"/>
-      ${pip(suit,72,52)}`;
+      <!-- 马尾（先画置于身后） -->
+      <path d="M24 84 q-9 4 -12 18 q-1 3 1.6 1.6 q5 -3 7 -9 q1 6 -1 12 q-0.4 3 2 1.4 q4 -6 5 -16z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <!-- 躯干 -->
+      <ellipse cx="48" cy="86" rx="24" ry="12" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.3"/>
+      <!-- 后腿（站立 + 抬蹄） -->
+      <path d="M60 94 q5 8 4 18 l-4 0 q-2 -9 -4 -16z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M66 92 q6 6 8 14 l-3 1.4 q-4 -7 -8 -12z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <!-- 前腿（前伸迈步） -->
+      <path d="M34 94 q-4 9 -3 18 l4 0 q1 -9 3 -16z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M28 92 q-7 5 -9 13 l3 1.4 q4 -7 9 -11z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <g fill="${MC.ink}"><path d="M30 111 h5 v1.6 h-5z"/><path d="M59 111 h5 v1.6 h-5z"/></g>
+      <!-- 弓形脖颈：自躯干前端上扬 -->
+      <path d="M26 80 Q18 70, 16 58 Q15 52, 19 50 Q24 56, 27 66 Q30 76, 32 82 Z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.3"/>
+      <!-- 马头：额→口鼻向左下，下颌收回 -->
+      <path d="M19 50 Q13 47, 9 50 Q6 52, 7 55 Q8 58, 13 58 Q17 58, 20 56 Q23 53, 19 50 Z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.3"/>
+      <!-- 双耳 -->
+      <path d="M19 50 l-1 -6 3 4z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="0.9"/>
+      <path d="M22 51 l2 -5 1.6 5z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="0.9"/>
+      <!-- 鬃毛：沿颈背一排 -->
+      <path d="M20 49 Q24 52, 27 62 Q30 72, 31 80" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>
+      <g stroke="${MC.ink}" stroke-width="0.4"><path d="M21 50 l2 2"/><path d="M24 56 l2 2"/><path d="M27 64 l2 2"/><path d="M29 73 l2 2"/></g>
+      <!-- 眼 / 鼻孔 / 嘴线 -->
+      <circle cx="14.5" cy="52.5" r="0.9" fill="${MC.ink}"/>
+      <circle cx="8.6" cy="53.4" r="0.6" fill="${MC.ink}"/>
+      <path d="M7 55.4 q3 1.4 6 0.6" fill="none" stroke="${MC.ink}" stroke-width="0.5"/>
+      <!-- 缰绳 -->
+      <path d="M9 51 Q22 40, 40 48" fill="none" stroke="${MC.fleshDk}" stroke-width="0.8"/>
+      <!-- ===== 骑士（坐于马背） ===== -->
+      <circle cx="50" cy="36" r="6.6" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <ellipse cx="47.8" cy="35.6" rx="0.8" ry="1" fill="${MC.ink}"/><ellipse cx="52.2" cy="35.6" rx="0.8" ry="1" fill="${MC.ink}"/>
+      <path d="M48 39 q2 1.4 4 0" fill="none" stroke="${MC.ink}" stroke-width="0.6"/>
+      <path d="M43 33 q7 -5 14 0 l-2 -7 -5 3 -5 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M45 27 l1 -5 1 4 z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.5"/>
+      <path d="M44 42 q6 -4 12 0 l3 28 -18 0z" fill="${c}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M50 42 v28" stroke="${MC.ink}" stroke-width="0.4" opacity="0.5"/>
+      <!-- 大腿压在马背 -->
+      <path d="M44 66 q8 2 16 4 l0 5 -16 0z" fill="${c}" stroke="${MC.ink}" stroke-width="1"/>
+      ${pip(suit,74,54)}`;
   } else if(rank === "page"){
+
     // 侍从：站立少年（五官、衣袍褶皱）
     inner = `
       <path d="M40 108 H60" stroke="${MC.ink}" stroke-width="1"/>
