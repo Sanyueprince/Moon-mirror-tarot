@@ -263,7 +263,7 @@
     if(a && (Math.abs(a.x)+Math.abs(a.y)+Math.abs(a.z) > 38)) doShuffle();
   });
 
-  // ---------- 抽牌：分页式牌阵（每页 15 张，左右滑动翻页） ----------
+  // ---------- 抽牌：分页整齐网格（每页 15 张 = 5列×3行，左右滑动翻页） ----------
   const PER_PAGE = 15;          // 每页展示张数
   function renderFan(){
     const fan = $('#fan');
@@ -274,28 +274,17 @@
     fan.innerHTML = '';
     const backSVG = (typeof cardBackSVG === 'function') ? cardBackSVG() : '';
     const pageCount = Math.ceil(total / PER_PAGE);
-    // 按页生成：每页一个 .fan-page（横向滚动 + scroll-snap 对齐）
+    // 按页生成：每页一个 .fan-page（整齐 5×3 网格，横向 scroll-snap 整页对齐）
     for(let p=0;p<pageCount;p++){
       const page = document.createElement('div');
       page.className = 'fan-page';
       const start = p*PER_PAGE;
       const end = Math.min(start+PER_PAGE, total);
-      const count = end - start;
-      for(let j=0;j<count;j++){
-        const i = start + j;
+      for(let i=start;i<end;i++){
         const f = document.createElement('div');
         f.className = 'f';
         f.dataset.idx = i;
         f.innerHTML = backSVG;   // 注入与洗牌页一致的马赛风格牌背
-        // 同页内整齐排成一道平缓小扇形：中间竖直、两端轻微倾斜，绝不溢出
-        const norm = count>1 ? (j-(count-1)/2)/((count-1)/2) : 0;  // -1..1
-        const ang = norm * 14;                 // 平缓倾斜角(度)
-        const drop = norm*norm * 14;            // 两端轻微下沉(px)
-        f.style.transformOrigin = '50% 140%';
-        f.style.setProperty('--ang', ang.toFixed(2)+'deg');
-        f.style.setProperty('--drop', drop.toFixed(1)+'px');
-        f.style.transform = `rotate(${ang.toFixed(2)}deg) translateY(${drop.toFixed(1)}px)`;
-        f.style.zIndex = String(Math.round(50 - Math.abs(norm)*20));
         page.appendChild(f);
       }
       fan.appendChild(page);
@@ -334,12 +323,7 @@
     if(!f || f.classList.contains('sel')) return;
     const need = state.spread.positions.length;
     if(state.drawn.length >= need) return;
-    f.classList.add('sel');
-    // 沿当前角度把牌抽起高亮
-    const ang = (f.style.getPropertyValue('--ang') || '0deg');
-    const drop = parseFloat(f.style.getPropertyValue('--drop')) || 0;
-    f.style.transform = `rotate(${ang}) translateY(${(drop-26).toFixed(1)}px)`;
-    f.style.zIndex = '60';
+    f.classList.add('sel');     // 选中：CSS 控制上浮高亮
     if(navigator.vibrate) navigator.vibrate(20);
     // 你点击的牌背位置 ↔ 牌堆中对应的那一张牌（不重复，正逆位随机）
     const idx = parseInt(f.dataset.idx, 10) || 0;
@@ -351,6 +335,7 @@
       setTimeout(()=> go('s-reveal'), 500);
     }
   }
+
 
   function updateCounter(){
     const need = state.spread.positions.length;

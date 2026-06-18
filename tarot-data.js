@@ -752,55 +752,42 @@ function cardBackSVG(){
       <!-- 圆月盘 -->
       <circle cx="50" cy="66" r="30" fill="url(#cbMoon)" stroke="${Gdk}" stroke-width="1.4"/>
       <circle cx="50" cy="66" r="30" fill="none" stroke="${G}" stroke-width="0.5"/>
-      <!-- 月面斑块（环形坑纹，落在暗面/脑后一侧作为肌理） -->
-      <g fill="${Gd}" opacity="0.28">
-        <circle cx="33" cy="56" r="3"/><circle cx="30" cy="74" r="2.2"/><circle cx="37" cy="86" r="2.4"/><circle cx="28" cy="64" r="1.4"/>
+      <!-- 月面斑块（环形坑纹，作为月盘肌理） -->
+      <g fill="${Gd}" opacity="0.22">
+        <circle cx="30" cy="58" r="2.6"/><circle cx="27" cy="74" r="1.8"/><circle cx="72" cy="80" r="2.2"/><circle cx="74" cy="58" r="1.4"/>
       </g>
-      <!-- ===== 关键：明暗分界线本身就是一张「朝右的女性侧脸」轮廓 =====
-           右半（面部）保持明亮 → 左半（脑后/暗面）填暗色，
-           分界线 = 发际→额头→鼻梁→鼻尖→人中→上下唇→下巴→下颌（收住，不拖长脖子） -->
-      <path d="M48 36.1
-               C 53 37, 59 43, 59 50
-               C 59 52, 56 52.6, 56.6 54.2
-               C 57.2 56, 63 57, 62.6 59
-               C 62.1 60.6, 57.2 60.5, 57.2 62
-               C 60 62.6, 60 64.2, 58 64.7
-               C 60 65.7, 60 67.6, 57.4 69
-               C 56 71, 58 72.6, 54 74.2
-               C 50.5 75.8, 48 79, 47 84
-               C 46.4 88, 46.2 92, 46.6 95.8
-               A 30 30 0 0 1 48 36.1 Z"
-            fill="${NAVY2}" opacity="0.96"/>
-      <!-- 侧脸分界线描边（柔和金线，勾出女性轮廓） -->
-      <path d="M48 36.1
-               C 53 37, 59 43, 59 50
-               C 59 52, 56 52.6, 56.6 54.2
-               C 57.2 56, 63 57, 62.6 59
-               C 62.1 60.6, 57.2 60.5, 57.2 62
-               C 60 62.6, 60 64.2, 58 64.7
-               C 60 65.7, 60 67.6, 57.4 69
-               C 56 71, 58 72.6, 54 74.2
-               C 50.5 75.8, 48 79, 47 84
-               C 46.4 88, 46.2 92, 46.6 95.8"
-            fill="none" stroke="${G}" stroke-width="1.3" stroke-linecap="round"/>
-      <!-- 一缕柔顺发丝（暗面一侧，体现女性感） -->
-      <path d="M48 36.4 C 40 38, 33 44, 31 54 C 30 60, 31 66, 34 72"
-            fill="none" stroke="${Gdk}" stroke-width="0.8" opacity="0.55" stroke-linecap="round"/>
-      <!-- 面部（明亮侧）五官细节 -->
-      <!-- 闭合的眼睛（位于鼻梁后方、朝右） -->
-      <path d="M51 55.6 q3.6 1.3 6 0" fill="none" stroke="${Gdk}" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="57.2" y1="55.4" x2="58" y2="54.2" stroke="${Gdk}" stroke-width="0.6"/>
-      <line x1="55.2" y1="55.9" x2="55.6" y2="54.6" stroke="${Gdk}" stroke-width="0.6"/>
-      <line x1="53.2" y1="55.9" x2="53.2" y2="54.6" stroke="${Gdk}" stroke-width="0.6"/>
-      <!-- 眉 -->
-      <path d="M51.4 53 q3.4 -1.1 5.8 0.1" fill="none" stroke="${Gdk}" stroke-width="0.8" stroke-linecap="round" opacity="0.8"/>
-      <!-- 唇部微染 -->
-      <path d="M57.6 64.5 q1.6 0.6 2.2 -0.2" fill="none" stroke="${RED}" stroke-width="1" stroke-linecap="round" opacity="0.65"/>
-      <!-- 脸颊淡红晕 -->
-      <circle cx="52.5" cy="61" r="2.6" fill="${RED}" opacity="0.16"/>
-      <!-- 月顶冠点 -->
-      <circle cx="49" cy="37" r="1.6" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
+      <!-- ===== 牌背主体：一只坐姿的猫咪剪影（暗色填充 + 金线描边） ===== -->
+      <!-- 猫身 + 头 + 双耳（坐姿，正面略侧，居于圆月中央） -->
+      <path d="M41 90
+               C 38 76, 37 64, 43 57
+               L 40 46 L 49 53
+               C 50.5 52.3, 53.5 52.3, 55 53
+               L 64 46 L 61 57
+               C 67 64, 66 76, 63 90
+               Z"
+            fill="${NAVY2}" opacity="0.97" stroke="${G}" stroke-width="1.2" stroke-linejoin="round"/>
+      <!-- 内耳金点 -->
+      <path d="M43 49 l2.8 4 -3.6 1z" fill="${Gd}" opacity="0.85"/>
+      <path d="M61 49 l-2.8 4 3.6 1z" fill="${Gd}" opacity="0.85"/>
+      <!-- 尾巴（绕到身前轻盈一卷） -->
+      <path d="M63 89 C 71 87, 74 79, 69 73 C 73 78, 71 86, 64 87 Z"
+            fill="${NAVY2}" opacity="0.97" stroke="${G}" stroke-width="1.1" stroke-linejoin="round"/>
+      <!-- 猫眼（杏仁形，金色发光） -->
+      <path d="M46.5 62 q2.6 -2.4 5 0 q-2.4 2.4 -5 0z" fill="${G}"/>
+      <path d="M54.5 62 q2.6 -2.4 5 0 q-2.4 2.4 -5 0z" fill="${G}"/>
+      <ellipse cx="49" cy="62" rx="0.7" ry="1.5" fill="${NAVY2}"/>
+      <ellipse cx="57" cy="62" rx="0.7" ry="1.5" fill="${NAVY2}"/>
+      <!-- 鼻头 -->
+      <path d="M51.6 66 h2.8 l-1.4 1.6z" fill="${RED}" opacity="0.9"/>
+      <!-- 胡须 -->
+      <g stroke="${G}" stroke-width="0.6" opacity="0.7" stroke-linecap="round">
+        <path d="M51 67.5 q-7 -0.4 -12 -2.6"/><path d="M51 68.4 q-7 1 -12 1.4"/>
+        <path d="M55 67.5 q7 -0.4 12 -2.6"/><path d="M55 68.4 q7 1 12 1.4"/>
+      </g>
+      <!-- 月顶星点 -->
+      <circle cx="52.5" cy="40" r="1.4" fill="${G}" stroke="${Gdk}" stroke-width="0.4"/>
       ${star}
+
 
     </g>
   </svg>`;
