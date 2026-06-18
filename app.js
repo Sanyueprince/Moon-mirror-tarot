@@ -221,7 +221,8 @@
     const need = state.spread.positions.length;
     const fan = $('#fan');
     const total = Math.min(13, Math.max(7, need*2+5)); // 展示的牌背数量
-    state._fanDeck = shuffleArray(TAROT.concat(TAROT)).slice(0, 30); // 抽牌用的牌堆
+    // 洗一副完整且不重复的 78 张牌，每个牌背位置对应牌堆里的一张牌
+    state._fanDeck = shuffleArray(TAROT.slice());
     state.drawn = [];
     fan.innerHTML = '';
     const spread = 120; // 总角度
@@ -245,8 +246,9 @@
     if(state.drawn.length >= need) return;
     f.classList.add('sel');
     if(navigator.vibrate) navigator.vibrate(20);
-    // 抽一张牌（正逆位随机）
-    const card = state._fanDeck[state.drawn.length % state._fanDeck.length];
+    // 你点击的牌背位置 ↔ 牌堆中对应的那一张牌（不重复，正逆位随机）
+    const idx = parseInt(f.dataset.idx, 10) || 0;
+    const card = state._fanDeck[idx % state._fanDeck.length];
     const reversed = Math.random() < 0.35;
     state.drawn.push({ card, reversed, position: state.spread.positions[state.drawn.length] });
     updateCounter();
