@@ -10,32 +10,58 @@
    - 小阿卡那为传统点数牌：花色符号按数量对称排列
 */
 
-/* 马赛风格调色板 */
+/* 马赛风格调色板（做旧矿物色） */
 const MC = {
-  ink:'#1c1a17',     // 描边黑
-  paper:'#fbf4e2',   // 牌面底（羊皮纸）
-  cream:'#fffdf4',   // 高光白
-  red:'#c5402b',     // 朱红
-  green:'#2f7d5e',   // 墨绿/青绿
-  gold:'#e8b53a',    // 金黄
-  blue:'#a9c7d4',    // 淡蓝
-  flesh:'#f0cba0',   // 肉粉
-  fleshDk:'#d9a06f'  // 肤色阴影
+  ink:'#2a211a',     // 描边·暖墨褐黑
+  inkSoft:'#6b5a48', // 浅墨（细节线）
+  paper:'#efe1c2',   // 牌面底（羊皮纸·做旧）
+  paperDk:'#e4d2ab', // 羊皮纸暗角
+  cream:'#fbf3df',   // 高光·浅羊皮纸
+  red:'#b23a2b',     // 暗朱红
+  green:'#316b4f',   // 苔绿
+  gold:'#d9a531',    // 土金黄
+  goldDk:'#a87a1d',  // 暗金
+  blue:'#3f6f86',    // 青金石蓝
+  blueLt:'#9cc0d0',  // 淡青
+  flesh:'#e7c39a',   // 赭石肤色
+  fleshDk:'#c79468'  // 肤色阴影
 };
 
-/* 通用底框：羊皮纸底 + 粗黑双线边框 + 顶部罗马数字 + 底部牌名横幅 */
+/* 共享 defs：羊皮纸做旧底纹（所有牌复用同一组 id，外观一致） */
+const MC_DEFS = `<defs>
+    <radialGradient id="mcPaper" cx="50%" cy="42%" r="72%">
+      <stop offset="0%" stop-color="${MC.cream}"/>
+      <stop offset="68%" stop-color="${MC.paper}"/>
+      <stop offset="100%" stop-color="${MC.paperDk}"/>
+    </radialGradient>
+  </defs>`;
+
+/* 四角马赛风装饰花纹（小百合 + 星点） */
+function mcCorner(x, y, rot){
+  return `<g transform="translate(${x},${y}) rotate(${rot})">
+    <path d="M0 0 q5 0.5 8 4 M0 0 q0.5 5 4 8" fill="none" stroke="${MC.goldDk}" stroke-width="0.7"/>
+    <path d="M9 9 l1.6 -3 1.6 3 -1.6 1z" fill="${MC.gold}"/>
+    <circle cx="3.4" cy="3.4" r="0.9" fill="${MC.goldDk}"/>
+  </g>`;
+}
+
+/* 通用底框：做旧羊皮纸底 + 粗黑双线边框 + 四角花纹 + 顶部罗马数字 + 底部牌名横幅 */
 function frame(inner, roman, label){
   const top = roman
-    ? `<text x="50" y="17" font-size="12" text-anchor="middle" fill="${MC.ink}" font-family="Georgia,'Times New Roman',serif" font-weight="700" letter-spacing="1.5">${roman}</text>`
+    ? `<text x="50" y="17.2" font-size="11.5" text-anchor="middle" fill="${MC.ink}" font-family="Georgia,'Times New Roman',serif" font-weight="700" letter-spacing="1.6" paint-order="stroke" stroke="${MC.cream}" stroke-width="1.4">${roman}</text>`
     : '';
   const bottom = label
-    ? `<line x1="9" y1="132.5" x2="91" y2="132.5" stroke="${MC.ink}" stroke-width="0.8"/>
-       <text x="50" y="142.5" font-size="6.6" text-anchor="middle" fill="${MC.ink}" font-family="Georgia,'Times New Roman',serif" font-weight="700" letter-spacing="0.8">${label}</text>`
+    ? `<line x1="9" y1="131.6" x2="91" y2="131.6" stroke="${MC.ink}" stroke-width="0.9"/>
+       <line x1="9" y1="133.4" x2="91" y2="133.4" stroke="${MC.inkSoft}" stroke-width="0.4"/>
+       <text x="50" y="143" font-size="6.4" text-anchor="middle" fill="${MC.ink}" font-family="Georgia,'Times New Roman',serif" font-weight="700" letter-spacing="0.8">${label}</text>`
     : '';
   return `<svg class="card-svg" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-    <rect width="100" height="150" fill="${MC.paper}"/>
-    <rect x="3" y="3" width="94" height="144" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="2.4" rx="1"/>
-    <rect x="6" y="6" width="88" height="138" fill="none" stroke="${MC.ink}" stroke-width="0.8"/>
+    ${MC_DEFS}
+    <rect width="100" height="150" fill="url(#mcPaper)"/>
+    <rect x="3" y="3" width="94" height="144" fill="none" stroke="${MC.ink}" stroke-width="2.6" rx="1.5"/>
+    <rect x="6" y="6" width="88" height="138" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
+    <rect x="7.6" y="7.6" width="84.8" height="134.8" fill="none" stroke="${MC.goldDk}" stroke-width="0.4" opacity="0.7"/>
+    ${mcCorner(8,8,0)}${mcCorner(92,8,90)}${mcCorner(92,142,180)}${mcCorner(8,142,270)}
     ${top}
     <g stroke-linejoin="round" stroke-linecap="round">${inner}</g>
     ${bottom}
@@ -516,33 +542,42 @@ function fillTpl(tpl, suit){
   return tpl.replace(/\{cn\}/g, s.cn).replace(/\{field\}/g, s.field);
 }
 
-/* 花色符号（点数牌单元，高约 16px） */
+/* 花色符号（点数牌单元，高约 16px）—— 马赛版画风格，描边更厚、装饰更细 */
 function pip(suit, cx, cy){
   if(suit === "denier"){
+    // 星币：花瓣外缘 + 双环 + 中心点
     return `<g transform="translate(${cx},${cy})">
-      <circle r="6.4" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
-      <circle r="3.6" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
-      <circle r="1.3" fill="${MC.red}"/></g>`;
+      <circle r="6.8" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <circle r="6.8" fill="none" stroke="${MC.goldDk}" stroke-width="0.5"/>
+      <circle r="4.4" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
+      <g stroke="${MC.goldDk}" stroke-width="0.5">
+        <line x1="0" y1="-6.8" x2="0" y2="-4.4"/><line x1="0" y1="6.8" x2="0" y2="4.4"/>
+        <line x1="-6.8" y1="0" x2="-4.4" y2="0"/><line x1="6.8" y1="0" x2="4.4" y2="0"/>
+      </g>
+      <circle r="1.5" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.4"/></g>`;
   }
   if(suit === "coupe"){
+    // 圣杯：杯身 + 杯柄 + 圆座，加描边层次
     return `<g transform="translate(${cx},${cy})">
-      <path d="M-5 -7 h10 l-1.6 7 a3.4 3.4 0 0 1 -6.8 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.9"/>
-      <rect x="-1.2" y="1" width="2.4" height="6" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.6"/>
-      <rect x="-4" y="7" width="8" height="2.4" rx="0.8" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.6"/></g>`;
+      <path d="M-5.4 -7.4 h10.8 l-1.8 7.2 a3.6 3.6 0 0 1 -7.2 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M-3.6 -5.6 h7.2" stroke="${MC.goldDk}" stroke-width="0.5"/>
+      <rect x="-1.3" y="0.8" width="2.6" height="6" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/>
+      <path d="M-4.4 7 q4.4 -2.4 8.8 0 q-4.4 2.4 -8.8 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/></g>`;
   }
   if(suit === "epee"){
+    // 宝剑：刃 + 中脊 + 护手 + 圆柄头
     return `<g transform="translate(${cx},${cy})">
-      <line x1="0" y1="-9" x2="0" y2="6" stroke="${MC.blue}" stroke-width="3" stroke-linecap="round"/>
-      <line x1="0" y1="-9" x2="0" y2="6" stroke="${MC.ink}" stroke-width="0.8"/>
-      <path d="M0 -9.5 l-1.8 3 1.8 -1 1.8 1z" fill="${MC.ink}"/>
-      <line x1="-4" y1="5" x2="4" y2="5" stroke="${MC.ink}" stroke-width="1.2"/>
-      <circle cx="0" cy="9" r="1.6" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.6"/></g>`;
+      <path d="M0 -9.5 l-2 3.4 0 9.6 4 0 0 -9.6z" fill="${MC.blueLt}" stroke="${MC.ink}" stroke-width="1"/>
+      <line x1="0" y1="-7" x2="0" y2="3" stroke="${MC.ink}" stroke-width="0.5"/>
+      <line x1="-4.6" y1="4.6" x2="4.6" y2="4.6" stroke="${MC.ink}" stroke-width="1.4"/>
+      <circle cx="0" cy="8.4" r="1.8" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/></g>`;
   }
-  // baton 权杖
+  // baton 权杖：节杖 + 端芽 + 斜纹
   return `<g transform="translate(${cx},${cy})">
-    <rect x="-1.6" y="-8" width="3.2" height="16" rx="1.4" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.9"/>
-    <ellipse cx="0" cy="-8" rx="2.4" ry="3" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.7"/>
-    <ellipse cx="0" cy="8" rx="2.4" ry="3" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.7"/></g>`;
+    <rect x="-1.8" y="-8" width="3.6" height="16" rx="1.6" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1"/>
+    <g stroke="${MC.ink}" stroke-width="0.4"><line x1="-1.8" y1="-3" x2="1.8" y2="-4.6"/><line x1="-1.8" y1="1" x2="1.8" y2="-0.6"/><line x1="-1.8" y1="5" x2="1.8" y2="3.4"/></g>
+    <ellipse cx="0" cy="-8" rx="2.6" ry="3.2" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"/>
+    <ellipse cx="0" cy="8" rx="2.6" ry="3.2" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"/></g>`;
 }
 
 /* 点数牌排列坐标（对称布局） */
