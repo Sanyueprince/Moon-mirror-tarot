@@ -216,29 +216,34 @@
     if(a && (Math.abs(a.x)+Math.abs(a.y)+Math.abs(a.z) > 38)) doShuffle();
   });
 
-  // ---------- 抽牌：扇形 ----------
+  // ---------- 抽牌：完整 78 张牌带（可横向滑动浏览） ----------
   function renderFan(){
-    const need = state.spread.positions.length;
     const fan = $('#fan');
-    const total = Math.min(13, Math.max(7, need*2+5)); // 展示的牌背数量
+    const total = TAROT.length; // 铺满完整 78 张牌背
     // 洗一副完整且不重复的 78 张牌，每个牌背位置对应牌堆里的一张牌
     state._fanDeck = shuffleArray(TAROT.slice());
     state.drawn = [];
     fan.innerHTML = '';
-    const spread = 120; // 总角度
     for(let i=0;i<total;i++){
       const f = document.createElement('div');
       f.className = 'f';
-      const angle = -spread/2 + (spread/(total-1))*i;
-      f.style.transform = `rotate(${angle}deg)`;
       f.dataset.idx = i;
       fan.appendChild(f);
     }
+    // 设置牌带总宽度，使牌背相互叠压、可横向滑动
+    const STEP = 22;      // 相邻牌背露出的宽度(px)
+    const CARD_W = 60;    // 单张牌背宽度(px)
+    fan.style.width = (STEP*(total-1) + CARD_W) + 'px';
+    $$('.f', fan).forEach((f,i)=>{ f.style.left = (i*STEP) + 'px'; });
+    // 进入时把滚动条复位到最左
+    const sc = $('.fan-scroll');
+    if(sc) sc.scrollLeft = 0;
     updateCounter();
     $('#drawDone').classList.add('hidden');
 
     fan.addEventListener('click', onPickCard);
   }
+
   function onPickCard(e){
     const f = e.target.closest('.f');
     if(!f || f.classList.contains('sel')) return;
@@ -328,11 +333,12 @@
                 <p>关键词：${d.card.kw}。${txt}</p>`;
       }).join('');
 
-    // 能量关系
-    $('#energyText').textContent = ENERGY_HINTS[Math.floor(Math.random()*ENERGY_HINTS.length)];
+    // 能量关系（结合本次牌面动态生成）
+    $('#energyText').textContent = buildEnergy();
 
-    // 行动建议（根据牌生成）
+    // 行动建议（结合各牌位含义动态生成）
     const advices = buildAdvice();
+
     $('#adviceList').innerHTML = advices.map((a,i)=>`<div class="li"><span class="b">${i+1}.</span><span>${a}</span></div>`).join('');
 
     // 幸运提示
@@ -348,22 +354,96 @@
     $('#deepContent').scrollIntoView({behavior:'smooth', block:'start'});
   });
 
+  // ---------- 牌面分析工具 ----------
+  // 判断大阿卡那
+  function isMajor(card){ return /^大阿卡那/.test(card.arcana || ''); }
+  // 取得小阿卡那花色（权杖/圣杯/宝剑/星币），大阿卡那返回 null
+  function suitOf(card){
+    const m = (card.arcana || '').match(/小阿卡那\s*·\s*(\S+)/);
+    return m ? m[1] : null;
+  }
+  // 花色对应的能量领域描述
+  const SUIT_FIELD = {
+    '权杖':{ ele:'火', field:'行动、热情与事业开拓' },
+    '圣杯':{ ele:'水', field:'情感、关系与内心感受' },
+    '宝剑':{ ele:'风', field:'思绪、沟通与现实抉择' },
+    '星币':{ ele:'土', field:'金钱、健康与现实根基' }
+  };
+
+  // ---------- 牌阵能量关系（结合本次实际牌面动态生成） ----------
+  function buildEnergy(){
+    const drawn = state.drawn;
+    const n = drawn.length;
+    const revCount = drawn.filter(d=>d.reversed).length;
+    const majorCount = drawn.filter(d=>isMajor(d.card)).length;
+    // 统计花色分布
+    const suitCount = {};
+    drawn.forEach(d=>{ const s=suitOf(d.card); if(s) suitCount[s]=(suitCount[s]||0)+1; });
+    const suits = Object.keys(suitCount);
+
+    const seg = [];
+
+    // 1) 大/小阿卡那比例
+    if(majorCount === 0){
+      seg.push('本次抽到的全是小阿卡那，说明此事更多落在具体的日常细节与当下情境中，主动调整就能改善，无需过度担忧。');
+    }else if(majorCount === n){
+      seg.push('本次抽到的全是大阿卡那，提示此事正触及你较深层的人生主题与重要转折，值得你认真对待、用心抉择。');
+    }else if(majorCount >= n/2){
+      seg.push(`牌阵中大阿卡那偏多（${majorCount}/${n}），说明命运层面的力量较为活跃，外部趋势对结果影响较大，顺势而为更为关键。`);
+    }else{
+      seg.push(`牌阵以小阿卡那为主、辅以大阿卡那，意味着事情主要由你的日常选择推动，同时也有一两个关键节点值得把握。`);
+    }
+
+    // 2) 逆位占比
+    if(revCount === 0){
+      seg.push('全部为正位，能量流动顺畅、方向清晰，是积极推进的好时机。');
+    }else if(revCount === n){
+      seg.push('全部为逆位，提示当前能量多在内在酝酿或受阻，宜先向内梳理、休整蓄力，不必急于向外求成。');
+    }else if(revCount >= n/2){
+      seg.push(`逆位偏多（${revCount}/${n}），说明你内心或外部存在一些尚未理顺的阻滞，先处理这些卡点，事情会更顺。`);
+    }else{
+      seg.push(`出现 ${revCount} 张逆位，整体偏顺但仍有局部需要留意与调整。`);
+    }
+
+    // 3) 花色分布
+    if(suits.length === 1 && suitCount[suits[0]] >= 2){
+      const info = SUIT_FIELD[suits[0]];
+      if(info) seg.push(`牌面能量集中在「${suits[0]}」（${info.ele}元素），核心议题明确落在${info.field}上，可重点围绕这一面着力。`);
+    }else if(suits.length >= 3){
+      seg.push('多种花色同时出现，说明此事牵涉面较广，需要兼顾情感、思考、行动与现实多个层面，保持平衡最为重要。');
+    }
+
+    return seg.join('');
+  }
+
+  // ---------- 行动建议（结合各牌位含义动态生成） ----------
   function buildAdvice(){
-    const pool = [
-      '主动而坦诚地沟通一次，把心里的想法说开。',
-      '给自己和他人一点时间，别被一时情绪带跑。',
-      '回顾你已经拥有的美好，重拾内心的信心。',
-      '把注意力放回自己身上，先照顾好自己的状态。',
-      '顺应当下的节奏，不必强求立刻有答案。',
-      '记录此刻的感受，过一段时间再回看会更清晰。',
-      '勇敢迈出小小的第一步，行动会带来新的转机。'
-    ];
-    const hasReversed = state.drawn.some(d=>d.reversed);
-    const list = shuffleArray(pool).slice(0,3);
-    list.push(hasReversed ? '逆位提醒：放慢脚步，先处理内在的不安，再做决定。'
-                          : '牌面整体积极，把握当下，大胆去争取你想要的。');
+    const drawn = state.drawn;
+    const list = [];
+    // 取最具代表性的牌位生成针对性建议（最多取前 3 个牌位）
+    const focus = drawn.slice(0, Math.min(3, drawn.length));
+    focus.forEach(d=>{
+      const kw = (d.card.kw || '').split(' · ')[0] || d.card.name;
+      const suit = suitOf(d.card);
+      const field = suit && SUIT_FIELD[suit] ? SUIT_FIELD[suit].field.split('、')[0] : '当下';
+      if(d.reversed){
+        list.push(`在「${d.position}」上，${d.card.name}逆位提醒你：${kw}的能量受阻，先放慢节奏、向内梳理，别急于在${field}方面下结论。`);
+      }else{
+        list.push(`在「${d.position}」上，${d.card.name}正位鼓励你：把握「${kw}」的力量，在${field}方面主动迈出踏实的一步。`);
+      }
+    });
+    // 整体收尾建议：依据逆位占比
+    const revCount = drawn.filter(d=>d.reversed).length;
+    if(revCount === 0){
+      list.push('整体牌面积极顺畅，信任自己的判断，大胆去争取你想要的。');
+    }else if(revCount >= drawn.length/2){
+      list.push('逆位较多，近期更适合休整与沉淀；先照顾好自己的状态，再谈推进。');
+    }else{
+      list.push('保持开放与耐心，顺应当下节奏，答案会随时间逐渐清晰。');
+    }
     return list;
   }
+
 
   // ---------- 保存 / 历史记录 ----------
   const HKEY = 'moonmirror_history';
@@ -507,8 +587,115 @@
     }, { passive:true });
   })();
 
+  // ---------- 登录 / 授权 / 隐私合规 ----------
+  const PKEY = 'moonmirror_privacy_agreed';   // 是否已同意隐私
+  const UKEY = 'moonmirror_user';             // 登录态：{type:'wx'|'phone'|'guest', name}
+
+  function hasPrivacy(){ return localStorage.getItem(PKEY) === '1'; }
+  function setUser(u){ localStorage.setItem(UKEY, JSON.stringify(u)); }
+  function getUser(){ try{ return JSON.parse(localStorage.getItem(UKEY)||'null'); }catch(e){ return null; } }
+
+  // 首次进入：隐私同意弹窗
+  function maybeShowPrivacy(){
+    if(hasPrivacy()) return;
+    const mask = $('#privacyMask');
+    if(mask) mask.classList.remove('hidden');
+  }
+  const privacyAgreeBtn = $('#privacyAgree');
+  if(privacyAgreeBtn){
+    privacyAgreeBtn.addEventListener('click', ()=>{
+      localStorage.setItem(PKEY, '1');
+      $('#privacyMask').classList.add('hidden');
+      toast('感谢你的信任 🌙');
+    });
+  }
+  const privacyRejectBtn = $('#privacyReject');
+  if(privacyRejectBtn){
+    privacyRejectBtn.addEventListener('click', ()=>{
+      toast('需同意后方可使用，你可随时查看协议');
+    });
+  }
+
+  // 登录页：必须先勾选协议
+  function ensureAgreed(){
+    const box = $('#agreeBox');
+    if(box && !box.checked){
+      toast('请先阅读并勾选同意协议');
+      const label = box.closest('.agree');
+      if(label){ label.classList.add('shake'); setTimeout(()=>label.classList.remove('shake'), 600); }
+      return false;
+    }
+    return true;
+  }
+  function doLogin(type, name){
+    if(!ensureAgreed()) return;
+    setUser({ type, name, since: Date.now() });
+    localStorage.setItem(PKEY, '1');  // 登录即视为已同意
+    toast('登录成功，欢迎你 🌙');
+    go('s-home');
+  }
+  const loginWxBtn = $('#loginWx');
+  if(loginWxBtn) loginWxBtn.addEventListener('click', ()=>{ if(ensureAgreed()) go('s-auth'); });
+  const loginPhoneBtn = $('#loginPhone');
+  if(loginPhoneBtn) loginPhoneBtn.addEventListener('click', ()=> doLogin('phone', '星语者'));
+  const loginGuestBtn = $('#loginGuest');
+  if(loginGuestBtn) loginGuestBtn.addEventListener('click', ()=>{
+    // 游客模式无需勾选，但不保存身份
+    setUser({ type:'guest', name:'游客', since: Date.now() });
+    toast('已进入游客模式，记录仅存于本机');
+    go('s-home');
+  });
+  // 微信授权弹层「允许」→ 视为微信登录成功
+  const authAllow = document.querySelector('#s-auth .btn.wx');
+  if(authAllow){
+    authAllow.addEventListener('click', ()=>{ setUser({ type:'wx', name:'微信用户', since: Date.now() }); });
+  }
+
+  // 退出登录
+  const logoutBtn = $('#logoutBtn');
+  if(logoutBtn){
+    logoutBtn.addEventListener('click', ()=>{
+      if(confirm('确定退出登录吗？')){
+        localStorage.removeItem(UKEY);
+        toast('已退出登录');
+        go('s-login');
+      }
+    });
+  }
+  // 撤回隐私同意并清空数据
+  const revokeBtn = $('#revokePrivacy');
+  if(revokeBtn){
+    revokeBtn.addEventListener('click', ()=>{
+      if(confirm('撤回隐私同意将清空全部本地数据（占卜记录、登录态等），且需重新同意协议才能继续使用。确定吗？')){
+        localStorage.removeItem(PKEY);
+        localStorage.removeItem(UKEY);
+        localStorage.removeItem(HKEY);
+        localStorage.removeItem('moonmirror_since');
+        toast('已撤回同意并清空数据');
+        go('s-login');
+        setTimeout(maybeShowPrivacy, 300);
+      }
+    });
+  }
+
+  // 我的页：根据登录态展示昵称
+  const _renderMine = renderMine;
+  renderMine = function(){
+    _renderMine();
+    const u = getUser();
+    const nameEl = document.querySelector('.mine-name');
+    const idEl = document.querySelector('.mine-id');
+    if(u && nameEl){ nameEl.textContent = u.name || '星语者'; }
+    if(u && idEl){
+      const tag = u.type==='wx'?'微信用户':(u.type==='phone'?'手机号登录':'游客');
+      idEl.textContent = 'ID: 202606 · ' + tag;
+    }
+  };
+
   // ---------- 初始化 ----------
   initHome();
+  maybeShowPrivacy();
 
 
 })();
+

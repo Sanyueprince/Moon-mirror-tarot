@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>月镜言 · 塔罗占卜</title>
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 
 
 
@@ -72,14 +72,14 @@
       <div class="logo-moon"></div>
       <div class="logo-name sm">月镜<span>言</span></div>
       <p class="muted center mb-lg">登录后即可保存你的占卜记录</p>
-      <button class="btn wx" data-go="s-auth"><svg class="ico"><use href="#i-wechat"/></svg>　微信一键登录</button>
+      <button class="btn wx" id="loginWx"><svg class="ico"><use href="#i-wechat"/></svg>　微信一键登录</button>
 
-      <button class="btn ghost" data-go="s-home">手机号登录 / 注册</button>
+      <button class="btn ghost" id="loginPhone">手机号登录 / 注册</button>
       <label class="agree">
-        <input type="checkbox" id="agreeBox" checked>
-        <span>已阅读并同意<a>《用户协议》</a>与<a>《隐私政策》</a></span>
+        <input type="checkbox" id="agreeBox">
+        <span>已阅读并同意<a data-go="s-agreement">《用户协议》</a>与<a data-go="s-privacy">《隐私政策》</a></span>
       </label>
-      <p class="link mt-lg" data-go="s-home">先随便看看 ›</p>
+      <p class="link mt-lg" id="loginGuest">先以游客身份看看 ›</p>
     </div>
   </section>
 
@@ -185,8 +185,8 @@
     <div class="scroll pad center-x">
       <h2 class="h-title mt">凭直觉，抽出你的牌</h2>
       <p class="counter" id="drawCounter"></p>
-      <div class="fan" id="fan"></div>
-      <p class="hint center">轻点卡牌选择，选满自动揭晓</p>
+      <div class="fan-scroll"><div class="fan" id="fan"></div></div>
+      <p class="hint center">← 左右滑动浏览整副 78 张牌，轻点选择，选满自动揭晓 →</p>
       <button class="btn ghost full hidden" id="drawDone" data-go="s-reveal">确认抽牌</button>
     </div>
   </section>
@@ -320,12 +320,15 @@
         </div>
       </div>
       <div class="set-group">
-        <div class="set-row tap" data-toast="《用户协议》"><span class="set-l"><svg class="ico"><use href="#i-doc"/></svg> 用户协议</span><svg class="ico set-chev"><use href="#i-chev"/></svg></div>
-        <div class="set-row tap" data-toast="《隐私政策》"><span class="set-l"><svg class="ico"><use href="#i-shield"/></svg> 隐私政策</span><svg class="ico set-chev"><use href="#i-chev"/></svg></div>
+        <div class="set-row tap" data-go="s-agreement"><span class="set-l"><svg class="ico"><use href="#i-doc"/></svg> 用户协议</span><svg class="ico set-chev"><use href="#i-chev"/></svg></div>
+        <div class="set-row tap" data-go="s-privacy"><span class="set-l"><svg class="ico"><use href="#i-shield"/></svg> 隐私政策</span><svg class="ico set-chev"><use href="#i-chev"/></svg></div>
         <div class="set-row tap" data-toast="意见反馈通道开发中"><span class="set-l"><svg class="ico"><use href="#i-chat"/></svg> 意见反馈</span><svg class="ico set-chev"><use href="#i-chev"/></svg></div>
         <div class="set-row tap" data-toast="月镜言 v1.0.0"><span class="set-l"><svg class="ico"><use href="#i-info"/></svg> 关于月镜言</span><span class="set-tag">v1.0.0</span></div>
       </div>
-      <button class="btn ghost" data-go="s-login">退出登录</button>
+      <div class="set-group">
+        <div class="set-row tap" id="revokePrivacy"><span class="set-l"><svg class="ico"><use href="#i-trash"/></svg> 撤回隐私同意并清空数据</span><svg class="ico set-chev"><use href="#i-chev"/></svg></div>
+      </div>
+      <button class="btn ghost" id="logoutBtn">退出登录</button>
       <p class="disclaimer">月镜言 · 以月为镜，照见内心</p>
     </div>
   </section>
@@ -367,11 +370,77 @@
     </div>
   </section>
 
+  <!-- ===== 用户协议 ===== -->
+  <section class="screen" id="s-agreement">
+    <div class="navbar"><span class="nav-back">‹</span><span class="nav-title">用户协议</span><span class="nav-ph"></span></div>
+    <div class="scroll pad">
+      <div class="legal">
+        <h3>月镜言用户协议</h3>
+        <p class="legal-upd">生效日期：2024 年 1 月 1 日</p>
+        <p>欢迎使用「月镜言」（以下简称"本应用"）。在使用前，请你仔细阅读并充分理解本协议各条款。当你勾选同意或开始使用本应用，即表示你已阅读并接受本协议的全部内容。</p>
+        <h4>一、服务内容</h4>
+        <p>本应用是一款以塔罗牌为载体的<b>娱乐与心理自我探索工具</b>。应用内提供的所有牌义、解读、指引等内容<b>仅供娱乐与启发参考，不具有任何科学预测、命运占卜或决策指导的效力</b>，不构成任何投资、医疗、法律、婚恋等专业建议。请勿将本应用内容用于任何重大决策，亦请勿迷信。</p>
+        <h4>二、用户行为规范</h4>
+        <p>你承诺在使用本应用时遵守国家相关法律法规，不利用本应用从事任何违法违规、封建迷信传播或损害他人权益的活动。</p>
+        <h4>三、未成年人使用</h4>
+        <p>本应用建议在监护人陪同与指导下供未成年人使用。如你未满 18 周岁，请在监护人同意后使用。</p>
+        <h4>四、知识产权</h4>
+        <p>本应用的界面设计、牌面图形、文案内容等均受相关法律保护，未经许可不得擅自复制、传播或用于商业用途。</p>
+        <h4>五、免责声明</h4>
+        <p>因使用本应用内容而产生的任何理解、判断与后果，由你本人自行承担。本应用对你基于内容所做的任何选择不承担责任。</p>
+        <h4>六、协议更新</h4>
+        <p>我们可能不时更新本协议，更新后将在应用内公示。继续使用即视为接受更新后的协议。</p>
+        <p class="legal-foot">月镜言 · 以月为镜，照见内心</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 隐私政策 ===== -->
+  <section class="screen" id="s-privacy">
+    <div class="navbar"><span class="nav-back">‹</span><span class="nav-title">隐私政策</span><span class="nav-ph"></span></div>
+    <div class="scroll pad">
+      <div class="legal">
+        <h3>月镜言隐私政策</h3>
+        <p class="legal-upd">生效日期：2024 年 1 月 1 日</p>
+        <p>我们非常重视你的个人信息与隐私保护。本政策说明我们如何收集、使用与保护你的信息。请你仔细阅读。</p>
+        <h4>一、我们收集的信息</h4>
+        <p>本应用为纯前端应用，<b>不会将你的任何信息上传至服务器</b>。具体如下：</p>
+        <p>1. <b>占卜记录与设置</b>：你的占卜历史、偏好设置等仅保存在你本机的浏览器本地存储（localStorage）中，仅你本人可见，我们无法读取。</p>
+        <p>2. <b>登录信息</b>：若你选择登录，仅在本地记录登录状态与你主动填写的昵称、头像，用于在应用内展示，不会外传。</p>
+        <h4>二、信息的使用</h4>
+        <p>上述信息仅用于在本设备上为你提供占卜记录保存、个性化展示等功能，不会用于任何其他目的，也不会共享、出售给第三方。</p>
+        <h4>三、权限说明</h4>
+        <p>本应用可能请求震动（用于抽牌反馈）、设备方向（用于"摇一摇"洗牌）等权限，均为可选，拒绝不影响核心功能使用。</p>
+        <h4>四、信息的存储与删除</h4>
+        <p>所有数据存储于你的设备本地。你可随时在「设置 → 清除占卜记录」中删除记录，或通过「撤回隐私同意」清空全部本地数据。卸载或清除浏览器数据后，相关信息将被永久删除。</p>
+        <h4>五、未成年人保护</h4>
+        <p>我们重视未成年人信息保护。若你是未成年人，请在监护人指导下使用并提供信息。</p>
+        <h4>六、联系我们</h4>
+        <p>如对本隐私政策有任何疑问，可通过应用内「意见反馈」与我们联系。</p>
+        <p class="legal-foot">月镜言 · 你的数据，只属于你</p>
+      </div>
+    </div>
+  </section>
+
   <!-- toast -->
   <div id="toast" class="toast"></div>
+
+  <!-- ===== 首次进入：隐私同意弹窗 ===== -->
+  <div id="privacyMask" class="privacy-mask hidden">
+    <div class="privacy-pop">
+      <div class="pp-title">隐私保护提示</div>
+      <div class="pp-body">
+        <p>感谢你使用「月镜言」。我们将依据 <a data-go="s-agreement">《用户协议》</a> 与 <a data-go="s-privacy">《隐私政策》</a> 为你提供服务。</p>
+        <p>请你了解：本应用为纯娱乐与自我探索工具，占卜内容<b>仅供娱乐参考、不构成任何决策建议</b>；你的占卜记录等数据<b>仅保存在本机</b>，不会上传服务器。</p>
+        <p>点击"同意并继续"，即表示你已阅读并接受上述条款。</p>
+      </div>
+      <button class="btn" id="privacyAgree">同意并继续</button>
+      <button class="btn ghost" id="privacyReject">不同意</button>
+    </div>
+  </div>
 </div>
-<script src="tarot-data.js?v=5"></script>
-<script src="app.js?v=5"></script>
+<script src="tarot-data.js?v=6"></script>
+<script src="app.js?v=6"></script>
 
 
 </body>
