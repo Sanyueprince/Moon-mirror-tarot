@@ -741,8 +741,13 @@ function cardBackSVG(){
       <pattern id="cbGrid" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
         <path d="M0 0 H10 M0 0 V10" stroke="${G}" stroke-width="0.4" opacity="0.18"/>
       </pattern>
-      <filter id="cbBlur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.2"/></filter>
+      <radialGradient id="cbShadow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="${NAVY2}" stop-opacity="0.34"/>
+        <stop offset="55%" stop-color="${NAVY2}" stop-opacity="0.16"/>
+        <stop offset="100%" stop-color="${NAVY2}" stop-opacity="0"/>
+      </radialGradient>
     </defs>
+
 
     <rect width="100" height="150" fill="url(#cbBg)"/>
     <rect width="100" height="150" fill="url(#cbGrid)"/>
@@ -760,8 +765,9 @@ function cardBackSVG(){
       </g>
       <!-- ===== 月中央：埃及猫（Bastet 神猫）正面端坐 · 纯净剪影（无五官） =====
            瘦长挺拔、英气：高直双尖耳 + 修长收腰的身躯 + 细长前腿 + 优雅卷尾。 -->
-      <!-- 身后淡淡暗晕（高斯虚化，更柔和） -->
-      <ellipse cx="50" cy="71" rx="13" ry="24" fill="${NAVY2}" opacity="0.12" filter="url(#cbBlur)"/>
+      <!-- 身后淡淡暗晕（径向渐变柔化边缘，无滤镜溢出） -->
+      <ellipse cx="50" cy="71" rx="16" ry="26" fill="url(#cbShadow)"/>
+
       <!-- 优雅卷尾：贴身右侧、尾尖内收上扬（先画，置于身后） -->
       <path d="M58 90 C 67 90, 70 80, 66.5 74 C 64.5 70.5, 60.5 71, 60 74.5"
             fill="none" stroke="${G}" stroke-width="2.2" stroke-linecap="round"/>
