@@ -752,45 +752,56 @@ function cardBackSVG(){
       <!-- 圆月盘 -->
       <circle cx="50" cy="66" r="30" fill="url(#cbMoon)" stroke="${Gdk}" stroke-width="1.4"/>
       <circle cx="50" cy="66" r="30" fill="none" stroke="${G}" stroke-width="0.5"/>
-      <!-- 月面斑块（环形坑纹，落在脸部一侧作为肌理） -->
-      <g fill="${Gd}" opacity="0.3">
-        <circle cx="62" cy="52" r="3"/><circle cx="67" cy="70" r="2.2"/><circle cx="60" cy="84" r="2.6"/><circle cx="69" cy="60" r="1.4"/>
+      <!-- 月面斑块（环形坑纹，落在暗面/脑后一侧作为肌理） -->
+      <g fill="${Gd}" opacity="0.28">
+        <circle cx="33" cy="56" r="3"/><circle cx="30" cy="74" r="2.2"/><circle cx="37" cy="86" r="2.4"/><circle cx="28" cy="64" r="1.4"/>
       </g>
-      <!-- ===== 关键：明暗分界线本身就是一张犀利的侧脸轮廓 =====
-           左半（脸前方）填暗色 → 右半（脸/头部）保持明亮，
-           二者的分界线即：发际→额头→鼻梁→鼻尖→人中→上下唇→下巴→下颌 -->
-      <path d="M50 36
-               L49 41
-               L43.5 45.5
-               L41.5 50.5
-               L44 53
-               L36 59
-               L43.2 61.2
-               L40 63.4
-               L44 65.2
-               L40.6 67.6
-               L41 71
-               L46 76
-               L48.5 84
-               L50 96
-               A 30 30 0 0 0 50 36 Z"
+      <!-- ===== 关键：明暗分界线本身就是一张「朝右的女性侧脸」轮廓 =====
+           右半（面部）保持明亮 → 左半（脑后/暗面）填暗色，
+           分界线 = 发际→额头→鼻梁→鼻尖→人中→上下唇→下巴→下颌（收住，不拖长脖子） -->
+      <path d="M48 36.1
+               C 53 37, 59 43, 59 50
+               C 59 52, 56 52.6, 56.6 54.2
+               C 57.2 56, 63 57, 62.6 59
+               C 62.1 60.6, 57.2 60.5, 57.2 62
+               C 60 62.6, 60 64.2, 58 64.7
+               C 60 65.7, 60 67.6, 57.4 69
+               C 56 71, 58 72.6, 54 74.2
+               C 50.5 75.8, 48 79, 47 84
+               C 46.4 88, 46.2 92, 46.6 95.8
+               A 30 30 0 0 1 48 36.1 Z"
             fill="${NAVY2}" opacity="0.96"/>
-      <!-- 侧脸分界线描边（犀利金线，强化轮廓） -->
-      <path d="M50 36 L49 41 L43.5 45.5 L41.5 50.5 L44 53 L36 59 L43.2 61.2 L40 63.4 L44 65.2 L40.6 67.6 L41 71 L46 76 L48.5 84 L50 96"
-            fill="none" stroke="${G}" stroke-width="1.3" stroke-linejoin="miter"/>
-      <!-- 脸部（明亮侧）五官细节 -->
-      <!-- 闭合的眼睛（位于鼻梁后方的脸部） -->
-      <path d="M47 51.5 q3.6 1.4 6.4 0.2" fill="none" stroke="${Gdk}" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="47.6" y1="52.4" x2="47" y2="53.8" stroke="${Gdk}" stroke-width="0.6"/>
-      <line x1="49.6" y1="52.7" x2="49.3" y2="54.1" stroke="${Gdk}" stroke-width="0.6"/>
-      <line x1="51.6" y1="52.5" x2="51.6" y2="53.9" stroke="${Gdk}" stroke-width="0.6"/>
+      <!-- 侧脸分界线描边（柔和金线，勾出女性轮廓） -->
+      <path d="M48 36.1
+               C 53 37, 59 43, 59 50
+               C 59 52, 56 52.6, 56.6 54.2
+               C 57.2 56, 63 57, 62.6 59
+               C 62.1 60.6, 57.2 60.5, 57.2 62
+               C 60 62.6, 60 64.2, 58 64.7
+               C 60 65.7, 60 67.6, 57.4 69
+               C 56 71, 58 72.6, 54 74.2
+               C 50.5 75.8, 48 79, 47 84
+               C 46.4 88, 46.2 92, 46.6 95.8"
+            fill="none" stroke="${G}" stroke-width="1.3" stroke-linecap="round"/>
+      <!-- 一缕柔顺发丝（暗面一侧，体现女性感） -->
+      <path d="M48 36.4 C 40 38, 33 44, 31 54 C 30 60, 31 66, 34 72"
+            fill="none" stroke="${Gdk}" stroke-width="0.8" opacity="0.55" stroke-linecap="round"/>
+      <!-- 面部（明亮侧）五官细节 -->
+      <!-- 闭合的眼睛（位于鼻梁后方、朝右） -->
+      <path d="M51 55.6 q3.6 1.3 6 0" fill="none" stroke="${Gdk}" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="57.2" y1="55.4" x2="58" y2="54.2" stroke="${Gdk}" stroke-width="0.6"/>
+      <line x1="55.2" y1="55.9" x2="55.6" y2="54.6" stroke="${Gdk}" stroke-width="0.6"/>
+      <line x1="53.2" y1="55.9" x2="53.2" y2="54.6" stroke="${Gdk}" stroke-width="0.6"/>
       <!-- 眉 -->
-      <path d="M46.6 49.4 q3.4 -1.2 6 0.2" fill="none" stroke="${Gdk}" stroke-width="0.8" stroke-linecap="round" opacity="0.8"/>
+      <path d="M51.4 53 q3.4 -1.1 5.8 0.1" fill="none" stroke="${Gdk}" stroke-width="0.8" stroke-linecap="round" opacity="0.8"/>
+      <!-- 唇部微染 -->
+      <path d="M57.6 64.5 q1.6 0.6 2.2 -0.2" fill="none" stroke="${RED}" stroke-width="1" stroke-linecap="round" opacity="0.65"/>
       <!-- 脸颊淡红晕 -->
-      <circle cx="50.5" cy="58" r="2.6" fill="${RED}" opacity="0.14"/>
+      <circle cx="52.5" cy="61" r="2.6" fill="${RED}" opacity="0.16"/>
       <!-- 月顶冠点 -->
-      <circle cx="50" cy="37" r="1.6" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
+      <circle cx="49" cy="37" r="1.6" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
       ${star}
+
     </g>
   </svg>`;
 }

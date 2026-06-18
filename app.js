@@ -119,7 +119,20 @@
     $$('.chip', $('#askChips')).forEach(c=>c.classList.remove('on'));
     state.category = '';
     state.question = '';
+    updateAskNext();
   }
+
+  // 根据「是否已选分类 或 已输入问题」启用/禁用下一步按钮
+  function updateAskNext(){
+    const btn = $('#askNext');
+    const hint = $('#askHint2');
+    if(!btn) return;
+    const hasText = (($('#askInput') && $('#askInput').value.trim()) || '').length > 0;
+    const ok = !!state.category || hasText;
+    btn.disabled = !ok;
+    if(hint) hint.textContent = ok ? '准备好了，进入下一步吧' : '请先选择一个问题方向，或输入你的问题';
+  }
+
 
 
   // ---------- 全局点击：data-go 导航 ----------
@@ -182,7 +195,11 @@
       '人际':'我和TA的关系该如何相处？','综合':'我近期整体的运势如何？'
     };
     $('#askInput').setAttribute('placeholder', placeholders[state.category] || '输入你的问题…（选填）');
+    updateAskNext();
   });
+  // 输入问题文字也可解锁下一步
+  if($('#askInput')) $('#askInput').addEventListener('input', updateAskNext);
+
 
   // ---------- 选牌阵 ----------
   function renderSpreads(){
@@ -235,77 +252,71 @@
     if(a && (Math.abs(a.x)+Math.abs(a.y)+Math.abs(a.z) > 38)) doShuffle();
   });
 
-  // ---------- 抽牌：完整 78 张牌带（可横向滑动浏览） ----------
+  // ---------- 抽牌：分页式牌阵（每页 15 张，左右滑动翻页） ----------
+  const PER_PAGE = 15;          // 每页展示张数
   function renderFan(){
     const fan = $('#fan');
-    const total = TAROT.length; // 铺满完整 78 张牌背
+    const total = TAROT.length; // 完整 78 张
     // 洗一副完整且不重复的 78 张牌，每个牌背位置对应牌堆里的一张牌
     state._fanDeck = shuffleArray(TAROT.slice());
     state.drawn = [];
     fan.innerHTML = '';
     const backSVG = (typeof cardBackSVG === 'function') ? cardBackSVG() : '';
-    for(let i=0;i<total;i++){
-      const f = document.createElement('div');
-      f.className = 'f';
-      f.dataset.idx = i;
-      f.innerHTML = backSVG;   // 注入马赛风格牌背
-      fan.appendChild(f);
-    }
-    // ===== 弧形扇面布局（局部扇面，随滚动动态计算） =====
-    // 78 张沿水平方向等距排列，每张牌的旋转角度根据它与「当前可视窗口中心」
-    // 的距离动态计算：越靠近中心越竖直、越靠两侧倾斜越大，形成手持折扇的弧形。
-    // 这样无论滚动到哪里，可视区内约 23 张牌始终呈干净的扇形（而非整体歪斜）。
-    const STEP = 15;        // 相邻牌背水平步距(px)，越小可视张数越多
-    const CARD_W = 60;      // 单张牌背宽度(px)
-    fan.style.width = (STEP*(total-1) + CARD_W) + 'px';
-    $$('.f', fan).forEach((f,i)=>{
-      f.style.left = (i*STEP) + 'px';
-      f.style.transformOrigin = '50% 135%';   // 旋转中心在牌底下方，形成扇面
-    });
-    const sc = $('.fan-scroll');
-    if(sc){
-      sc.scrollLeft = 0;
-      // 绑定滚动监听（只绑一次），用 rAF 节流
-      if(!sc._fanBound){
-        let ticking = false;
-        const onScroll = ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(()=>{ layoutFan(); ticking = false; }); } };
-        sc.addEventListener('scroll', onScroll, { passive:true });
-        window.addEventListener('resize', layoutFan);
-        sc._fanBound = true;
+    const pageCount = Math.ceil(total / PER_PAGE);
+    // 按页生成：每页一个 .fan-page（横向滚动 + scroll-snap 对齐）
+    for(let p=0;p<pageCount;p++){
+      const page = document.createElement('div');
+      page.className = 'fan-page';
+      const start = p*PER_PAGE;
+      const end = Math.min(start+PER_PAGE, total);
+      const count = end - start;
+      for(let j=0;j<count;j++){
+        const i = start + j;
+        const f = document.createElement('div');
+        f.className = 'f';
+        f.dataset.idx = i;
+        f.innerHTML = backSVG;   // 注入与洗牌页一致的马赛风格牌背
+        // 同页内整齐排成一道平缓小扇形：中间竖直、两端轻微倾斜，绝不溢出
+        const norm = count>1 ? (j-(count-1)/2)/((count-1)/2) : 0;  // -1..1
+        const ang = norm * 14;                 // 平缓倾斜角(度)
+        const drop = norm*norm * 14;            // 两端轻微下沉(px)
+        f.style.transformOrigin = '50% 140%';
+        f.style.setProperty('--ang', ang.toFixed(2)+'deg');
+        f.style.setProperty('--drop', drop.toFixed(1)+'px');
+        f.style.transform = `rotate(${ang.toFixed(2)}deg) translateY(${drop.toFixed(1)}px)`;
+        f.style.zIndex = String(Math.round(50 - Math.abs(norm)*20));
+        page.appendChild(f);
       }
-      // 首次布局（等待回流取到正确宽度）
-      requestAnimationFrame(layoutFan);
+      fan.appendChild(page);
     }
+    // 翻页滚动到第一页
+    const sc = $('.fan-scroll');
+    if(sc) sc.scrollLeft = 0;
+    // 翻页指示
+    if(sc && !sc._pageBound){
+      let ticking = false;
+      sc.addEventListener('scroll', ()=>{
+        if(ticking) return; ticking = true;
+        requestAnimationFrame(()=>{ updatePageCounter(); ticking = false; });
+      }, { passive:true });
+      sc._pageBound = true;
+    }
+    updatePageCounter();
     updateCounter();
     $('#drawDone').classList.add('hidden');
-
     fan.addEventListener('click', onPickCard);
   }
 
-  // 根据可视窗口中心，动态计算每张牌的扇形角度与下沉量
-  function layoutFan(){
+  // 翻页指示：第 x / N 页
+  function updatePageCounter(){
     const sc = $('.fan-scroll');
-    const fan = $('#fan');
-    if(!sc || !fan) return;
-    const STEP = 15, CARD_W = 60;
-    const viewCenter = sc.scrollLeft + sc.clientWidth / 2;   // 当前视口中心(相对牌带)
-    const half = sc.clientWidth / 2 || 180;
-    const MAX_DEG = 32;        // 视口边缘处的最大倾斜角
-    const DROP_MAX = 46;       // 视口边缘处的最大下沉(px)
-    $$('.f', fan).forEach((f,i)=>{
-      const cardCenter = i*STEP + CARD_W/2;
-      let norm = (cardCenter - viewCenter) / half;           // -1..1（超出则更大）
-      if(norm > 1.4) norm = 1.4; if(norm < -1.4) norm = -1.4;
-      const ang = norm * MAX_DEG;                            // 倾斜角
-      const drop = norm * norm * DROP_MAX;                   // 两侧下沉（抛物线）
-      const lift = f.classList.contains('sel') ? -30 : 0;    // 选中牌抽起
-      f.style.transform = `rotate(${ang.toFixed(2)}deg) translateY(${(drop+lift).toFixed(1)}px)`;
-      f.style.zIndex = f.classList.contains('sel') ? 60 : Math.round(100 - Math.abs(norm)*40);
-      f.dataset.ang = ang.toFixed(2);
-      f.dataset.drop = drop.toFixed(1);
-    });
+    const el = $('#pageCounter');
+    if(!sc || !el) return;
+    const pageCount = Math.ceil(TAROT.length / PER_PAGE);
+    const w = sc.clientWidth || 1;
+    const cur = Math.round(sc.scrollLeft / w) + 1;
+    el.textContent = `第 ${Math.min(cur,pageCount)} / ${pageCount} 页`;
   }
-
 
   function onPickCard(e){
     const f = e.target.closest('.f');
@@ -313,10 +324,11 @@
     const need = state.spread.positions.length;
     if(state.drawn.length >= need) return;
     f.classList.add('sel');
-    // 沿当前扇面角度方向把牌抽起高亮
-    const ang = parseFloat(f.dataset.ang || '0');
-    const drop = parseFloat(f.dataset.drop || '0');
-    f.style.transform = `rotate(${ang}deg) translateY(${(drop-26).toFixed(1)}px)`;
+    // 沿当前角度把牌抽起高亮
+    const ang = (f.style.getPropertyValue('--ang') || '0deg');
+    const drop = parseFloat(f.style.getPropertyValue('--drop')) || 0;
+    f.style.transform = `rotate(${ang}) translateY(${(drop-26).toFixed(1)}px)`;
+    f.style.zIndex = '60';
     if(navigator.vibrate) navigator.vibrate(20);
     // 你点击的牌背位置 ↔ 牌堆中对应的那一张牌（不重复，正逆位随机）
     const idx = parseInt(f.dataset.idx, 10) || 0;
@@ -328,6 +340,7 @@
       setTimeout(()=> go('s-reveal'), 500);
     }
   }
+
   function updateCounter(){
     const need = state.spread.positions.length;
     const left = need - state.drawn.length;

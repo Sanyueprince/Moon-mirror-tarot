@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>月镜言 · 塔罗占卜</title>
-<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="style.css?v=11">
 
 
 
@@ -147,8 +147,8 @@
       </div>
       <textarea class="ta" id="askInput" placeholder="输入你的问题…（选填）" maxlength="50"></textarea>
       <p class="hint"><svg class="ico"><use href="#i-bulb"/></svg> 聚焦自己的感受，提开放式问题更易获得指引</p>
-      <button class="btn" data-go="s-spread">下一步 · 选择牌阵</button>
-      <p class="link muted" data-skip="1" data-go="s-spread">无具体问题，给我今日指引 ›</p>
+      <button class="btn" id="askNext" data-go="s-spread" disabled>下一步 · 选择牌阵</button>
+      <p class="link muted" id="askHint2">请先选择一个问题方向，或输入你的问题</p>
     </div>
   </section>
 
@@ -186,7 +186,8 @@
       <h2 class="h-title mt">凭直觉，抽出你的牌</h2>
       <p class="counter" id="drawCounter"></p>
       <div class="fan-scroll"><div class="fan" id="fan"></div></div>
-      <p class="hint center">← 左右滑动浏览整副 78 张牌，轻点选择，选满自动揭晓 →</p>
+      <p class="counter" id="pageCounter"></p>
+      <p class="hint center">← 左右滑动翻页浏览整副 78 张牌，轻点选择，选满自动揭晓 →</p>
       <button class="btn ghost full hidden" id="drawDone" data-go="s-reveal">确认抽牌</button>
     </div>
   </section>
@@ -197,7 +198,7 @@
     <div class="center-col pad">
       <p class="h-sub mb">轻点卡牌翻面，揭晓你的指引</p>
       <div class="reveal-cards" id="revealCards"></div>
-      <button class="btn full hidden" id="revealDone" data-go="s-result">查看解读</button>
+      <button class="btn full hidden" id="revealDone" data-go="s-result">✨ 揭晓我的指引</button>
     </div>
   </section>
 
@@ -439,8 +440,8 @@
     </div>
   </div>
 </div>
-<script src="tarot-data.js?v=10"></script>
-<script src="app.js?v=10"></script>
+<script src="tarot-data.js?v=11"></script>
+<script src="app.js?v=11"></script>
 
 
 </body>
