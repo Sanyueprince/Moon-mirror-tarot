@@ -867,7 +867,9 @@ function cardBackSVG(){
       <!-- ===== 月中央：埃及猫（Bastet 神猫）正面端坐 · 纯净剪影（无五官） =====
            瘦长挺拔、英气：高直双尖耳 + 修长收腰的身躯 + 细长前腿 + 优雅卷尾。 -->
       <!-- 身后淡淡暗晕 -->
-      <ellipse cx="50" cy="68" rx="13" ry="19" fill="${NAVY2}" opacity="0.16"/>
+      <ellipse cx="50" cy="66" rx="16" ry="24" fill="${NAVY2}" opacity="0.16"/>
+      <!-- 整只猫等比例放大并居中于月盘（高度充满月亮）：以猫几何中心(50,59.7)为基准放大 1.28 倍后平移到月心(50,66) -->
+      <g transform="translate(50,66) scale(1.28) translate(-50,-59.7)">
       <!-- 优雅卷尾：贴合纤细身形、尾尖内收上扬（先画，置于身后） -->
       <path d="M57 83 C 65 83, 68 73, 64.5 67 C 62.5 64, 59 65, 58.5 68"
             fill="none" stroke="${G}" stroke-width="2.2" stroke-linecap="round"/>
@@ -899,7 +901,7 @@ function cardBackSVG(){
       <!-- 前腿分隔暗线，强化端坐的两条纤长前腿 -->
       <path d="M48 60 C 47.6 68, 47.6 76, 48 81.6" fill="none" stroke="${Gdk}" stroke-width="0.6" opacity="0.5"/>
       <path d="M52 60 C 52.4 68, 52.4 76, 52 81.6" fill="none" stroke="${Gdk}" stroke-width="0.6" opacity="0.5"/>
-
+      </g>
       <!-- 月顶星点 -->
       <circle cx="64" cy="44" r="1.4" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
       ${star}
