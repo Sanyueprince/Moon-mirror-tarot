@@ -103,6 +103,8 @@ const MAJORS = [
     svg:()=>frame(`
       <path d="M40 28 q10 -8 20 0 q-3 -7 -10 -7 q-7 0 -10 7z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
       <circle cx="50" cy="40" r="8.5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <ellipse cx="46.8" cy="39.5" rx="0.9" ry="1.2" fill="${MC.ink}"/><ellipse cx="53.2" cy="39.5" rx="0.9" ry="1.2" fill="${MC.ink}"/>
+      <path d="M46.5 43.5 q3.5 2 7 0" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
       <path d="M41 49 q9 -5 18 0 l4 46 -26 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.2"/>
       <path d="M41 49 l-5 22 6 2z" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1"/>
       <path d="M59 49 l6 -10" stroke="${MC.flesh}" stroke-width="3.4" stroke-linecap="round"/>
@@ -144,6 +146,8 @@ const MAJORS = [
       <rect x="26" y="56" width="48" height="52" rx="4" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.3"/>
       <path d="M37 60 q13 -7 26 0 l5 48 -36 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.3"/>
       <circle cx="50" cy="42" r="9" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <ellipse cx="46.6" cy="41.5" rx="0.9" ry="1.2" fill="${MC.ink}"/><ellipse cx="53.4" cy="41.5" rx="0.9" ry="1.2" fill="${MC.ink}"/>
+      <path d="M46 45.5 q4 2 8 0" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
       <path d="M40 35 q10 -6 20 0" fill="none" stroke="${MC.gold}" stroke-width="1.3"/>
       <g fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.5"><circle cx="42" cy="31" r="1.6"/><circle cx="50" cy="29" r="1.8"/><circle cx="58" cy="31" r="1.6"/></g>
       <line x1="68" y1="48" x2="68" y2="100" stroke="${MC.fleshDk}" stroke-width="2"/><circle cx="68" cy="46" r="3.4" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
@@ -160,6 +164,7 @@ const MAJORS = [
       <g fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.8"><path d="M30 50 l4 -7 4 7z"/><path d="M62 50 l4 -7 4 7z"/></g>
       <path d="M38 56 q12 -6 24 0 l3 50 -30 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.3"/>
       <circle cx="50" cy="40" r="8.5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <ellipse cx="46.8" cy="39.5" rx="0.9" ry="1.2" fill="${MC.ink}"/><ellipse cx="53.2" cy="39.5" rx="0.9" ry="1.2" fill="${MC.ink}"/>
       <path d="M40 35 h20 l-2 -6 -3 3 -2 -5 -2 5 -3 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
       <path d="M45 47 q5 5 10 0 l-1 7 -8 0z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1"/>
       <line x1="66" y1="54" x2="66" y2="98" stroke="${MC.fleshDk}" stroke-width="2"/><circle cx="66" cy="52" r="3" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
@@ -227,6 +232,7 @@ const MAJORS = [
       <rect x="28" y="54" width="44" height="54" rx="3" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
       <path d="M38 58 q12 -6 24 0 l3 48 -30 0z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1.3"/>
       <circle cx="50" cy="42" r="8.5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <ellipse cx="46.8" cy="41.5" rx="0.9" ry="1.2" fill="${MC.ink}"/><ellipse cx="53.2" cy="41.5" rx="0.9" ry="1.2" fill="${MC.ink}"/>
       <path d="M41 36 q9 -5 18 0 l-2 -6 -7 3 -7 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
       <line x1="66" y1="42" x2="66" y2="96" stroke="${MC.blue}" stroke-width="3"/><line x1="66" y1="42" x2="66" y2="96" stroke="${MC.ink}" stroke-width="0.8"/><path d="M66 42 l-2 5 2 -1 2 1z" fill="${MC.ink}"/>
       <g stroke="${MC.ink}" stroke-width="1"><line x1="30" y1="58" x2="30" y2="72"/><line x1="22" y1="72" x2="38" y2="72"/></g>
@@ -275,12 +281,23 @@ const MAJORS = [
       <circle cx="42" cy="40" r="8" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
       <path d="M34 48 q8 -5 16 0 l3 50 -22 0z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
       <path d="M34 48 l-4 20 5 2z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
-      <ellipse cx="64" cy="86" rx="17" ry="13" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
-      <circle cx="74" cy="78" r="10" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
-      <g fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"><path d="M66 70 l-4 -5 5 3z"/><path d="M82 70 l4 -5 -5 3z"/></g>
-      <circle cx="71" cy="77" r="1.4" fill="${MC.ink}"/><circle cx="78" cy="77" r="1.4" fill="${MC.ink}"/>
-      <path d="M70 84 q4 3 8 0" fill="none" stroke="${MC.ink}" stroke-width="1.2"/>
-      <path d="M50 72 q8 4 14 8" fill="none" stroke="${MC.flesh}" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="64" cy="88" rx="18" ry="14" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M80 96 q9 4 11 12 q-7 -1 -11 -6z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M88 108 q3 2 2 6 q-3 -1 -3 -5z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"/>
+      <g fill="${MC.goldDk}" stroke="${MC.ink}" stroke-width="0.6">
+        <path d="M74 64 l-3 6 5 -2z"/><path d="M84 66 l3 6 -5 -1z"/>
+        <path d="M62 70 l-7 1 6 3z"/><path d="M86 72 l8 2 -7 3z"/>
+        <path d="M60 80 l-8 -1 7 4z"/><path d="M88 82 l9 0 -8 4z"/>
+        <path d="M64 92 l-7 4 7 1z"/><path d="M84 94 l8 4 -7 1z"/>
+      </g>
+      <circle cx="74" cy="80" r="11" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <g fill="${MC.fleshDk}" stroke="${MC.ink}" stroke-width="0.7"><path d="M66 72 l-4 -5 6 3z"/><path d="M82 72 l4 -5 -6 3z"/></g>
+      <ellipse cx="70" cy="79" rx="1.6" ry="1.9" fill="${MC.ink}"/><ellipse cx="79" cy="79" rx="1.6" ry="1.9" fill="${MC.ink}"/>
+      <path d="M73 84 l1.5 2 1.5 -2z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.6"/>
+      <path d="M74.5 86 v2 M74.5 88 q-3 2 -6 1 M74.5 88 q3 2 6 1" fill="none" stroke="${MC.ink}" stroke-width="0.9"/>
+      <g stroke="${MC.inkSoft}" stroke-width="0.4"><path d="M68 85 l-7 -1"/><path d="M68 87 l-7 1"/><path d="M81 85 l7 -1"/><path d="M81 87 l7 1"/></g>
+      <g fill="${MC.cream}" stroke="${MC.ink}" stroke-width="0.4"><path d="M50 100 l-3 4 3 0z"/><path d="M54 102 l-3 4 3 0z"/><path d="M58 103 l-3 4 3 0z"/></g>
+      <path d="M50 72 q8 4 14 10" fill="none" stroke="${MC.flesh}" stroke-width="3" stroke-linecap="round"/>
       <path d="M10 120 H90" stroke="${MC.ink}" stroke-width="1"/>
     `, "XI", "LA·FORCE")
   },
@@ -397,11 +414,24 @@ const MAJORS = [
       <g fill="${MC.red}"><path d="M50 58 l1.4 4 1.4 -4 -1.4 -3z"/><path d="M34 64 l1 3 1 -3 -1 -2.4z"/><path d="M66 64 l1 3 1 -3 -1 -2.4z"/></g>
       <rect x="11" y="66" width="13" height="40" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/><path d="M11 66 l6.5 -10 6.5 10z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
       <rect x="76" y="66" width="13" height="40" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/><path d="M76 66 l6.5 -10 6.5 10z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="1"/>
-      <path d="M30 106 q-2 -12 3 -16 q1.5 -3 3 0 q3.5 7 1 16z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.1"/>
-      <path d="M70 106 q2 -12 -3 -16 q-1.5 -3 -3 0 q-3.5 7 -1 16z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M28 108 q-3 -14 3 -19 q1.6 -3 3 0 q4 8 1.5 19z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M29 92 l-4 -3 4 0z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.7"/>
+      <path d="M30 90 q-1 -3 1 -5" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
+      <circle cx="30" cy="94" r="0.8" fill="${MC.ink}"/>
+      <g stroke="${MC.inkSoft}" stroke-width="0.4"><path d="M30 100 l4 1"/><path d="M30 104 l4 1"/></g>
+      <path d="M72 108 q3 -14 -3 -19 q-1.6 -3 -3 0 q-4 8 -1.5 19z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.1"/>
+      <path d="M71 92 l4 -3 -4 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/>
+      <path d="M70 90 q1 -3 -1 -5" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
+      <circle cx="70" cy="94" r="0.8" fill="${MC.ink}"/>
+      <g stroke="${MC.goldDk}" stroke-width="0.4"><path d="M70 100 l-4 1"/><path d="M70 104 l-4 1"/></g>
       <ellipse cx="50" cy="118" rx="18" ry="7" fill="${MC.blue}" stroke="${MC.ink}" stroke-width="1.2"/>
-      <ellipse cx="50" cy="116" rx="5" ry="3" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.9"/>
-      <path d="M45 116 l-3 2.5 M55 116 l3 2.5 M47 114 l-1 -2.5 M53 114 l1 -2.5" stroke="${MC.ink}" stroke-width="0.9"/>
+      <path d="M38 117 q12 -4 24 0" fill="none" stroke="${MC.blueLt}" stroke-width="0.6"/>
+      <ellipse cx="50" cy="116" rx="5" ry="3.2" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.9"/>
+      <g stroke="${MC.ink}" stroke-width="0.5"><path d="M46 115 q-1 1 -1 2.4"/><path d="M50 114.5 v3"/><path d="M54 115 q1 1 1 2.4"/></g>
+      <path d="M45 114.5 l-3.6 -1.6 q-1 1.2 0.4 2 z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.7"/>
+      <path d="M55 114.5 l3.6 -1.6 q1 1.2 -0.4 2 z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.7"/>
+      <path d="M48 119 l-1.4 2.4 M52 119 l1.4 2.4" stroke="${MC.ink}" stroke-width="0.9"/>
+      <circle cx="48.4" cy="115" r="0.5" fill="${MC.ink}"/><circle cx="51.6" cy="115" r="0.5" fill="${MC.ink}"/>
     `, "XVIII", "LA·LVNE")
   },
   {
@@ -542,42 +572,63 @@ function fillTpl(tpl, suit){
   return tpl.replace(/\{cn\}/g, s.cn).replace(/\{field\}/g, s.field);
 }
 
-/* 花色符号（点数牌单元，高约 16px）—— 马赛版画风格，描边更厚、装饰更细 */
+/* 花色符号（点数牌单元，高约 16px）—— 马赛版画风格，描边厚、细节繁复 */
 function pip(suit, cx, cy){
   if(suit === "denier"){
-    // 星币：花瓣外缘 + 双环 + 中心点
+    // 星币：双环 + 内嵌五角刻纹 + 花瓣外缘 + 中心宝石
     return `<g transform="translate(${cx},${cy})">
-      <circle r="6.8" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
-      <circle r="6.8" fill="none" stroke="${MC.goldDk}" stroke-width="0.5"/>
-      <circle r="4.4" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
+      <circle r="7" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <circle r="7" fill="none" stroke="${MC.goldDk}" stroke-width="0.5"/>
+      <circle r="5.4" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
+      <circle r="5.4" fill="none" stroke="${MC.cream}" stroke-width="0.3" opacity="0.6"/>
+      <path d="M0 -4.6 L1.08 -1.42 4.37 -1.42 1.71 0.54 2.7 3.72 0 1.76 -2.7 3.72 -1.71 0.54 -4.37 -1.42 -1.08 -1.42 Z" fill="none" stroke="${MC.goldDk}" stroke-width="0.6"/>
       <g stroke="${MC.goldDk}" stroke-width="0.5">
-        <line x1="0" y1="-6.8" x2="0" y2="-4.4"/><line x1="0" y1="6.8" x2="0" y2="4.4"/>
-        <line x1="-6.8" y1="0" x2="-4.4" y2="0"/><line x1="6.8" y1="0" x2="4.4" y2="0"/>
+        <path d="M0 -7 l-1 1.6 1 0.6 1 -0.6z"/><path d="M0 7 l-1 -1.6 1 -0.6 1 0.6z"/>
+        <path d="M-7 0 l1.6 -1 0.6 1 -0.6 1z"/><path d="M7 0 l-1.6 -1 -0.6 1 0.6 1z"/>
       </g>
-      <circle r="1.5" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.4"/></g>`;
+      <circle r="1.6" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.5"/>
+      <circle cx="-0.5" cy="-0.5" r="0.5" fill="${MC.cream}"/></g>`;
   }
   if(suit === "coupe"){
-    // 圣杯：杯身 + 杯柄 + 圆座，加描边层次
+    // 圣杯：杯口透视椭圆 + 杯身浮雕带 + 高足 + 圆座 + 杯沿光泽
     return `<g transform="translate(${cx},${cy})">
-      <path d="M-5.4 -7.4 h10.8 l-1.8 7.2 a3.6 3.6 0 0 1 -7.2 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
-      <path d="M-3.6 -5.6 h7.2" stroke="${MC.goldDk}" stroke-width="0.5"/>
-      <rect x="-1.3" y="0.8" width="2.6" height="6" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/>
-      <path d="M-4.4 7 q4.4 -2.4 8.8 0 q-4.4 2.4 -8.8 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/></g>`;
+      <ellipse cx="0" cy="-7" rx="5.6" ry="1.7" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.9"/>
+      <ellipse cx="0" cy="-7" rx="4" ry="1.1" fill="${MC.goldDk}" stroke="none" opacity="0.5"/>
+      <path d="M-5.4 -6.8 q5.4 3 10.8 0 l-2 5.4 a3.4 3.4 0 0 1 -6.8 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M-4.7 -4.2 q4.7 2 9.4 0" fill="none" stroke="${MC.goldDk}" stroke-width="0.5"/>
+      <circle cx="0" cy="-2.4" r="1" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.4"/>
+      <rect x="-1.2" y="1.4" width="2.4" height="4.6" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/>
+      <circle cx="0" cy="3.6" r="1" fill="${MC.goldDk}" stroke="${MC.ink}" stroke-width="0.4"/>
+      <path d="M-4.6 7 q4.6 -2.6 9.2 0 q-4.6 2.4 -9.2 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/>
+      <path d="M-3.6 -6.4 q1.2 1.4 0 2.6" fill="none" stroke="${MC.cream}" stroke-width="0.6" opacity="0.7"/></g>`;
   }
   if(suit === "epee"){
-    // 宝剑：刃 + 中脊 + 护手 + 圆柄头
+    // 宝剑：双面开刃 + 中脊高光 + 护手缠绕 + 柄头宝石
     return `<g transform="translate(${cx},${cy})">
-      <path d="M0 -9.5 l-2 3.4 0 9.6 4 0 0 -9.6z" fill="${MC.blueLt}" stroke="${MC.ink}" stroke-width="1"/>
-      <line x1="0" y1="-7" x2="0" y2="3" stroke="${MC.ink}" stroke-width="0.5"/>
-      <line x1="-4.6" y1="4.6" x2="4.6" y2="4.6" stroke="${MC.ink}" stroke-width="1.4"/>
-      <circle cx="0" cy="8.4" r="1.8" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/></g>`;
+      <path d="M0 -10 l-2.2 3.6 0 9.4 4.4 0 0 -9.4z" fill="${MC.blueLt}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M0 -9 l-1 2 0 8 2 0 0 -8z" fill="${MC.cream}" stroke="none" opacity="0.55"/>
+      <line x1="0" y1="-7.6" x2="0" y2="2.4" stroke="${MC.ink}" stroke-width="0.5"/>
+      <line x1="-1.6" y1="-5" x2="-1.6" y2="2.2" stroke="${MC.blue}" stroke-width="0.4" opacity="0.6"/>
+      <line x1="-5" y1="4.4" x2="5" y2="4.4" stroke="${MC.gold}" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="-5" y1="4.4" x2="5" y2="4.4" stroke="${MC.ink}" stroke-width="0.5"/>
+      <rect x="-0.9" y="4.8" width="1.8" height="3.2" fill="${MC.fleshDk}" stroke="${MC.ink}" stroke-width="0.4"/>
+      <path d="M-0.9 5.6 h1.8 M-0.9 6.6 h1.8" stroke="${MC.ink}" stroke-width="0.3"/>
+      <circle cx="0" cy="8.8" r="1.9" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"/>
+      <circle cx="0" cy="8.8" r="0.7" fill="${MC.red}"/></g>`;
   }
-  // baton 权杖：节杖 + 端芽 + 斜纹
+  // baton 权杖：木纹结节 + 顶端嫩芽叶 + 缠藤
   return `<g transform="translate(${cx},${cy})">
-    <rect x="-1.8" y="-8" width="3.6" height="16" rx="1.6" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1"/>
-    <g stroke="${MC.ink}" stroke-width="0.4"><line x1="-1.8" y1="-3" x2="1.8" y2="-4.6"/><line x1="-1.8" y1="1" x2="1.8" y2="-0.6"/><line x1="-1.8" y1="5" x2="1.8" y2="3.4"/></g>
-    <ellipse cx="0" cy="-8" rx="2.6" ry="3.2" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"/>
-    <ellipse cx="0" cy="8" rx="2.6" ry="3.2" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"/></g>`;
+    <rect x="-1.9" y="-8" width="3.8" height="16" rx="1.7" fill="${MC.green}" stroke="${MC.ink}" stroke-width="1"/>
+    <line x1="-0.4" y1="-7" x2="-0.4" y2="7" stroke="${MC.cream}" stroke-width="0.4" opacity="0.5"/>
+    <g stroke="${MC.ink}" stroke-width="0.4" fill="none">
+      <path d="M-1.9 -3.4 q1.9 -1.4 3.8 0"/><path d="M-1.9 0.6 q1.9 -1.4 3.8 0"/><path d="M-1.9 4.6 q1.9 -1.4 3.8 0"/>
+    </g>
+    <circle cx="0" cy="-3.4" r="0.6" fill="${MC.ink}"/><circle cx="0" cy="4.6" r="0.6" fill="${MC.ink}"/>
+    <path d="M0 -8 q-3.2 -1 -3.6 -4 q3 0.6 3.6 4z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.7"/>
+    <path d="M0 -8 q3.2 -1 3.6 -4 q-3 0.6 -3.6 4z" fill="${MC.green}" stroke="${MC.ink}" stroke-width="0.7"/>
+    <ellipse cx="0" cy="-8" rx="2.4" ry="2.8" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"/>
+    <ellipse cx="0" cy="8" rx="2.4" ry="2.8" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.8"/>
+    <circle cx="-0.6" cy="-8.6" r="0.6" fill="${MC.cream}" opacity="0.7"/></g>`;
 }
 
 /* 点数牌排列坐标（对称布局） */
@@ -599,35 +650,60 @@ function courtSvg(suit, rank){
   const c = SUIT_INFO[suit].col;
   let inner = "";
   if(rank === "knight"){
-    // 骑士：坐于马上
+    // 骑士：策马前行（马鬃、马具、缰绳细节）
     inner = `
       <path d="M22 74 q26 -12 52 0 l-2 30 -9 0 -2 -18 -26 0 -2 18 -9 0z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.3"/>
-      <path d="M22 74 q-7 -7 -11 -5 q4 7 11 9z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <g stroke="${MC.ink}" stroke-width="0.5"><path d="M30 76 v24"/><path d="M58 76 v22"/></g>
+      <path d="M22 74 q-9 -8 -13 -5 q3 6 8 8 l-4 2 q4 4 9 2z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M13 70 l-3 -5 4 1z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="0.9"/>
+      <circle cx="14" cy="71" r="0.7" fill="${MC.ink}"/>
+      <g stroke="${c}" stroke-width="1.1" fill="none"><path d="M16 73 q-3 4 -2 9"/><path d="M20 72 q-2 5 -1 10"/></g>
+      <path d="M22 74 q14 -4 14 8" fill="none" stroke="${MC.fleshDk}" stroke-width="0.7"/>
       <circle cx="50" cy="34" r="7" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
-      <path d="M43 28 q7 -4 14 0 l-2 -6 -5 3 -5 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <ellipse cx="47.6" cy="33.5" rx="0.8" ry="1" fill="${MC.ink}"/><ellipse cx="52.4" cy="33.5" rx="0.8" ry="1" fill="${MC.ink}"/>
+      <path d="M47 37 q3 1.5 6 0" fill="none" stroke="${MC.ink}" stroke-width="0.7"/>
+      <path d="M42 30 q8 -5 16 0 l-2 -7 -6 3 -6 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M44 27 l1 -5 1 4 z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.5"/>
       <path d="M43 41 q7 -4 14 0 l3 24 -20 0z" fill="${c}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <path d="M50 41 v24" stroke="${MC.ink}" stroke-width="0.4" opacity="0.5"/>
       ${pip(suit,72,52)}`;
   } else if(rank === "page"){
-    // 侍从：站立少年
+    // 侍从：站立少年（五官、衣袍褶皱）
     inner = `
       <path d="M40 108 H60" stroke="${MC.ink}" stroke-width="1"/>
       <circle cx="50" cy="40" r="8.5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
-      <path d="M41 33 q9 -5 18 0 l-2 -6 -7 3 -7 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <ellipse cx="46.8" cy="39.5" rx="0.9" ry="1.2" fill="${MC.ink}"/><ellipse cx="53.2" cy="39.5" rx="0.9" ry="1.2" fill="${MC.ink}"/>
+      <path d="M46 43.5 q4 2 8 0" fill="none" stroke="${MC.ink}" stroke-width="0.8"/>
+      <path d="M44 36 q2 -1.5 4 -0.5 M52 35.5 q2 -1 4 0.5" fill="none" stroke="${MC.ink}" stroke-width="0.6"/>
+      <path d="M41 33 q9 -5 18 0 l-2 -7 -7 3 -7 -3z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+      <path d="M48 27 l2 -5 2 5z" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.5"/>
       <path d="M40 49 q10 -5 20 0 l3 56 -26 0z" fill="${c}" stroke="${MC.ink}" stroke-width="1.2"/>
-      ${pip(suit,50,78)}`;
+      <g stroke="${MC.ink}" stroke-width="0.4" opacity="0.55" fill="none"><path d="M45 56 q5 -2 10 0"/><path d="M44 70 q6 -2 12 0"/><path d="M43 86 q7 -2 14 0"/></g>
+      ${pip(suit,50,80)}`;
   } else {
-    // 王后 / 国王：端坐于宝座
+    // 王后 / 国王：端坐于宝座（王冠刻面、五官、宝座纹饰）
     const king = (rank === "king");
     const crown = king
-      ? `<path d="M38 32 l3 -10 4 7 5 -9 5 9 4 -7 3 10z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>`
-      : `<path d="M40 33 q10 -6 20 0 l-3 -8 -7 4 -7 -4z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>`;
+      ? `<path d="M38 32 l3 -10 4 7 5 -9 5 9 4 -7 3 10z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+         <g fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.4"><circle cx="42" cy="25" r="1"/><circle cx="50" cy="23" r="1.2"/><circle cx="58" cy="25" r="1"/></g>
+         <path d="M38 32 h24" stroke="${MC.goldDk}" stroke-width="0.6"/>`
+      : `<path d="M40 33 q10 -6 20 0 l-3 -8 -7 4 -7 -4z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>
+         <circle cx="50" cy="25" r="1.4" fill="${MC.red}" stroke="${MC.ink}" stroke-width="0.4"/>
+         <path d="M40 33 h20" stroke="${MC.goldDk}" stroke-width="0.6"/>`;
     const scepter = king
-      ? `<line x1="70" y1="46" x2="70" y2="104" stroke="${MC.fleshDk}" stroke-width="2"/><circle cx="70" cy="44" r="3.2" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/>`
-      : "";
+      ? `<line x1="70" y1="46" x2="70" y2="104" stroke="${MC.fleshDk}" stroke-width="2"/><circle cx="70" cy="44" r="3.2" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="1"/><path d="M70 41 l-2 3 4 0z" fill="${MC.goldDk}"/>`
+      : `<line x1="70" y1="58" x2="70" y2="100" stroke="${MC.fleshDk}" stroke-width="1.6"/><path d="M70 56 l-2.6 -2.6 a3.6 3.6 0 0 1 5.2 0z" fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.8"/>`;
     inner = `
       <rect x="26" y="50" width="48" height="58" rx="3" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <g fill="${MC.gold}" stroke="${MC.ink}" stroke-width="0.7"><path d="M27 50 l3 -7 3 7z"/><path d="M67 50 l3 -7 3 7z"/></g>
+      <line x1="30" y1="58" x2="70" y2="58" stroke="${MC.goldDk}" stroke-width="0.6"/>
       <path d="M36 54 q14 -6 28 0 l4 54 -36 0z" fill="${c}" stroke="${MC.ink}" stroke-width="1.3"/>
+      <path d="M50 56 v50" stroke="${MC.ink}" stroke-width="0.4" opacity="0.5"/>
+      <g stroke="${MC.ink}" stroke-width="0.4" opacity="0.5" fill="none"><path d="M40 74 q10 -3 20 0"/><path d="M39 90 q11 -3 22 0"/></g>
       <circle cx="50" cy="42" r="8.5" fill="${MC.flesh}" stroke="${MC.ink}" stroke-width="1.2"/>
+      <ellipse cx="46.6" cy="41.5" rx="0.9" ry="1.2" fill="${MC.ink}"/><ellipse cx="53.4" cy="41.5" rx="0.9" ry="1.2" fill="${MC.ink}"/>
+      <path d="M46 45.5 q4 2 8 0" fill="none" stroke="${MC.ink}" stroke-width="0.8"/>
+      ${king?`<path d="M44 48 q6 5 12 0 l-1 5 -10 0z" fill="${MC.cream}" stroke="${MC.ink}" stroke-width="0.7"/>`:''}
       ${crown}
       ${scepter}
       ${pip(suit,32,80)}`;
