@@ -122,16 +122,21 @@
     updateAskNext();
   }
 
-  // 根据「是否已选分类 或 已输入问题」启用/禁用下一步按钮
+  // 是否满足进入下一步的条件（已选分类 或 已输入问题）
+  function askReady(){
+    const hasText = (($('#askInput') && $('#askInput').value.trim()) || '').length > 0;
+    return !!state.category || hasText;
+  }
+  // 按钮始终保持亮色；选好后追加 .ready 让按钮亮起闪烁的星星
   function updateAskNext(){
     const btn = $('#askNext');
     const hint = $('#askHint2');
     if(!btn) return;
-    const hasText = (($('#askInput') && $('#askInput').value.trim()) || '').length > 0;
-    const ok = !!state.category || hasText;
-    btn.disabled = !ok;
-    if(hint) hint.textContent = ok ? '准备好了，进入下一步吧' : '请先选择一个问题方向，或输入你的问题';
+    const ok = askReady();
+    btn.classList.toggle('ready', ok);
+    if(hint) hint.textContent = ok ? '准备好了，进入下一步吧 ✨' : '请先选择一个问题方向，或输入你的问题';
   }
+
 
 
 
@@ -148,7 +153,13 @@
     if(goEl){
 
       const target = goEl.getAttribute('data-go');
+      // 提问页「下一步」：未选分类且未输入问题时，不跳转并提示
+      if(goEl.id === 'askNext' && !askReady()){
+        toast('请先选择一个问题方向，或输入你的问题');
+        return;
+      }
       // 提问页的“跳过”：直接用每日一牌
+
       if(goEl.getAttribute('data-skip')){
         state.question = '今日指引';
         state.category = '综合';
