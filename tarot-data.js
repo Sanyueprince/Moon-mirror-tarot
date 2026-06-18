@@ -752,41 +752,56 @@ function cardBackSVG(){
       <!-- 圆月盘 -->
       <circle cx="50" cy="66" r="30" fill="url(#cbMoon)" stroke="${Gdk}" stroke-width="1.4"/>
       <circle cx="50" cy="66" r="30" fill="none" stroke="${G}" stroke-width="0.5"/>
-      <!-- 月面斑块（环形坑纹，作为月盘肌理） -->
-      <g fill="${Gd}" opacity="0.22">
-        <circle cx="30" cy="58" r="2.6"/><circle cx="27" cy="74" r="1.8"/><circle cx="72" cy="80" r="2.2"/><circle cx="74" cy="58" r="1.4"/>
+      <!-- 月面斑块（环形坑纹，落在左侧明亮半边作为肌理） -->
+      <g fill="${Gd}" opacity="0.26">
+        <circle cx="33" cy="56" r="3"/><circle cx="30" cy="74" r="2.2"/><circle cx="37" cy="86" r="2.4"/><circle cx="28" cy="64" r="1.4"/>
       </g>
-      <!-- ===== 牌背主体：一只坐姿的猫咪剪影（暗色填充 + 金线描边） ===== -->
-      <!-- 猫身 + 头 + 双耳（坐姿，正面略侧，居于圆月中央） -->
-      <path d="M41 90
-               C 38 76, 37 64, 43 57
-               L 40 46 L 49 53
-               C 50.5 52.3, 53.5 52.3, 55 53
-               L 64 46 L 61 57
-               C 67 64, 66 76, 63 90
-               Z"
-            fill="${NAVY2}" opacity="0.97" stroke="${G}" stroke-width="1.2" stroke-linejoin="round"/>
-      <!-- 内耳金点 -->
-      <path d="M43 49 l2.8 4 -3.6 1z" fill="${Gd}" opacity="0.85"/>
-      <path d="M61 49 l-2.8 4 3.6 1z" fill="${Gd}" opacity="0.85"/>
-      <!-- 尾巴（绕到身前轻盈一卷） -->
-      <path d="M63 89 C 71 87, 74 79, 69 73 C 73 78, 71 86, 64 87 Z"
-            fill="${NAVY2}" opacity="0.97" stroke="${G}" stroke-width="1.1" stroke-linejoin="round"/>
-      <!-- 猫眼（杏仁形，金色发光） -->
-      <path d="M46.5 62 q2.6 -2.4 5 0 q-2.4 2.4 -5 0z" fill="${G}"/>
-      <path d="M54.5 62 q2.6 -2.4 5 0 q-2.4 2.4 -5 0z" fill="${G}"/>
-      <ellipse cx="49" cy="62" rx="0.7" ry="1.5" fill="${NAVY2}"/>
-      <ellipse cx="57" cy="62" rx="0.7" ry="1.5" fill="${NAVY2}"/>
-      <!-- 鼻头 -->
-      <path d="M51.6 66 h2.8 l-1.4 1.6z" fill="${RED}" opacity="0.9"/>
-      <!-- 胡须 -->
-      <g stroke="${G}" stroke-width="0.6" opacity="0.7" stroke-linecap="round">
-        <path d="M51 67.5 q-7 -0.4 -12 -2.6"/><path d="M51 68.4 q-7 1 -12 1.4"/>
-        <path d="M55 67.5 q7 -0.4 12 -2.6"/><path d="M55 68.4 q7 1 12 1.4"/>
+      <!-- ===== 关键：月亮左右明暗分界线本身就是一只「朝右的猫侧脸」轮廓 =====
+           左半（猫脸正面）保持明亮 → 右半（脑后/暗面）填暗色。
+           分界线 = 头顶 → 尖耳 → 额头 → 鼻梁 → 鼻尖 → 嘴 → 下巴 → 颈，
+           组成一只朝右的猫的侧面剪影。 -->
+      <path d="M50 36.2
+               C 52 33, 55 33, 56.5 36
+               C 58 39, 58.5 42, 57 44.5
+               C 60 45.5, 62.5 48, 63 51.5
+               C 63.4 54.5, 61.6 56, 62.6 58
+               C 63.8 60.3, 63.4 62.6, 61 63.6
+               C 64 65, 64.5 68, 62 70
+               C 64 71.4, 63.6 74, 60.6 75
+               C 57 76.2, 54.5 79, 53.6 83
+               C 53 86.6, 53 90, 53.4 95.6
+               A 30 30 0 0 0 50 36.2 Z"
+            fill="${NAVY2}" opacity="0.96"/>
+      <!-- 猫侧脸分界线描边（柔和金线，勾出猫的侧影轮廓） -->
+      <path d="M50 36.2
+               C 52 33, 55 33, 56.5 36
+               C 58 39, 58.5 42, 57 44.5
+               C 60 45.5, 62.5 48, 63 51.5
+               C 63.4 54.5, 61.6 56, 62.6 58
+               C 63.8 60.3, 63.4 62.6, 61 63.6
+               C 64 65, 64.5 68, 62 70
+               C 64 71.4, 63.6 74, 60.6 75
+               C 57 76.2, 54.5 79, 53.6 83
+               C 53 86.6, 53 90, 53.4 95.6"
+            fill="none" stroke="${G}" stroke-width="1.3" stroke-linecap="round"/>
+      <!-- 猫耳内侧的一道暗纹 + 耳尖（强调是猫耳） -->
+      <path d="M51 37 C 52.6 35, 54.6 35, 55.8 36.6" fill="none" stroke="${Gdk}" stroke-width="0.7" opacity="0.6"/>
+      <!-- 面部（明亮侧）猫五官细节 -->
+      <!-- 杏仁猫眼（闭合上扬，朝右） -->
+      <path d="M48 55 q4 -2 7.5 0.4" fill="none" stroke="${Gdk}" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="55.5" y1="55.4" x2="56.6" y2="54.4" stroke="${Gdk}" stroke-width="0.6"/>
+      <!-- 鼻头微红 -->
+      <path d="M56.4 63 q1.6 0.8 2.4 -0.2" fill="none" stroke="${RED}" stroke-width="1.1" stroke-linecap="round" opacity="0.7"/>
+      <!-- 胡须（自鼻吻向左侧明亮面伸出） -->
+      <g stroke="${Gdk}" stroke-width="0.6" opacity="0.6" stroke-linecap="round">
+        <path d="M56 65 q-9 -1 -15 -3.4"/>
+        <path d="M56 66.4 q-9 0.6 -15 1"/>
+        <path d="M56 67.6 q-8 2 -13.5 4.4"/>
       </g>
       <!-- 月顶星点 -->
-      <circle cx="52.5" cy="40" r="1.4" fill="${G}" stroke="${Gdk}" stroke-width="0.4"/>
+      <circle cx="49" cy="37" r="1.5" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
       ${star}
+
 
 
     </g>

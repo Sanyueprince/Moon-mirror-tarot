@@ -92,9 +92,12 @@ body{
 .btn:active{transform:scale(.97)}
 /* 提问页「下一步」：选好后亮起闪烁的星星 */
 .btn .btn-tx{position:relative;z-index:2}
+/* 默认隐藏星星，仅在 .ready（已选方向/已输入问题）时浮现 */
+.btn .star{display:none}
 .btn.ready{box-shadow:0 8px 26px rgba(212,175,106,.6),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 4px rgba(120,90,40,.4);animation:readyGlow 1.8s ease-in-out infinite}
 @keyframes readyGlow{0%,100%{box-shadow:0 8px 22px rgba(212,175,106,.45)}50%{box-shadow:0 8px 30px rgba(255,228,150,.85),0 0 16px rgba(255,228,150,.55)}}
-.btn.ready .star{position:absolute;z-index:3;color:#fff7e0;font-size:11px;pointer-events:none;
+.btn.ready .star{display:block;position:absolute;z-index:3;color:#fff7e0;font-size:11px;pointer-events:none;
+
   filter:drop-shadow(0 0 3px rgba(255,247,224,.9));animation:twinkle 1.4s ease-in-out infinite}
 .btn.ready .star.s1{top:6px;left:16%;animation-delay:0s;font-size:12px}
 .btn.ready .star.s2{top:9px;right:20%;animation-delay:.45s;font-size:9px}
@@ -234,25 +237,22 @@ body{
   position:absolute;animation:pulse 2s ease-out infinite}
 @keyframes pulse{0%{transform:scale(.7);opacity:.7}100%{transform:scale(1.4);opacity:0}}
 
-/* fan draw —— 分页式牌阵：每页 15 张，左右滑动整页翻页 */
+/* fan draw —— 真实摊牌：78 张沿弧线左右摊开、依次叠压，横向滑动浏览 */
 .fan-scroll{width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
-  margin:10px 0 4px;scrollbar-width:none;
-  scroll-snap-type:x mandatory}
+  margin:14px 0 4px;scrollbar-width:none}
 .fan-scroll::-webkit-scrollbar{display:none}
-.fan{display:flex;height:300px}
-/* 每页占满一屏宽度，整齐 5列×3行 网格 */
-.fan-page{flex:0 0 100%;width:100%;height:100%;box-sizing:border-box;
-  scroll-snap-align:center;
-  display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;
-  gap:8px 8px;padding:14px 16px;align-content:center;justify-items:center}
-.fan .f{width:100%;max-width:54px;aspect-ratio:2/3;border-radius:7px;overflow:hidden;
-  border:1px solid rgba(217,165,49,.45);box-shadow:0 3px 8px rgba(0,0,0,.35);
-  transition:transform .18s ease,border-color .18s,box-shadow .18s;cursor:pointer}
+/* 一整排连续牌带（宽度由 JS 按张数计算），底部留白容纳弧线下沉 */
+.fan{position:relative;height:230px;display:block}
+.fan .f{position:absolute;top:30px;width:46px;height:138px;border-radius:7px;overflow:hidden;
+  border:1px solid rgba(217,165,49,.5);box-shadow:-3px 4px 9px rgba(0,0,0,.45);
+  transform-origin:50% 200%;
+  transition:transform .2s ease,border-color .18s,box-shadow .18s;cursor:pointer;will-change:transform}
 .fan .f .card-back-svg{width:100%;height:100%;display:block;border-radius:6px}
 .fan .f::after{content:none}
-.fan .f:active{filter:brightness(1.08)}
-.fan .f.sel{border-color:var(--gold);transform:translateY(-10px) scale(1.06);
-  box-shadow:0 0 20px rgba(232,196,106,.85);z-index:2}
+.fan .f:active{filter:brightness(1.1)}
+.fan .f.sel{border-color:var(--gold);
+  box-shadow:0 0 22px rgba(232,196,106,.9);z-index:60 !important}
+
 
 
 .counter{text-align:center;font-size:13px;color:var(--gold-soft);margin:6px 0 8px}

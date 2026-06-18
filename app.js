@@ -263,8 +263,9 @@
     if(a && (Math.abs(a.x)+Math.abs(a.y)+Math.abs(a.z) > 38)) doShuffle();
   });
 
-  // ---------- 抽牌：分页整齐网格（每页 15 张 = 5列×3行，左右滑动翻页） ----------
-  const PER_PAGE = 15;          // 每页展示张数
+  // ---------- 抽牌：真实摊牌 —— 78 张沿弧线左右摊开、依次叠压，横向滑动浏览 ----------
+  const CARD_STEP = 26;   // 相邻两张牌的水平间距(px)，越小叠得越密
+  const EDGE_PAD  = 40;   // 牌带两端留白(px)
   function renderFan(){
     const fan = $('#fan');
     const total = TAROT.length; // 完整 78 张
@@ -273,49 +274,36 @@
     state.drawn = [];
     fan.innerHTML = '';
     const backSVG = (typeof cardBackSVG === 'function') ? cardBackSVG() : '';
-    const pageCount = Math.ceil(total / PER_PAGE);
-    // 按页生成：每页一个 .fan-page（整齐 5×3 网格，横向 scroll-snap 整页对齐）
-    for(let p=0;p<pageCount;p++){
-      const page = document.createElement('div');
-      page.className = 'fan-page';
-      const start = p*PER_PAGE;
-      const end = Math.min(start+PER_PAGE, total);
-      for(let i=start;i<end;i++){
-        const f = document.createElement('div');
-        f.className = 'f';
-        f.dataset.idx = i;
-        f.innerHTML = backSVG;   // 注入与洗牌页一致的马赛风格牌背
-        page.appendChild(f);
-      }
-      fan.appendChild(page);
+    // 牌带总宽：两端留白 + (n-1)*间距 + 一张牌宽
+    const beltW = EDGE_PAD*2 + (total-1)*CARD_STEP + 46;
+    fan.style.width = beltW + 'px';
+    // 弧线参数：以牌带为弦，中间最高、两端略低，模拟桌面摊牌的弧度
+    const mid = (total-1)/2;
+    for(let i=0;i<total;i++){
+      const f = document.createElement('div');
+      f.className = 'f';
+      f.dataset.idx = i;
+      f.innerHTML = backSVG;   // 注入与洗牌页一致的马赛风格牌背
+      const left = EDGE_PAD + i*CARD_STEP;
+      const norm = mid ? (i-mid)/mid : 0;     // -1..1
+      const ang  = norm * 16;                 // 两端向外倾斜(度)
+      const drop = norm*norm * 22;            // 两端下沉(px)，中间最高
+      f.style.left = left + 'px';
+      f.style.setProperty('--ang', ang.toFixed(2)+'deg');
+      f.style.setProperty('--drop', drop.toFixed(1)+'px');
+      f.style.transform = `rotate(${ang.toFixed(2)}deg) translateY(${drop.toFixed(1)}px)`;
+      f.style.zIndex = String(i);   // 依次叠压：右压左
+      fan.appendChild(f);
     }
-    // 翻页滚动到第一页
+    // 居中显示牌带中段
     const sc = $('.fan-scroll');
-    if(sc) sc.scrollLeft = 0;
-    // 翻页指示
-    if(sc && !sc._pageBound){
-      let ticking = false;
-      sc.addEventListener('scroll', ()=>{
-        if(ticking) return; ticking = true;
-        requestAnimationFrame(()=>{ updatePageCounter(); ticking = false; });
-      }, { passive:true });
-      sc._pageBound = true;
+    if(sc){
+      requestAnimationFrame(()=>{ sc.scrollLeft = (beltW - sc.clientWidth)/2; });
     }
-    updatePageCounter();
+    if($('#pageCounter')) $('#pageCounter').textContent = `共 ${total} 张 · 左右滑动浏览`;
     updateCounter();
     $('#drawDone').classList.add('hidden');
     fan.addEventListener('click', onPickCard);
-  }
-
-  // 翻页指示：第 x / N 页
-  function updatePageCounter(){
-    const sc = $('.fan-scroll');
-    const el = $('#pageCounter');
-    if(!sc || !el) return;
-    const pageCount = Math.ceil(TAROT.length / PER_PAGE);
-    const w = sc.clientWidth || 1;
-    const cur = Math.round(sc.scrollLeft / w) + 1;
-    el.textContent = `第 ${Math.min(cur,pageCount)} / ${pageCount} 页`;
   }
 
   function onPickCard(e){
@@ -323,7 +311,11 @@
     if(!f || f.classList.contains('sel')) return;
     const need = state.spread.positions.length;
     if(state.drawn.length >= need) return;
-    f.classList.add('sel');     // 选中：CSS 控制上浮高亮
+    f.classList.add('sel');
+    // 沿当前角度把牌向上抽起高亮
+    const ang = (f.style.getPropertyValue('--ang') || '0deg');
+    const drop = parseFloat(f.style.getPropertyValue('--drop')) || 0;
+    f.style.transform = `rotate(${ang}) translateY(${(drop-34).toFixed(1)}px)`;
     if(navigator.vibrate) navigator.vibrate(20);
     // 你点击的牌背位置 ↔ 牌堆中对应的那一张牌（不重复，正逆位随机）
     const idx = parseInt(f.dataset.idx, 10) || 0;
@@ -335,6 +327,7 @@
       setTimeout(()=> go('s-reveal'), 500);
     }
   }
+
 
 
   function updateCounter(){
