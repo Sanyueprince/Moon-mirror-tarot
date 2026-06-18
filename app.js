@@ -251,32 +251,61 @@
       f.innerHTML = backSVG;   // 注入马赛风格牌背
       fan.appendChild(f);
     }
-    // ===== 弧形扇面布局 =====
-    // 78 张沿一条大圆弧排布：一屏约露出 23 张呈扇形，可左右滑动浏览全部
-    const STEP = 26;        // 相邻牌背沿弧的水平步距(px)
+    // ===== 弧形扇面布局（局部扇面，随滚动动态计算） =====
+    // 78 张沿水平方向等距排列，每张牌的旋转角度根据它与「当前可视窗口中心」
+    // 的距离动态计算：越靠近中心越竖直、越靠两侧倾斜越大，形成手持折扇的弧形。
+    // 这样无论滚动到哪里，可视区内约 23 张牌始终呈干净的扇形（而非整体歪斜）。
+    const STEP = 15;        // 相邻牌背水平步距(px)，越小可视张数越多
     const CARD_W = 60;      // 单张牌背宽度(px)
-    const PER_DEG = 2.0;    // 每张牌相对相邻牌的夹角(度)
-    const ARC_DROP = 0.42;  // 弧面下沉系数（角度越大，沿弧下沉越多）
     fan.style.width = (STEP*(total-1) + CARD_W) + 'px';
     $$('.f', fan).forEach((f,i)=>{
-      // 以「当前一屏的中心」为基准计算角度：用每 23 张为一个可视窗口，
-      // 让整条牌带呈连续弧形（中间凸、两端略垂）
-      const ang = (i - (total-1)/2) * PER_DEG;          // 该牌的旋转角度
-      const drop = Math.abs(ang) * ARC_DROP;            // 离中心越远，越往下沉
       f.style.left = (i*STEP) + 'px';
-      f.style.transformOrigin = '50% 150%';             // 旋转中心在牌底下方，形成扇面
-      f.style.transform = `rotate(${ang.toFixed(2)}deg) translateY(${drop.toFixed(1)}px)`;
-      f.dataset.ang = ang.toFixed(2);
-      f.dataset.drop = drop.toFixed(1);
+      f.style.transformOrigin = '50% 135%';   // 旋转中心在牌底下方，形成扇面
     });
-    // 进入时把滚动条复位到最左
     const sc = $('.fan-scroll');
-    if(sc) sc.scrollLeft = 0;
+    if(sc){
+      sc.scrollLeft = 0;
+      // 绑定滚动监听（只绑一次），用 rAF 节流
+      if(!sc._fanBound){
+        let ticking = false;
+        const onScroll = ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(()=>{ layoutFan(); ticking = false; }); } };
+        sc.addEventListener('scroll', onScroll, { passive:true });
+        window.addEventListener('resize', layoutFan);
+        sc._fanBound = true;
+      }
+      // 首次布局（等待回流取到正确宽度）
+      requestAnimationFrame(layoutFan);
+    }
     updateCounter();
     $('#drawDone').classList.add('hidden');
 
     fan.addEventListener('click', onPickCard);
   }
+
+  // 根据可视窗口中心，动态计算每张牌的扇形角度与下沉量
+  function layoutFan(){
+    const sc = $('.fan-scroll');
+    const fan = $('#fan');
+    if(!sc || !fan) return;
+    const STEP = 15, CARD_W = 60;
+    const viewCenter = sc.scrollLeft + sc.clientWidth / 2;   // 当前视口中心(相对牌带)
+    const half = sc.clientWidth / 2 || 180;
+    const MAX_DEG = 32;        // 视口边缘处的最大倾斜角
+    const DROP_MAX = 46;       // 视口边缘处的最大下沉(px)
+    $$('.f', fan).forEach((f,i)=>{
+      const cardCenter = i*STEP + CARD_W/2;
+      let norm = (cardCenter - viewCenter) / half;           // -1..1（超出则更大）
+      if(norm > 1.4) norm = 1.4; if(norm < -1.4) norm = -1.4;
+      const ang = norm * MAX_DEG;                            // 倾斜角
+      const drop = norm * norm * DROP_MAX;                   // 两侧下沉（抛物线）
+      const lift = f.classList.contains('sel') ? -30 : 0;    // 选中牌抽起
+      f.style.transform = `rotate(${ang.toFixed(2)}deg) translateY(${(drop+lift).toFixed(1)}px)`;
+      f.style.zIndex = f.classList.contains('sel') ? 60 : Math.round(100 - Math.abs(norm)*40);
+      f.dataset.ang = ang.toFixed(2);
+      f.dataset.drop = drop.toFixed(1);
+    });
+  }
+
 
   function onPickCard(e){
     const f = e.target.closest('.f');
