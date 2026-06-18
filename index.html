@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>月镜言 · 塔罗占卜</title>
-<link rel="stylesheet" href="style.css?v=26">
+<link rel="stylesheet" href="style.css?v=27">
 
 
 
@@ -112,9 +112,30 @@
         </div>
       </div>
       <div class="start-card" data-go="s-ask">
-        <div class="start-ic"><svg class="ico"><use href="#i-orb"/></svg></div>
-        <div class="start-t">开始占卜</div>
-        <div class="start-sub">提问 · 洗牌 · 抽牌 · 解读</div>
+        <span class="sc-aura"></span>
+        <i class="sc-sparkle k1">✦</i><i class="sc-sparkle k2">✧</i><i class="sc-sparkle k3">✦</i>
+        <i class="sc-sparkle k4">✧</i><i class="sc-sparkle k5">·</i><i class="sc-sparkle k6">✦</i>
+        <div class="start-ic">
+          <svg class="sc-orb" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <radialGradient id="scGlow" cx="42%" cy="36%" r="62%">
+                <stop offset="0%" stop-color="#fff7e6"/>
+                <stop offset="46%" stop-color="#ffe9b8"/>
+                <stop offset="100%" stop-color="#caa24f"/>
+              </radialGradient>
+            </defs>
+            <ellipse class="sc-ring" cx="32" cy="32" rx="26" ry="11"/>
+            <circle class="sc-ball" cx="32" cy="30" r="17" fill="url(#scGlow)"/>
+            <path class="sc-moon" d="M37 22a11 11 0 1 0 0 16 8.6 8.6 0 0 1 0-16z"/>
+            <g class="sc-twinkle">
+              <path d="M26 25l1.1 2.6 2.6 1.1-2.6 1.1L26 32.4l-1.1-2.6L22.3 28.7l2.6-1.1z"/>
+              <circle cx="39" cy="33" r="1.1"/>
+            </g>
+            <path class="sc-base" d="M20 47h24l-3.5 6h-17z"/>
+          </svg>
+        </div>
+        <div class="start-t">叩 问 月 镜</div>
+        <div class="start-sub">凝神静心 · 让月光照见答案</div>
       </div>
       <div class="grid3">
         <div class="g-item" data-go="s-wiki"><div class="g-ic"><svg class="ico"><use href="#i-book"/></svg></div><div class="g-t">塔罗百科</div></div>
@@ -442,8 +463,8 @@
     </div>
   </div>
 </div>
-<script src="tarot-data.js?v=26"></script>
-<script src="app.js?v=26"></script>
+<script src="tarot-data.js?v=27"></script>
+<script src="app.js?v=27"></script>
 
 
 </body>

@@ -179,13 +179,60 @@ body{
 .daily-desc{font-size:12px;color:var(--dim);margin-top:5px;line-height:1.6}
 
 /* start card */
-.start-card{background:linear-gradient(135deg,var(--gold),#a07f43);border-radius:16px;
-  padding:22px 16px;text-align:center;color:#1a1530;margin:0 16px 14px;
-  box-shadow:0 8px 22px rgba(212,175,106,.3);cursor:pointer}
-.start-card:active{transform:scale(.98)}
-.start-ic .ico{width:30px;height:30px;stroke-width:1.5}
-.start-t{font-family:var(--serif);font-size:18px;font-weight:600;letter-spacing:2px;margin-top:6px}
-.start-sub{font-size:11px;margin-top:4px;opacity:.8}
+.start-card{position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(233,207,154,.28), transparent 60%),
+    linear-gradient(140deg,#2a2360 0%,#1d1748 48%,#241c54 100%);
+  border:1px solid rgba(212,175,106,.5);border-radius:18px;
+  padding:24px 16px 20px;text-align:center;color:var(--gold-soft);margin:0 16px 14px;
+  box-shadow:0 10px 28px rgba(13,11,26,.5),inset 0 0 24px rgba(139,123,216,.12);
+  cursor:pointer;transition:transform .25s ease,box-shadow .25s ease}
+.start-card::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1px;
+  background:linear-gradient(140deg,rgba(212,175,106,.7),rgba(139,123,216,.15),rgba(212,175,106,.5));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.7}
+/* 斜向流光扫过 */
+.start-card::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,247,230,.22),transparent);
+  transform:skewX(-18deg);animation:scSheen 4.6s ease-in-out infinite}
+@keyframes scSheen{0%,72%{left:-60%}88%,100%{left:120%}}
+.start-card:active{transform:scale(.975);box-shadow:0 6px 18px rgba(13,11,26,.5),inset 0 0 24px rgba(139,123,216,.18)}
+/* 背景光晕呼吸 */
+.sc-aura{position:absolute;top:-22px;left:50%;width:140px;height:140px;margin-left:-70px;
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(233,207,154,.45),rgba(233,207,154,0) 68%);
+  animation:scAura 3.4s ease-in-out infinite}
+@keyframes scAura{0%,100%{transform:scale(.82);opacity:.5}50%{transform:scale(1.12);opacity:.95}}
+/* 漂浮闪烁的小星 */
+.sc-sparkle{position:absolute;color:var(--gold-soft);font-size:11px;pointer-events:none;
+  text-shadow:0 0 6px rgba(233,207,154,.9);animation:scTwinkle 2.8s ease-in-out infinite}
+.sc-sparkle.k1{top:16px;left:30px;font-size:12px;animation-delay:.0s}
+.sc-sparkle.k2{top:30px;right:34px;font-size:9px;animation-delay:.6s}
+.sc-sparkle.k3{top:54px;left:50px;font-size:8px;animation-delay:1.2s}
+.sc-sparkle.k4{top:20px;right:64px;font-size:10px;animation-delay:1.8s}
+.sc-sparkle.k5{bottom:30px;left:40px;font-size:14px;animation-delay:.9s}
+.sc-sparkle.k6{bottom:24px;right:42px;font-size:10px;animation-delay:1.5s}
+@keyframes scTwinkle{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}
+/* 水晶球图标 */
+.start-ic{position:relative;z-index:1;height:58px;display:flex;align-items:flex-end;justify-content:center}
+.sc-orb{width:60px;height:60px;overflow:visible;animation:scFloat 4s ease-in-out infinite;
+  filter:drop-shadow(0 4px 10px rgba(233,207,154,.45))}
+@keyframes scFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.sc-orb .sc-base{fill:#caa24f;stroke:#7c5f2a;stroke-width:.8}
+.sc-orb .sc-ring{fill:none;stroke:rgba(255,247,230,.55);stroke-width:1;stroke-dasharray:3 5;
+  transform-origin:32px 32px;animation:scSpin 9s linear infinite}
+@keyframes scSpin{to{transform:rotate(360deg)}}
+.sc-orb .sc-ball{animation:scGlowPulse 3.2s ease-in-out infinite}
+@keyframes scGlowPulse{0%,100%{opacity:.92}50%{opacity:1}}
+.sc-orb .sc-moon{fill:rgba(255,255,255,.55)}
+.sc-orb .sc-twinkle{fill:#fff;animation:scTwinkle 2.4s ease-in-out infinite}
+.start-t{position:relative;z-index:1;font-family:var(--serif);font-size:19px;font-weight:600;
+  letter-spacing:5px;margin-top:10px;color:#fbf0d6;
+  text-shadow:0 0 12px rgba(233,207,154,.55),0 1px 2px rgba(0,0,0,.3)}
+.start-sub{position:relative;z-index:1;font-size:11.5px;letter-spacing:1px;margin-top:6px;color:var(--dim)}
+@media (prefers-reduced-motion:reduce){
+  .start-card::after,.sc-aura,.sc-sparkle,.sc-orb,.sc-ring,.sc-ball,.sc-twinkle{animation:none}
+}
 .grid3{display:flex;gap:10px;margin:0 16px}
 .g-item{flex:1;background:rgba(139,123,216,.08);border:1px solid var(--line);border-radius:12px;
   padding:16px 8px;text-align:center;cursor:pointer}
