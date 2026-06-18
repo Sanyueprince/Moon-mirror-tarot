@@ -756,36 +756,26 @@ function cardBackSVG(){
       <g fill="${Gd}" opacity="0.35">
         <circle cx="62" cy="54" r="3.4"/><circle cx="66" cy="72" r="2.4"/><circle cx="58" cy="82" r="2.8"/><circle cx="68" cy="62" r="1.6"/>
       </g>
-      <!-- 半脸侧影（左半·朝左的侧脸，暗面） -->
-      <path d="M50 36
-               C 45 39 44 43 44 48
-               C 41 51 38 53 42 56
-               L 44 58
-               C 39 59 41 63 45 64
-               C 47 66 47 69 50 72
-               L 50 96
-               A 30 30 0 0 1 50 36 Z"
-            fill="${INK}" opacity="0.32"/>
-      <!-- 侧脸轮廓线（金描边，强化版画感） -->
-      <path d="M50 36
-               C 45 39 44 43 44 48
-               C 41 51 38 53 42 56
-               L 44 58
-               C 39 59 41 63 45 64
-               C 47 66 47 69 50 72"
-            fill="none" stroke="${Gdk}" stroke-width="1.1"/>
-      <!-- 眉 + 闭眼 + 睫毛 -->
-      <path d="M40 49 q4 -2 7 0" fill="none" stroke="${Gdk}" stroke-width="1"/>
-      <path d="M40 53 q3.5 2.5 7 0.5" fill="none" stroke="${INK}" stroke-width="1.1"/>
-      <g stroke="${INK}" stroke-width="0.7">
-        <line x1="41" y1="54.5" x2="40" y2="56.5"/><line x1="43" y1="55.2" x2="42.5" y2="57.3"/><line x1="45" y1="55" x2="45" y2="57"/>
+      <!-- 半张脸暗面（圆月左半，柔和阴影） -->
+      <path d="M50 36 A 30 30 0 0 0 50 96 Z" fill="${INK}" opacity="0.14"/>
+      <!-- 经典马赛新月侧脸轮廓：饱满额头—挺直鼻梁—柔和上下唇—圆润下巴 -->
+      <path d="M50 37.5 C 43.5 38 39.5 42.5 38.5 48 C 38 51 37.4 53 36.2 54.6 C 35.2 56 35 56.6 36.6 57.4 C 37.6 57.9 38 58.6 37.4 59.4 C 36.6 60.3 37 61.4 38.4 61.7 C 39.4 62 39.4 63 38.8 63.8 C 38.2 64.8 38.6 66.2 40.2 66.8 C 42 67.6 43.6 69 45 71.5 C 46 73.2 47.6 74 50 74.5"
+            fill="none" stroke="${Gdk}" stroke-width="1.4" stroke-linecap="round"/>
+      <!-- 闭合的眼睛（一道安详的弧线 + 上睫毛） -->
+      <path d="M40.4 50.6 q3.4 1.8 6.4 0.4" fill="none" stroke="${INK}" stroke-width="1.2" stroke-linecap="round"/>
+      <g stroke="${INK}" stroke-width="0.7" stroke-linecap="round">
+        <line x1="41" y1="51.6" x2="40.2" y2="53.2"/>
+        <line x1="43" y1="52" x2="42.6" y2="53.7"/>
+        <line x1="45" y1="51.9" x2="45.1" y2="53.6"/>
       </g>
-      <!-- 嘴唇 -->
-      <path d="M41.5 61.5 q3 1.6 5 0" fill="none" stroke="${RED}" stroke-width="1.1" opacity="0.8"/>
-      <!-- 脸颊螺旋红晕 -->
-      <path d="M52 60 a2.4 2.4 0 1 1 -1.6 -1.6" fill="none" stroke="${RED}" stroke-width="0.9" opacity="0.7"/>
-      <!-- 月顶小冠点 -->
-      <circle cx="50" cy="36" r="1.8" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
+      <!-- 柔和眉弓 -->
+      <path d="M40 48.4 q3.6 -1.4 6.2 0.2" fill="none" stroke="${Gdk}" stroke-width="0.9" stroke-linecap="round" opacity="0.85"/>
+      <!-- 嘴唇微染 -->
+      <path d="M37.6 61.7 q1.5 0.9 2.6 0.1" fill="none" stroke="${RED}" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+      <!-- 脸颊淡红晕 -->
+      <circle cx="43.5" cy="58" r="2.4" fill="${RED}" opacity="0.16"/>
+      <!-- 月顶冠点 -->
+      <circle cx="50" cy="37" r="1.8" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
       ${star}
     </g>
   </svg>`;
