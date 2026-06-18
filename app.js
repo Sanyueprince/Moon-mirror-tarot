@@ -45,10 +45,24 @@
       }
     }
     showScreen(id);
+    // 每次前进都补一条浏览器历史，使历史深度与页面深度匹配，
+    // 这样系统返回/侧滑返回都会被 popstate 捕获，绝不会退出小程序
+    trapHistory();
+  }
+
+  // 关闭当前打开的弹层/遮罩，返回 true 表示「本次返回已被弹层消费」
+  function closeOverlays(){
+    let closed = false;
+    document.querySelectorAll('.privacy-mask:not(.hidden), .mask.show, .modal.show, .sheet.show').forEach(el=>{
+      el.classList.add('hidden'); el.classList.remove('show'); closed = true;
+    });
+    return closed;
   }
 
   // 返回上一页：栈空时停留在首页（绝不退出小程序）
   function goBack(){
+    // 先关弹层（若有），关掉就不再切换页面
+    if(closeOverlays()) return;
     if(navStack.length){
       const prev = navStack.pop();
       showScreen(prev);
@@ -60,12 +74,13 @@
   }
 
   // 拦截浏览器/系统返回（含侧滑返回），改为返回上一页而非退出
-  function trapHistory(){ history.pushState({ mm:true }, ''); }
+  function trapHistory(){ try{ history.pushState({ mm:true }, ''); }catch(e){} }
   window.addEventListener('popstate', () => {
-    trapHistory();   // 立即补一个历史记录，防止真正退出
-    goBack();        // 执行内部返回逻辑
+    trapHistory();   // 立即补一个历史记录，防止真正退出（任何页面都不退出）
+    goBack();        // goBack 内部会优先关闭弹层，否则返回上一页
   });
-  trapHistory();     // 初始化时放置一个「陷阱」历史记录
+  // 初始化时多放置几个「陷阱」历史记录，进一步降低被系统直接退出的概率
+  trapHistory(); trapHistory(); trapHistory();
 
 
   function toast(msg){
@@ -560,16 +575,19 @@
   // ---------- 右滑手势返回上一页 ----------
   (function initSwipeBack(){
     let startX = 0, startY = 0, tracking = false;
-    const EDGE = 40;     // 从屏幕左缘起手的判定区域(px)
-    const DIST = 70;     // 触发返回所需的水平滑动距离(px)
+    const DIST = 60;     // 触发返回所需的水平滑动距离(px)
     const app = document.getElementById('app');
     if(!app) return;
 
     app.addEventListener('touchstart', (e)=>{
       if(e.touches.length !== 1){ tracking = false; return; }
       const t = e.touches[0];
-      // 仅当从屏幕左缘起手时才识别为返回手势，避免与页面内横向滑动冲突
-      tracking = t.clientX <= EDGE;
+      // 屏幕任意位置向右滑动都可返回；但若手指落在横向滚动区域（如抽牌牌带）内，
+      // 则不识别为返回手势，避免与该区域的横向滚动冲突
+      if(t.target.closest && t.target.closest('.fan-scroll, .no-swipe-back')){
+        tracking = false; return;
+      }
+      tracking = true;
       startX = t.clientX;
       startY = t.clientY;
     }, { passive:true });
@@ -580,8 +598,8 @@
       const t = e.changedTouches[0];
       const dx = t.clientX - startX;
       const dy = t.clientY - startY;
-      // 向右滑动且以水平方向为主
-      if(dx > DIST && Math.abs(dx) > Math.abs(dy) * 1.5){
+      // 向右滑动且以水平方向为主（水平位移明显大于垂直位移）
+      if(dx > DIST && Math.abs(dx) > Math.abs(dy) * 1.4){
         goBack();
       }
     }, { passive:true });
