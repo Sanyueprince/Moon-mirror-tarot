@@ -756,54 +756,44 @@ function cardBackSVG(){
       <g fill="${Gd}" opacity="0.2">
         <circle cx="68" cy="50" r="2.4"/><circle cx="72" cy="62" r="1.6"/><circle cx="30" cy="52" r="1.8"/><circle cx="28" cy="66" r="1.3"/>
       </g>
-      <!-- ===== 月中央：埃及猫（Bastet 神猫）挺拔端坐剪影 · 朝左 =====
-           脊背笔直昂首、大尖耳、瘦长棱角脸、修长前腿垂直落地、细长尾沿腿垂落收于脚边。
-           金色实心剪影 + 利落描边，去除卡通细节，整体酷而有神性气场。 -->
-      <!-- 身后淡淡暗晕，强化「月中剪影」的层次 -->
-      <ellipse cx="50" cy="68" rx="19" ry="24" fill="${NAVY2}" opacity="0.16"/>
-      <!-- 猫身：实心金色剪影（一笔闭合轮廓） -->
-      <path d="M40.5 95
-               C 40 88, 39.6 80, 39.6 72
-               C 39.6 66, 39 61, 37.2 57.4
-               C 36 55, 35.6 53, 36 50.8
-               C 36.3 49, 36 47, 35 44.6
-               C 34.3 42.9, 34.6 41.6, 35.8 42
-               C 37.2 42.5, 38.7 43.6, 39.8 45.2
-               C 40.6 46.4, 41.3 46.6, 41.9 45.6
-               C 42.6 44.4, 43 42.4, 43.1 39.8
-               C 43.2 37.8, 44 37.4, 45 38.8
-               C 46.4 40.7, 47.4 43.4, 47.8 46.6
-               C 48 48.6, 48.8 49.6, 50.2 50.4
-               C 53.4 52.2, 56 55, 57.6 58.8
-               C 59.6 63.6, 60 69, 59 74.4
-               C 58.3 78.2, 58.4 81.4, 59.4 84.4
-               C 60.4 87.4, 60.6 89.8, 59.6 91.8
-               C 59 93, 57.6 93.4, 56.4 92.6
-               C 55 91.7, 54.4 90, 54.4 87.8
-               C 54.4 86, 53.6 85.2, 52 85.4
-               C 49 85.8, 46 85.8, 43.4 85
-               C 43.5 88, 43.6 91.4, 43.6 94.8
-               C 43.6 96, 42.8 96.4, 41.8 96
-               C 41 95.7, 40.6 95.4, 40.5 95 Z"
+      <!-- ===== 月中央：埃及猫（Bastet 神猫）正面端坐金色剪影 =====
+           几何构建：双三角尖耳 + 对称钟形身躯 + 前腿 + 身侧卷尾。挺拔瘦长、神性气场。 -->
+      <!-- 身后淡淡暗晕 -->
+      <ellipse cx="50" cy="70" rx="17" ry="22" fill="${NAVY2}" opacity="0.16"/>
+      <!-- 卷尾：贴身右侧、向上扬起（先画，置于身后） -->
+      <path d="M61 86 C 70 86, 73 76, 69 70 C 66.5 66, 62.5 67, 62 70.5"
+            fill="none" stroke="${G}" stroke-width="2.6" stroke-linecap="round"/>
+      <!-- 双耳（三角尖耳） -->
+      <path d="M40.5 53 L 42.5 41.5 L 49 51.5 Z" fill="${G}" stroke="${Gdk}" stroke-width="0.7" stroke-linejoin="round"/>
+      <path d="M59.5 53 L 57.5 41.5 L 51 51.5 Z" fill="${G}" stroke="${Gdk}" stroke-width="0.7" stroke-linejoin="round"/>
+      <!-- 头 + 身躯（对称钟形闭合剪影） -->
+      <path d="M50 49
+               C 43 49, 39.5 52.5, 39.5 57
+               C 39.5 60.5, 41 63.5, 43 65.5
+               C 40 68, 37 76, 36 89
+               L 36 90.5 L 64 90.5 L 64 89
+               C 63 76, 60 68, 57 65.5
+               C 59 63.5, 60.5 60.5, 60.5 57
+               C 60.5 52.5, 57 49, 50 49 Z"
             fill="${G}" stroke="${Gdk}" stroke-width="0.8" stroke-linejoin="round"/>
-      <!-- 修长前腿与坐地基线（暗线分隔腿部，增强立体） -->
-      <path d="M48.4 85.4 C 48.6 89, 48.7 92.4, 48.7 95.2"
-            fill="none" stroke="${Gdk}" stroke-width="0.7" opacity="0.55" stroke-linecap="round"/>
-      <!-- 细长尾：沿身体右侧垂落、收于脚边 -->
-      <path d="M58.6 90.6
-               C 62.4 90, 65 88.4, 65.4 85
-               C 65.7 82.4, 64.6 80.4, 62.6 79.8"
-            fill="none" stroke="${G}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- 耳内折线（左右尖耳各一道，利落直线） -->
-      <path d="M36 43.4 L 38.4 46.6" fill="none" stroke="${Gdk}" stroke-width="0.7" opacity="0.6"/>
-      <path d="M45 40.4 L 46.6 45" fill="none" stroke="${Gdk}" stroke-width="0.7" opacity="0.6"/>
-      <!-- 埃及式上挑杏仁眼（一道利落眼线 + 下垂眼尾） -->
-      <path d="M37 51.4 Q 39.4 49.8 41.6 51" fill="none" stroke="${INK}" stroke-width="1" stroke-linecap="round"/>
-      <path d="M41.6 51 q1.6 0.6 2.6 1.8" fill="none" stroke="${INK}" stroke-width="0.7" stroke-linecap="round"/>
+      <!-- 前腿分隔（两条暗线，把底部分成两条直立前腿） -->
+      <path d="M50 70 L 50 90.5" fill="none" stroke="${Gdk}" stroke-width="0.7" opacity="0.5"/>
+      <!-- 耳内折（小三角） -->
+      <path d="M43 50 L 43.6 45 L 46.5 50 Z" fill="${Gdk}" opacity="0.45"/>
+      <path d="M57 50 L 56.4 45 L 53.5 50 Z" fill="${Gdk}" opacity="0.45"/>
+      <!-- 埃及式上挑杏仁眼 -->
+      <path d="M43.5 57.5 Q 46 55.8 48.2 57.5" fill="none" stroke="${INK}" stroke-width="0.9" stroke-linecap="round"/>
+      <path d="M51.8 57.5 Q 54 55.8 56.5 57.5" fill="none" stroke="${INK}" stroke-width="0.9" stroke-linecap="round"/>
+      <path d="M48.2 57.5 q-0.6 0.9 -1.6 1.1 M51.8 57.5 q0.6 0.9 1.6 1.1" fill="none" stroke="${INK}" stroke-width="0.5" stroke-linecap="round"/>
+      <!-- 鼻 + 嘴 -->
+      <path d="M48.6 61 L 51.4 61 L 50 62.6 Z" fill="${INK}" opacity="0.8"/>
+      <path d="M50 62.6 q-1.6 1.6 -3 0.6 M50 62.6 q1.6 1.6 3 0.6" fill="none" stroke="${INK}" stroke-width="0.5" stroke-linecap="round"/>
 
       <!-- 月顶星点 -->
-      <circle cx="56" cy="40" r="1.4" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
+      <circle cx="63" cy="42" r="1.4" fill="${G}" stroke="${Gdk}" stroke-width="0.5"/>
       ${star}
+
+
 
 
 
